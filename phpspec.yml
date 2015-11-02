@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: LaravelAppUi
+        psr4_prefix: LaravelAppUi
+        src_path: app

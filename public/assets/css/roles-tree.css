@@ -1,0 +1,41 @@
+
+#show-list{
+	cursor: pointer;
+}
+
+
+/* Custom chart styling */
+.jOrgChart {
+  margin                : 0px;
+  padding               : 0px;
+}
+
+/* Custom node styling */
+.jOrgChart .node {
+	width: 115px;
+	height: 115px;
+	
+	border: 3px solid #45a7b9;
+	border-radius: 50%;
+
+	overflow: hidden;
+	background: #f9f9f9;
+	
+}
+
+.jOrgChart .node p {
+	color: black;
+	vertical-align: middle;
+	margin: 18% 10px 0 10px;
+	line-height: 1.2;
+	font-size: 13px;
+}
+
+
+ul#roles-tree {
+    display:none;
+}
+
+td.node-cell {
+	height: 100px;
+}
