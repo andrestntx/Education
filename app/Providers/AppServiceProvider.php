@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelAppUi\Providers;
+namespace Education\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

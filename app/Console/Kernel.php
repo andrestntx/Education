@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelAppUi\Console;
+namespace Education\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -13,9 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \LaravelAppUi\Console\Commands\Inspire::class,
-        \LaravelAppUi\Console\Commands\Birthday::class,
-        \LaravelAppUi\Console\Commands\UpdatePollingStations::class
+        \Education\Console\Commands\Inspire::class,
+        \Education\Console\Commands\Birthday::class,
+        \Education\Console\Commands\UpdatePollingStations::class
     ];
 
     /**

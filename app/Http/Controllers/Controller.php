@@ -1,4 +1,4 @@
-<?php namespace LaravelAppUi\Http\Controllers;
+<?php namespace Education\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

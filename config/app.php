@@ -140,10 +140,10 @@ return [
         /*
          * Application Service Providers...
          */
-        LaravelAppUi\Providers\AppServiceProvider::class,
-        LaravelAppUi\Providers\EventServiceProvider::class,
-        LaravelAppUi\Providers\RouteServiceProvider::class,
-        LaravelAppUi\Providers\ComposerServiceProvider::class,
+        Education\Providers\AppServiceProvider::class,
+        Education\Providers\EventServiceProvider::class,
+        Education\Providers\RouteServiceProvider::class,
+        Education\Providers\ComposerServiceProvider::class,
 
         /*
         * Aditional

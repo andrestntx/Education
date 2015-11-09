@@ -1,4 +1,4 @@
-<?php namespace LaravelAppUi\Providers;
+<?php namespace Education\Providers;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -13,7 +13,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composers([
-            'LaravelAppUi\Http\ViewComposers\MenuComposer'        => ['auth.login',
+            'Education\Http\ViewComposers\MenuComposer'        => ['auth.login',
                                                                 'dashboard.pages.*',
                                                                 ]
         ]);

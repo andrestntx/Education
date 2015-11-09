@@ -1,7 +1,7 @@
 <?php 
 
 use \Illuminate\Database\Seeder;
-use Laravel\Entities\User;
+use Education\Entities\User;
 
 class UsersTableSeeder extends Seeder
 {
@@ -12,27 +12,19 @@ class UsersTableSeeder extends Seeder
             'username'      => 'superadmin',
             'email'         => 'superadmin@Laravel.info',
             'password'      => 123,
-            'type_id'       => 1,
+            'type'          => 'superadmin',
+            'company_id'    => 1,
             'created_at'    => new DateTime,
             'updated_at'    => new DateTime 
         ]);
 
         User::create([
-            'name'          => 'Andrés Pinzón',
+            'name'          => 'Admin',
             'username'      => 'admin',
-            'email'         => 'andrestntx@Laravel.info',
-            'password'      => 123,
-            'type_id'       => 2,
-            'created_at'    => new DateTime,
-            'updated_at'    => new DateTime 
-        ]);
-
-        User::create([
-            'name'          => 'Digitadora Ana Maria',
-            'username'      => 'ana',
             'email'         => 'admin@Laravel.info',
             'password'      => 123,
-            'type_id'       => 3,
+            'type'          => 'admin',
+            'company_id'    => 1,
             'created_at'    => new DateTime,
             'updated_at'    => new DateTime 
         ]);

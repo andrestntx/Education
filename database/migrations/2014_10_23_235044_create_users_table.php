@@ -12,18 +12,23 @@ class CreateUsersTable extends Migration {
 	 */
 	public function up()
 	{
-		 Schema::create('user', function($table)
+		 Schema::create('users', function($table)
         {
             $table->increments('id');
             $table->string('username', 100)->unique();        
             $table->string('name', 100)->nullable()->unique();
             $table->string('email', 100)->nullable()->unique();
             $table->string('password', 255);
-			$table->rememberToken();
-			$table->timestamps();
 
-			$table->integer('type_id')->unsigned()->nullable();
-		    $table->foreign('type_id')->references('id')->on('user_types');
+            $table->string('url_photo', 255)->nullable();
+
+			$table->string('type',20)->enum(['superadmin', 'admin', 'registred']);
+
+		    $table->integer('company_id')->unsigned();
+		    $table->foreign('company_id')->references('id')->on('companies');
+
+		    $table->rememberToken();
+			$table->timestamps();
         });
 	}
 
@@ -34,7 +39,7 @@ class CreateUsersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('user');
+		Schema::drop('users');
 	}
 
 }

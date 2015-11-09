@@ -1,8 +1,8 @@
-<?php namespace LaravelAppUi\Http\ViewComposers;
+<?php namespace Education\Http\ViewComposers;
 
 use Illuminate\Contracts\View\View;
 use Auth;
-use LaravelAppUi\Libraries\Campaing;
+use Education\Libraries\Campaing;
 
  
 class MenuComposer {

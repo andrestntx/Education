@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelAppUi\Http;
+namespace Education\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -14,11 +14,11 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Styde\Html\Alert\Middleware::class,
-        \LaravelAppUi\Http\Middleware\EncryptCookies::class,
+        \Education\Http\Middleware\EncryptCookies::class,
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \LaravelAppUi\Http\Middleware\VerifyCsrfToken::class,
+        \Education\Http\Middleware\VerifyCsrfToken::class,
     ];
 
     /**
@@ -27,10 +27,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \LaravelAppUi\Http\Middleware\Authenticate::class,
+        'auth' => \Education\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \LaravelAppUi\Http\Middleware\RedirectIfAuthenticated::class,
-        'logs' => \LaravelAppUi\Http\Middleware\AfterLogs::class,
-        'module' => \LaravelAppUi\Http\Middleware\Module::class
+        'guest' => \Education\Http\Middleware\RedirectIfAuthenticated::class,
+        'logs' => \Education\Http\Middleware\AfterLogs::class,
+        'user_type' => \Education\Http\Middleware\UserType::class
     ];
 }

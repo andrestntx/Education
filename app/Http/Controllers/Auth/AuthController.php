@@ -1,8 +1,8 @@
-<?php namespace LaravelAppUi\Http\Controllers\Auth;
+<?php namespace Education\Http\Controllers\Auth;
 
-use LaravelAppUi\Entities\User;
+use Education\Entities\User;
 use Validator;
-use LaravelAppUi\Http\Controllers\Controller;
+use Education\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 

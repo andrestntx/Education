@@ -27,5 +27,8 @@
 <!-- Include a specific file here from css/themes/ folder to alter the default theme of the template -->
 
 <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
-<link rel="stylesheet" href="/assets/css/themes/{{ env('APP_TEMPLATE') }}.min.css">
+
+<link rel="stylesheet" href="{{url('assets/css/themes.css')}}">
+
+<link rel="stylesheet" href="/assets/css/themes/system.css">
 <!-- END Stylesheets -->

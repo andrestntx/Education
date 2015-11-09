@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => LaravelAppUi\User::class,
+        'model'  => Education\User::class,
         'key'    => '',
         'secret' => '',
     ],

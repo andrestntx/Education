@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelAppUi\Http\Middleware;
+namespace Education\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;

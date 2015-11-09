@@ -1,5 +1,5 @@
 @extends('layout')
-	@section('title_page') Bienvenido a {{ env('APP_NAME') }} @endsection
+	@section('title_web_page') Bienvenido a {{ env('APP_NAME') }} @endsection
 	@section('meta')
 		<meta name="description" content="AppUI is a Web App Bootstrap Admin Template created by pixelcave and published on Themeforest">
         <meta name="author" content="pixelcave">

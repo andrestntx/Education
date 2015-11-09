@@ -1,4 +1,4 @@
-<?php namespace LaravelAppUi\Http\Middleware;
+<?php namespace Education\Http\Middleware;
 
 use Closure;
 use Log;

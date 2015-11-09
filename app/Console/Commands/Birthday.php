@@ -1,10 +1,10 @@
 <?php
 
-namespace LaravelAppUi\Console\Commands;
+namespace Education\Console\Commands;
 
 use Illuminate\Console\Command;
-use LaravelAppUi\Entities\Voter;
-use LaravelAppUi\Libraries\Sms\SendSMS;
+use Education\Entities\Voter;
+use Education\Libraries\Sms\SendSMS;
 use Log;
 
 class Birthday extends Command

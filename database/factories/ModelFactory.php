@@ -11,7 +11,7 @@
 |
 */
 
-$factory->define(LaravelAppUi\User::class, function ($faker) {
+$factory->define(Education\User::class, function ($faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,

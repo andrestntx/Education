@@ -2,7 +2,7 @@
 <html lang="es" @yield('class_html')>
 	<head>
 		<meta charset="utf-8"/>
-		<title> @yield('title_page', 'Bienvenido a la Aplicación') </title>
+		<title> @yield('title_web_page', 'Bienvenido a la Aplicación') </title>
 		@yield('css_files')
 		@yield('meta')
 	</head>

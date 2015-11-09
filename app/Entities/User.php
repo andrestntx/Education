@@ -1,4 +1,4 @@
-<?php namespace LaravelAppUi\Entities;
+<?php namespace Education\Entities;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -16,15 +16,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var string
      */
-    protected $table = 'user';
+    protected $table = 'users';
     public $timestamp = true;
+
+    /**
+     * The system types array
+     *
+     * @var array 
+     */
+    private static $singularTypes = ['superadmin' => 'super administrador', 'admin' => 'administrador', 'registered' => 'registrado'];
+    private static $pluralTypes = ['superadmin' => 'super administradores', 'admin' => 'administradores', 'registered' => 'registrados'];
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'username', 'type_id', 'email', 'password'];
+    protected $fillable = ['name', 'username', 'type', 'email', 'password'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -43,78 +51,85 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /* Mutators */
 	public function setPasswordAttribute($value)
     {
-        if(!empty($value)){
+        if( !empty($value) )
+        {
             $this->attributes['password'] = Hash::make(trim($value));
         }
     }
 
+    public function isAdmin()
+    {
+        return $this->isType('admin');
+    }
+
+    public function isRegistered()
+    {
+        return $this->isType('registered');
+    }
+
+    public function isType($type)
+    {
+        if($this->type == $type)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getTypeNameAttribute()
     {
-        return $this->type->name;
+        return self::$singularTypes[$this->type];    
     }
 
-    public function getCountVotersAttribute()
+    public function getTypePluralNameAttribute()
     {
-        return $this->voters->count();
+        return self::$pluralTypes[$this->type];    
     }
 
-    public function getCountPollsAttribute()
+    public function company()
     {
-        return $this->voterPolls->count();
+        return $this->belongsTo('Education\Entities\Company');
     }
 
-    /* Functions */
-    
-    public function getMenuModules()
+    /*public function protocolsForStudy()
     {
-        return $this->type->getMenuModules();
+        return Protocol::userCanStudy($this->id)->orderBy('id')->get();
     }
 
-    public function getModuleNames()
+    public function resolvedSurveys()
     {
-        return $this->type->getModuleNames();
+        return $this->hasMany('ResolvedSurvey', 'user_id');
     }
 
-    public function hasModule($module)
+    public function examScores()
     {
-        return $this->type->hasModule($module);
+        return $this->hasMany('ExamScores', 'user_id');
     }
 
-    public function voterPollsRealized($poll_id)
+    public function protocolsCreated()
     {
-        return $this->voterPolls()->realized()->wherePollId($poll_id)->count();
+        return $this->hasMany('Protocol', 'user_id');
     }
 
-    public function voterPollsAnswered($poll_id)
+    public function preferredCompany()
     {
-        return $this->voterPolls()->whereResult('answer')->wherePollId($poll_id)->count();
+        return $this->belongsTo('Company', 'preferred_company_id');
     }
 
-     public function voterPollsRealizedToday($poll_id)
+    public function systemRole()
     {
-        return $this->voterPolls()->realized()->wherePollId($poll_id)->today()->count();
+        return $this->belongsTo('SystemRole', 'system_role_id');
     }
 
-    public function voterPollsAnsweredToday($poll_id)
+    public function roles()
     {
-        return $this->voterPolls()->whereResult('answer')->wherePollId($poll_id)->today()->count();
+        return $this->belongsToMany('UserRole', 'users_has_roles', 'user_id', 'role_id');
     }
 
-
-    /* Relations */
-    public function type()
+    public function areas()
     {
-        return $this->belongsTo('LaravelAppUi\Entities\UserType', 'type_id');
-    }
-
-    public function voters()
-    {
-        return $this->hasMany('LaravelAppUi\Entities\Voter', 'created_by', 'id');
-    }
-
-    public function voterPolls()
-    {
-        return $this->hasMany('LaravelAppUi\Entities\VoterPoll');
-    }
+        return $this->belongsToMany('Area', 'users_has_areas', 'user_id', 'area_id');
+    }*/
 
 }

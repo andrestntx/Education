@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: LaravelAppUi
-        psr4_prefix: LaravelAppUi
+        namespace: Education
+        psr4_prefix: Education
         src_path: app

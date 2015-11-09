@@ -19,7 +19,13 @@ Route::controllers([
 ]);
 
 /** App **/
-Route::group(['middleware' => ['auth']], function()
+Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 {
+	Route::group(['middleware' => 'user_type:superadmin'], function()
+	{
+		Route::resource('companies', 'CompaniesController');
+		Route::resource('companies.users', 'CompanyUsersController');
+	});
+
 	Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);	
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelAppUi\Exceptions;
+namespace Education\Exceptions;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;

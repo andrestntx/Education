@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelAppUi\Console\Commands;
+namespace Education\Console\Commands;
 
 use Illuminate\Console\Command;
-use LaravelAppUi\Entities\Voter;
+use Education\Entities\Voter;
 use Log;
 
 class UpdatePollingStations extends Command

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelAppUi\Events;
+namespace Education\Events;
 
 abstract class Event
 {
