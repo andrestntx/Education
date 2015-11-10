@@ -17,6 +17,12 @@ class Answer extends Model
         return $this->belongsTo('Question', 'question_id');
     }
 
+
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class);
+    }
+
     public function scopeCorrects($query)
     {
         return $query->whereCorrect(true);

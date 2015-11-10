@@ -61,30 +61,21 @@ class Exam extends Model
         return $this->roles->lists('id');
     }
 
-    public function questions()
+    public function answers()
     {
-        return $this->hasMany('Question', 'survey_id');
+        return $this->hasMany(Answer::class);
     }
 
-    public function creator()
+    public function user()
     {
-        return $this->belongsTo('User', 'created_by');
+        return $this->belongsTo(User::class);
     }
 
-    public function type()
+    public function protocol()
     {
-        return $this->belongsTo('SurveyType', 'type_id');
+        return $this->belongsTo(Protocol::class);
     }
 
-    public function areas()
-    {
-        return $this->belongsToMany('Area', 'surveys_has_areas', 'survey_id', 'area_id');
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany('UserRole', 'surveys_has_roles', 'survey_id', 'role_id');
-    }
 
     public function randomQuestions()
     {

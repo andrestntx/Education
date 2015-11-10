@@ -39,5 +39,20 @@ class Role extends Model
         
         return false;
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function protocols()
+    {
+        return $this->belongsToMany(Protocol::class);
+    }
+
+    public function companies()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }
 

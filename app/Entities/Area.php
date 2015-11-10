@@ -40,5 +40,20 @@ class Area extends Model
         
         return false;
     }
+
+    public function Protocols()
+    {
+        return $this->belongsToMany(Protocol::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }
 

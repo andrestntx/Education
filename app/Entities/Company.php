@@ -49,7 +49,7 @@ class Company extends Model
      */
     public function users()
     {
-        return $this->hasMany('Education\Entities\User');
+        return $this->hasMany(User::class);
     }
 
     /** 
@@ -58,7 +58,7 @@ class Company extends Model
      */
     public function roles()
     {
-        return $this->hasMany('Education\Entities\Role');
+        return $this->hasMany(Role::class);
     }
 
     /** 
@@ -70,7 +70,7 @@ class Company extends Model
         return $this->hasMany('Education\Entities\Area');
     }
 
-    /** 
+    /**
      * Relation
      * @return Education\Entities\Category
      */
@@ -85,7 +85,7 @@ class Company extends Model
      */
     public function protocols()
     {
-        return $this->hasManyThrough('Education\Entities\Protocol', 'Education\Entities\User');
+        return $this->hasManyThrough(Protocol::class, User::class);
     }
 
     /** 
@@ -94,17 +94,8 @@ class Company extends Model
      */
     public function exams()
     {
-        return $this->hasManyThrough('Education\Entities\Exam', 'Education\Entities\User');
+        return $this->hasManyThrough(Exam::class, User::class);
     }
-
-    /** 
-     * Relation
-     * @return Education\Entities\CompanyType
-     */
-	public function type()
-	{
-	    return $this->belongsTo('Education\Entities\CompanyType');
-	}
 
 
 	/***** End Relations *****/

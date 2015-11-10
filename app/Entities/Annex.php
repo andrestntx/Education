@@ -17,9 +17,9 @@ class Annex extends Model
         return $this->user->name;
     }
 
-    public function user()
+    public function protocol()
     {
-        return $this->belongsTo('User', 'user_id');
+        return $this->belongsTo(Protocol::class);
     }
 
     public function isValidFile($file)

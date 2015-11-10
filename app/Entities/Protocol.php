@@ -150,19 +150,13 @@ class Protocol extends Model
 
     /***** Relations *****/
 
-    public function survey()
-    {
-        return $this->belongsTo('Survey', 'survey_id');
-    }
 
-    public function examScores()
-    {
-        return $this->hasMany('ExamScores', 'survey_id', 'survey_id');
-    }
+
+
 
     public function user()
     {
-        return $this->belongsTo('User', 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     /** 
@@ -171,12 +165,27 @@ class Protocol extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany('Education\Entities\Category');
+        return $this->belongsToMany(Category::class);
     }
 
-    public function annex()
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function areas()
+    {
+        return $this->belongsToMany(Area::class);
+    }
+
+    public function annexes()
     {
         return $this->hasMany('Annex', 'protocol_id');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
     }
 
     /***** End Relations *****/
