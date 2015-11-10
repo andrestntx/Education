@@ -18,7 +18,7 @@ class CreateAnswersTable extends Migration {
 		    $table->text('text');
 		    $table->text('observation')->nullable();
 		    $table->integer('value')->nullable();
-		    $table->boolean('correct')->nullable();
+		    $table->boolean('correct')->default(false)->nullable();
 
 		    $table->integer('question_id')->unsigned();	    
 		    $table->foreign('question_id')

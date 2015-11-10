@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration {
 
             $table->string('url_photo', 255)->nullable();
 
-			$table->string('type',20)->enum(['superadmin', 'admin', 'registred']);
+			$table->string('type',20)->enum(['superadmin', 'admin', 'registred'])->default('registred');
 
 		    $table->integer('company_id')->unsigned();
 		    $table->foreign('company_id')->references('id')->on('companies');

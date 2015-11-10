@@ -18,6 +18,8 @@ class CreateProtocolsTable extends Migration {
 		    $table->string('name', 100);
 		    $table->string('description', 250)->nullable();
 		    $table->string('url_doc', 250)->nullable();
+		    $table->boolean('aviable')->default(false)->nullable();
+		    
 		    $table->timestamps();
 
 		    $table->integer('user_id')->unsigned();

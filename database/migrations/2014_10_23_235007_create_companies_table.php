@@ -18,8 +18,7 @@ class CreateCompaniesTable extends Migration {
 		    $table->string('name', 100);
 		    $table->string('url_logo', 250)->nullable();
 
-		    $table->integer('type_id')->unsigned()->default(2);
-		    $table->foreign('type_id')->references('id')->on('company_types');
+		    $table->string('type',20)->enum(['developer', 'customer'])->default('customer');
 
 		    $table->timestamps();
 		});
