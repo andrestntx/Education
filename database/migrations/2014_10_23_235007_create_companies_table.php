@@ -15,7 +15,7 @@ class CreateCompaniesTable extends Migration {
 		Schema::create('companies', function($table)
 		{
 		    $table->increments('id');
-		    $table->string('name', 100);
+		    $table->string('name', 100)->unique();
 		    $table->string('url_logo', 250)->nullable();
 
 		    $table->string('type',20)->enum(['developer', 'customer'])->default('customer');

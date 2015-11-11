@@ -1,7 +1,7 @@
-<?php namespace App\Http\ViewComposers\Categories;
+<?php namespace Education\Http\ViewComposers\Categories;
 
 use Illuminate\Contracts\View\View;
-use App\Entities\Category;
+use Education\Entities\Category;
  
 class ListComposer {
     /**
