@@ -8,6 +8,11 @@ class Company extends Model
 	public $timestamps = true;
 	public $increments = true;
 
+    public static function allTypePaginate($type = 'customer', $paginate = 10)
+    {
+        return self::with(['users', 'protocols'])->whereType('customer')->paginate(10);
+    }
+
     public function getAreasCountAttribute()
     {
         return $this->areas->count();

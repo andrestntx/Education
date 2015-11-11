@@ -12,7 +12,7 @@ class ListComposer {
      */
     public function compose(View $view)
     {        
-        $companies = Company::whereType('customer')->orderBy('id')->paginate(10);
+        $companies = Company::allTypePaginate();
 
         $view->with([
             'companies' => $companies

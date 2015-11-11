@@ -15,8 +15,8 @@ class ComposerServiceProvider extends ServiceProvider
         View::composers([
             'Education\Http\ViewComposers\MenuComposer'                 => ['auth.login',
                                                                         'dashboard.pages.*'],
-            'Education\Http\ViewComposers\Categories\ListComposer'      => 'dashboard.pages.category.lists-table',
-            'Education\Http\ViewComposers\Companies\ListComposer'       => 'dashboard.pages.company.list'
+            'Education\Http\ViewComposers\Categories\ListComposer'      => 'dashboard.pages.categoies.lists-table',
+            'Education\Http\ViewComposers\Companies\ListComposer'       => 'dashboard.pages.companies.list'
         ]);
     }
 

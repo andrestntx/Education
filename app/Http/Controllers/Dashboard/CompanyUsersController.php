@@ -18,7 +18,7 @@ class CompanyUsersController extends Controller {
 	private $form_data;
 
 	private static $prefixRoute = 'companies.users.';
-    private static $prefixView  = 'dashboard.pages.user.';
+    private static $prefixView  = 'dashboard.pages.companies.users.superadmin.';
 
 	public function __construct() 
 	{
@@ -77,7 +77,7 @@ class CompanyUsersController extends Controller {
 	{
 		$users = $this->company->userAdmins();
 		
-		return view()->make(self::$prefixView . 'lists-table-superadmin', compact('users'))
+		return view()->make(self::$prefixView . 'list', compact('users'))
 			->with(['company' => $this->company]); 
 	}
 

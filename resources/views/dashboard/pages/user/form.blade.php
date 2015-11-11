@@ -4,7 +4,9 @@
   <i class="fa fa-building-o"></i> {{ $company->name }}: 
   @if($user->exists) Usuario {{ $user->name }} @else Nuevo Usuario @endif 
 @stop
-@section('breadcrumbs') @stop
+
+@section('breadcrumbs') {!! Breadcrumbs::render('companies.company.users.user', $company, $user) !!} @stop
+
 @section('title_form') Datos del Usuario @stop
 @section('form')
 

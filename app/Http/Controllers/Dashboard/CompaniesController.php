@@ -16,7 +16,7 @@ class CompaniesController extends Controller {
 	private $form_data;
 
 	private static $prefixRoute = 'companies.';
-    private static $prefixView  = 'dashboard.pages.company.';
+    private static $prefixView  = 'dashboard.pages.companies.';
 
 	public function __construct() 
 	{

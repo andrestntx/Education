@@ -3,6 +3,9 @@
 @section('title_page') 
   <i class="fa fa-building-o"></i> @if($company->exists) Editar Institución: {{ $company->name }} @else Nueva Institución @endif 
 @stop
+
+@section('breadcrumbs') {!! Breadcrumbs::render('companies.company', $company) !!} @stop
+
 @section('title_form') Datos de la Institución @stop
 
 @section('form')

@@ -1,6 +1,53 @@
 <?php 
-	Breadcrumbs::register('home', function($breadcrumbs){
-		$breadcrumbs->push('<i class="fa fa-home"></i>', url('/'));
-	});		
+
+Breadcrumbs::register('home', function($breadcrumbs){
+	$breadcrumbs->push('<i class="fa fa-home"></i>', url('/'));
+});		
+
+	// Home > Companies
+Breadcrumbs::register('companies', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Empresas', route('companies.index'));
+});
+
+// Home > Companies > Company
+Breadcrumbs::register('companies.company', function($breadcrumbs, $company)
+{
+	$breadcrumbs->parent('companies');
+
+	if($company->exists)
+	{
+		$breadcrumbs->push($company->name, route('companies.show', $company->id));
+	}
+	else
+	{
+		$breadcrumbs->push('Nueva', route('companies.create'));
+	}
+});
+
+// Home > Companies > Company > Users
+Breadcrumbs::register('companies.company.users', function($breadcrumbs, $company)
+{
+	$breadcrumbs->parent('companies.company', $company);
+
+	$breadcrumbs->push('Usuarios', route('companies.users.index', $company->id));
+
+});
+
+// Home > Companies > Company > Users > User
+Breadcrumbs::register('companies.company.users.user', function($breadcrumbs, $company, $user)
+{
+	$breadcrumbs->parent('companies.company.users', $company);
+
+	if($user->exists)
+	{
+		$breadcrumbs->push($user->name, route('companies.users.show', [$company->id, $user->id]));
+	}
+	else
+	{
+		$breadcrumbs->push('Nuevo', route('companies.users.create', $company->id));
+	}
+});
 
 ?>

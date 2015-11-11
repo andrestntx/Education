@@ -6,6 +6,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Hash;
+use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -85,6 +86,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getTypePluralNameAttribute()
     {
         return self::$pluralTypes[$this->type];    
+    }
+
+    public function getUpdatedAtHummansAttribute()
+    {
+        Carbon::setLocale('es');
+        return ucfirst($this->updated_at->diffForHumans());
     }
 
     public function company()
