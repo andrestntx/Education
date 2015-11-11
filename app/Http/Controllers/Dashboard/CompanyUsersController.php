@@ -14,6 +14,9 @@ class CompanyUsersController extends Controller {
 	private $user;
 	private $form_data;
 
+	private static $prefixRoute = 'companies.users';
+    private static $prefixView  = 'dashboard.pages.user.';
+
 	public function __construct() 
 	{
 		$this->beforeFilter('@newUser', ['only' => ['create', 'store']]);
@@ -58,7 +61,7 @@ class CompanyUsersController extends Controller {
 	 */
 	public function getFormView()
 	{
-	 	return view('dashboard.pages.user.form')
+	 	return view(self::$prefixView . 'form')
 			->with(['form_data' => $this->form_data, 'company' => $this->company, 'user' => $this->user]);
 	} 
 
@@ -70,8 +73,9 @@ class CompanyUsersController extends Controller {
 	public function index($company_id)
 	{
 		$users = $this->company->userAdmins();
-		return view()->make('dashboard.pages.user.lists-table-superadmin', compact('users'))
-			->with(['company' => $this->company, 'user' => $this->user]); 
+		
+		return view()->make(self::$prefixView . 'lists-table-superadmin', compact('users'))
+			->with(['company' => $this->company]); 
 	}
 
 
@@ -82,7 +86,7 @@ class CompanyUsersController extends Controller {
 	 */
 	public function create($company_id)
 	{
-		$this->form_data = ['route' => ['companies.users.store', $this->company->id], 'method' => 'POST', 'files' => true];
+		$this->form_data = ['route' => [self::$prefixRoute . 'store', $this->company->id], 'method' => 'POST', 'files' => true];
 		return $this->getFormView();
 	}
 
@@ -96,7 +100,8 @@ class CompanyUsersController extends Controller {
 	{
 		$this->user->fill($request->all());
 		$this->company->users()->save($this->user);
-        return redirect()->route('companies.users.index', $this->company->id);
+
+        return redirect()->route(self::$prefixRoute . 'index', $this->company->id);
 	}
 
 	/**
@@ -108,7 +113,7 @@ class CompanyUsersController extends Controller {
 	 */
 	public function show($company_id, $user_id)
 	{
-		return View::make('dashboard.pages.user..show', compact('user'));
+		return View::make(self::$prefixView . '.show', compact('user'));
 	}
 
 
@@ -121,7 +126,7 @@ class CompanyUsersController extends Controller {
 	public function edit($company_id, $user_id)
 	{
 		$this->form_data = [
-			'route' => ['companies.users.update', $this->company->id, $this->user->id], 
+			'route' => [self::$prefixRoute . 'update', $this->company->id, $this->user->id], 
 			'method' => 'PUT', 'files' => true
 		];
 
@@ -139,7 +144,8 @@ class CompanyUsersController extends Controller {
 	{
 		$this->user->fill($request->all());
         $this->user->save();
-        return redirect()->route('companies.users.index', $this->company->id);	
+
+        return redirect()->route(self::$prefixRoute . 'index', $this->company->id);	
 	}
 
 }

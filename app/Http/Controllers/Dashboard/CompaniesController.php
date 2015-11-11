@@ -12,6 +12,9 @@ class CompaniesController extends Controller {
 	private $company;
 	private $form_data;
 
+	private static $prefixRoute = 'companies.';
+    private static $prefixView  = 'dashboard.pages.company.';
+
 	public function __construct() 
 	{
 		$this->beforeFilter('@newCompany', ['only' => ['create', 'store']]);
@@ -43,9 +46,9 @@ class CompaniesController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function getFormView()
+	public function getFormView($viewName)
 	{
-	 	return view('dashboard.pages.company.form')
+	 	return view(self::$viewName . 'form')
 			->with(['form_data' => $this->form_data, 'company' => $this->company]);
 	} 
 
@@ -57,9 +60,7 @@ class CompaniesController extends Controller {
 
 	public function index()
 	{
-		$companies = Company::whereTypeId('2')->orderBy('id')->paginate(10);
-		return view('dashboard.pages.company.lists', compact('companies'));
-		
+		return view(self::$prefixView . 'lists');
 	}
 
 
@@ -70,7 +71,7 @@ class CompaniesController extends Controller {
 	 */
 	public function create()
 	{
-		$this->form_data = ['route' => 'companies.store', 'method' => 'POST', 'files' => true];
+		$this->form_data = ['route' => self::$prefixRoute . 'store', 'method' => 'POST', 'files' => true];
 		return $this->getFormView();
 	}
 
@@ -85,7 +86,7 @@ class CompaniesController extends Controller {
 		$this->company->fill($request->all());
         $this->company->save();
 
-        return redirect()->route('companies.index');
+        return redirect()->route(self::$prefixRoute . 'index');
 
 	}
 
@@ -98,7 +99,7 @@ class CompaniesController extends Controller {
 	 */
 	public function show($id)
 	{
-		return view('dashboard.pages.company.show')->with('company', $this->company);
+		return view(self::$prefixView . 'show')->with('company', $this->company);
 	}
 
 
@@ -110,7 +111,7 @@ class CompaniesController extends Controller {
 	 */
 	public function edit()
 	{
-		$this->form_data = ['route' => ['companies.update', $this->company->id], 'method' => 'PUT', 'files' => true];
+		$this->form_data = ['route' => [self::$prefixRoute . 'update', $this->company->id], 'method' => 'PUT', 'files' => true];
 		return $this->getFormView();
 	}
 
@@ -126,7 +127,7 @@ class CompaniesController extends Controller {
 		$this->company->fill($request->all());
         $this->company->save();
 
-        return redirect()->route('companies.index');
+        return redirect()->route(self::$prefixRoute . 'index');
 	}
 
 }
