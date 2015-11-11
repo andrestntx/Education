@@ -89,47 +89,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function company()
     {
-        return $this->belongsTo('Education\Entities\Company');
-    }
-
-    /*public function protocolsForStudy()
-    {
-        return Protocol::userCanStudy($this->id)->orderBy('id')->get();
-    }
-
-    public function resolvedSurveys()
-    {
-        return $this->hasMany('ResolvedSurvey', 'user_id');
-    }
-
-    public function examScores()
-    {
-        return $this->hasMany('ExamScores', 'user_id');
-    }
-
-    public function protocolsCreated()
-    {
-        return $this->hasMany('Protocol', 'user_id');
-    }
-
-    public function preferredCompany()
-    {
-        return $this->belongsTo('Company', 'preferred_company_id');
-    }
-
-    public function systemRole()
-    {
-        return $this->belongsTo('SystemRole', 'system_role_id');
+        return $this->belongsTo(Company::class);
     }
 
     public function roles()
     {
-        return $this->belongsToMany('UserRole', 'users_has_roles', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class);
     }
 
     public function areas()
     {
-        return $this->belongsToMany('Area', 'users_has_areas', 'user_id', 'area_id');
-    }*/
+        return $this->belongsToMany(Area::class);
+    }
+
+    public function exams()
+    {
+        return $this->hasMany(Exam::class);
+    }
+
+    public function protocolsCreated()
+    {
+        return $this->hasMany(Protocol::class, 'user_id');
+    }
+
 
 }

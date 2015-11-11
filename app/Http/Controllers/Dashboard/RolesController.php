@@ -1,25 +1,49 @@
-<?php
-
 <?php namespace Education\Http\Controllers\Dashboard;
 
 use Education\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Flash, Alert;
 
 use Education\Entities\Role;
 
-class RolesController extends <?php
+class RolesController extends Controller {
 
-<?php namespace Education\Http\Controllers\Dashboard;
+    private $role;
+    private $form_data;
+    private static $prefixRoute = 'users.roles.';
+    private static $prefixView = 'dashboard.pages.user.role.';
 
-use Education\Http\Controllers\Controller;
+    public function __construct()
+    {
+        $this->beforeFilter('@newRole', ['only' => ['store','create']]);
+        $this->beforeFilter('@findRole', ['only' => ['show', 'edit', 'update', 'destroy']]);
+    }
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+    /**
+     * Find a specified resource
+     *
+     */
+    public function findRole(Route $route)
+    {
+        $this->role = Role::findOrFail($route->getParameter('roles'));
+    }
 
-use Education\Entities\Company;
-Controller {
+    /**
+     * Create a new User instance
+     *
+     */
+    public function newRole()
+    {
+        $this->role = new Role;
+    }
+
+    public function getViewForm($viewName = 'show')
+    {
+        return view(self::$prefixView . $viewName)
+            ->with(['role' => $this->role, 'form_data' => $this->form_data]);
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -29,9 +53,7 @@ Controller {
 
 	public function index()
 	{
-		$roles = Auth::user()->preferredCompany->roles()->orderBy('id')->get();
-		return View::make('dashboard.pages.user.role.lists-table', compact('roles'));
-		
+        return view(self::$prefixView . 'lists-table');
 	}
 
 
@@ -42,9 +64,8 @@ Controller {
 	 */
 	public function create()
 	{
-		$role = new UserRole;
-		$form_data = array('route' => 'usuarios.perfiles.store', 'method' => 'POST');
-		return View::make('dashboard.pages.user.role.form', compact('role', 'form_data'));
+        $this->form_data = ['route' => self::$prefixRoute .'store', 'method' => 'POST'];
+        return $this->getViewForm('form');
 	}
 
 
@@ -53,19 +74,14 @@ Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(CreateRequest $request)
 	{
-        $role = new UserRole;
-        $data = Input::all();
-        
-        if ($role->validAndSave($data))
-        {
-            return Redirect::route('usuarios.perfiles.index');
-        }
-        else
-        {
-			return Redirect::route('usuarios.perfiles.create')->withInput()->withErrors($role->errors);
-        }
+        $this->role->fill($request->all());
+        $this->role->save();
+
+        Flash::info('Perfil creado correctamente');
+
+        return redirect()->route(self::$prefixRoute .'index');
 	}
 
 
@@ -77,8 +93,7 @@ Controller {
 	 */
 	public function show($id)
 	{
-		$role = UserRole::findOrFail($id);
-		return View::make('dashboard.pages.user.role.show', compact('action_role', 'role'));
+        return $this->getViewForm();
 
 	}
 
@@ -91,9 +106,8 @@ Controller {
 	 */
 	public function edit($id)
 	{
-		$role = UserRole::findOrFail($id);
-		$form_data = array('route' => array('usuarios.perfiles.update', $role->id), 'method' => 'PUT', 'files' => true);
-		return View::make('dashboard.pages.user.role.form', compact('role', 'form_data'));
+        $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->role->id], 'method' => 'PUT','files' => true];
+        return $this->getViewForm('form');
 	}
 
 
@@ -103,19 +117,14 @@ Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(EditRequest $request, $id)
 	{
-		$role = UserRole::findOrFail($id);
-		
-        $data = Input::all();
-        if ($role->validAndSave($data))
-        {
-            return Redirect::route('usuarios.perfiles.index');
-        }
-        else
-        {
-			return Redirect::route(array('usuarios.perfiles.edit', $role->id))->withInput()->withErrors($role->errors);
-        }	
+        $this->role->fill($request->all());
+        $this->role->save();
+
+        Flash::info('Perfil editado correctamente');
+
+        return redirect()->route(self::$prefixRoute . 'index');
 	}
 
 
@@ -127,21 +136,20 @@ Controller {
 	 */
 	public function destroy($id)
     {
-    	$role = UserRole::findOrFail($id);
-    	
-        $role->delete();
+        $this->role->delete();
 
         if (Request::ajax())
         {
             return Response::json(array (
                 'success' => true,
-                'msg'     => 'Perfil "' . $role->name . '" eliminado',
-                'id'      => $role->id
+                'msg'     => 'Perfil "' . $this->role->name . '" eliminado',
+                'id'      => $this->role->id
             ));
         }
         else
         {
-            return Redirect::route('usuarios.perfiles.index');
+            return redirect()->route(self::$prefixRoute . 'index');
+
         }
 	}
 }

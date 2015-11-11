@@ -9,20 +9,16 @@ class Question extends Model
 	public $increments = true;
 
     /* Relations */
-     
-    public function survey()
-    {
-        return $this->belongsTo('Survey', 'survey_id');
-    }
 
-    public function type()
-    {
-        return $this->belongsTo('QuestionType', 'type_id');
-    }
 
     public function answers()
     {
-        return $this->hasMany('Answer', 'question_id');
+        return $this->hasMany(Answer::class);
+    }
+
+    public function protocol()
+    {
+        return $this->belongsTo(Protocol::class);
     }
 
     /* End Relations */

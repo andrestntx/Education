@@ -1,25 +1,49 @@
-<?php
-
 <?php namespace Education\Http\Controllers\Dashboard;
 
 use Education\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Flash, Alert;
 
 use Education\Entities\Area;
 
-class AreasController extends <?php
+class AreasController extends Controller {
 
-<?php namespace Education\Http\Controllers\Dashboard;
+    private $area;
+    private $form_data;
+    private static $prefixRoute = 'areas.';
+    private static $prefixView = 'dashboard.pages.area.';
 
-use Education\Http\Controllers\Controller;
+    public function __construct()
+    {
+        $this->beforeFilter('@newArea', ['only' => ['store','create']]);
+        $this->beforeFilter('@findArea', ['only' => ['show', 'edit', 'update', 'destroy']]);
+    }
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+    /**
+     * Find a specified resource
+     *
+     */
+    public function findArea(Route $route)
+    {
+        $this->area = Area::findOrFail($route->getParameter('areas'));
+    }
 
-use Education\Entities\Company;
-Controller {
+    /**
+     * Create a new User instance
+     *
+     */
+    public function newArea()
+    {
+        $this->area = new Area;
+    }
+
+    public function getViewForm($viewName = 'show')
+    {
+        return view(self::$prefixView . $viewName)
+            ->with(['area' => $this->area, 'form_data' => $this->form_data]);
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -28,9 +52,8 @@ Controller {
 	 */
 	public function index()
 	{
-		$areas = Auth::user()->preferredCompany->areas()->orderBy('id')->get();
-		return View::make('dashboard.pages.area.lists-table', compact('areas'));
-		
+        return view(self::$prefixView . 'list');
+
 	}
 
 
@@ -41,9 +64,8 @@ Controller {
 	 */
 	public function create()
 	{
-		$area = new Area;		
-		$form_data = array('route' => 'areas.store', 'method' => 'POST');
-		return View::make('dashboard.pages.area.form', compact('area', 'form_data'));
+        $this->form_data = ['route' => self::$prefixRoute .'store', 'method' => 'POST'];
+        return $this->getViewForm('form');
 	}
 
 
@@ -52,19 +74,14 @@ Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(CreateRequest $request)
 	{
-        $area = new Area;
-        $data = Input::all();
-        
-        if ($area->validAndSave($data))
-        {
-            return Redirect::route('areas.index');
-        }
-        else
-        {
-			return Redirect::route('areas.create')->withInput()->withErrors($area->errors);
-        }
+        $this->area->fill($request->all());
+        $this->area->save();
+
+        Flash::info('Area creada correctamente');
+
+        return redirect()->route(self::$prefixRoute .'index');
 	}
 
 
@@ -76,8 +93,7 @@ Controller {
 	 */
 	public function show($id)
 	{
-		$area = Area::findOrFail($id);
-		return View::make('dashboard.pages.area.show', compact('area'));
+        return $this->getViewForm();
 	}
 
 
@@ -89,9 +105,8 @@ Controller {
 	 */
 	public function edit($id)
 	{
-		$area = Area::findOrFail($id);
-		$form_data = array('route' => array('areas.update', $area->id), 'method' => 'PUT', 'files' => true);
-		return View::make('dashboard.pages.area.form', compact('area', 'form_data'));
+        $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->area->id], 'method' => 'PUT', 'files' => true];
+        return $this->getViewForm('form');
 	}
 
 
@@ -101,19 +116,14 @@ Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(EditRequest $request, $id)
 	{
-		$area = Area::findOrFail($id);
-		
-        $data = Input::all();
-        if ($area->validAndSave($data))
-        {
-            return Redirect::route('areas.index');
-        }
-        else
-        {
-			return Redirect::route(array('areas.edit', $area->id))->withInput()->withErrors($area->errors);
-        }	
+        $this->area->fill($request->all());
+        $this->area->save();
+
+        Flash::info('Area editada correctamente');
+
+        return redirect()->route(self::$prefixRoute . 'index');
 	}
 
 
@@ -125,16 +135,14 @@ Controller {
 	 */
 	public function destroy($id)
     {
-    	$area = Area::findOrFail($id);
-    	
-        $area->delete();
+        $this->area->delete();
 
         if (Request::ajax())
         {
             return Response::json(array (
                 'success' => true,
-                'msg'     => 'Área "' . $area->name . '" eliminada',
-                'id'      => $area->id
+                'msg'     => 'Área "' . $this->area->name . '" eliminada',
+                'id'      => $this->area->id
             ));
         }
         else

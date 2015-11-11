@@ -15,7 +15,12 @@ class Category extends Model
      */
     public function protocols()
     {
-        return $this->belongsToMany('Education\Entities\Protocol');
+        return $this->belongsToMany(Protocol::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
 	public function isValid($data)
