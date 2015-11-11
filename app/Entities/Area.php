@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
-	protected $fillable = array('name', 'description', 'company_id');
+	protected $fillable = array('name', 'description');
 	public $timestamps = true;
 	public $increments = true;
 

@@ -14,7 +14,7 @@ class CompanyUsersController extends Controller {
 	private $user;
 	private $form_data;
 
-	private static $prefixRoute = 'companies.users';
+	private static $prefixRoute = 'companies.users.';
     private static $prefixView  = 'dashboard.pages.user.';
 
 	public function __construct() 

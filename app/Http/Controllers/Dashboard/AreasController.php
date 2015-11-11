@@ -79,7 +79,7 @@ class AreasController extends Controller {
 	public function store(CreateRequest $request)
 	{
         $this->area->fill($request->all());
-        $this->area->save();
+        \Auth::user()->areasCreated()->save($this->area);
 
         Flash::info('Area creada correctamente');
 

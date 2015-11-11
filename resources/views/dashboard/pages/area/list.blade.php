@@ -31,21 +31,18 @@
                                 <a href="{{route('areas.edit', $area->id)}}" data-toggle="tooltip" title="Editar Area" class="btn btn-effect-ripple btn-warning">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="#" data-id="{{ $area->id }}" id="btn-delete-{{$area->id}}" onclick="deleteModel('btn-delete-{{$area->id}}')"  data-toggle="tooltip" title="Borrar Area" class="btn btn-effect-ripple btn-danger">
-                                    <i class="fa fa-times"></i>
-                                </a>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+                    {!! $areas->render() !!}
         </div>
     </div>
+
     <!-- END Datatables Block -->
-    {{Form::open(array('route' => array('areas.destroy', 'USER_ID') , 'method' => 'DELETE', 'role' => 'form', 'id' => 'form-delete'))}}
+
 @stop
 @section('js_aditional')
-	<!-- Load and execute javascript code used only in this page -->
-		{{ HTML::script('assets/js/pages/areaTables.js'); }}
-        <script>$(function(){ UiTables.init(); });</script>
+
 @stop

@@ -1,8 +1,7 @@
-<?php namespace Education\Http\Requests\Areas;
+<?php namespace Education\Http\Requests\Companies;
 
 use Education\Http\Requests\Request;
 use Illuminate\Routing\Route;
-
 
 class EditRequest extends Request {
 
@@ -35,7 +34,9 @@ class EditRequest extends Request {
 	 */
 	public function rules()
 	{
-        $rules = $this->createRequest->rules();
+		$rules = $this->createRequest->rules();
+		$rules['name'] .= ',name,' . $this->route->getParameter('companies') . ',id';
+
 		return $rules;
 	}
 

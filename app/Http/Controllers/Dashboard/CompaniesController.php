@@ -5,6 +5,9 @@ use Education\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
+use Education\Http\Requests\Companies\CreateRequest;
+use Education\Http\Requests\Companies\EditRequest;
+
 use Education\Entities\Company;
 
 class CompaniesController extends Controller {
@@ -46,9 +49,9 @@ class CompaniesController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function getFormView($viewName)
+	public function getFormView($viewName = 'form')
 	{
-	 	return view(self::$viewName . 'form')
+	 	return view(self::$prefixView . $viewName)
 			->with(['form_data' => $this->form_data, 'company' => $this->company]);
 	} 
 
@@ -60,7 +63,7 @@ class CompaniesController extends Controller {
 
 	public function index()
 	{
-		return view(self::$prefixView . 'lists');
+		return view(self::$prefixView . 'list');
 	}
 
 
@@ -81,7 +84,7 @@ class CompaniesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store(CreateRequest $request)
 	{
 		$this->company->fill($request->all());
         $this->company->save();
@@ -122,7 +125,7 @@ class CompaniesController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Request $request, $id)
+	public function update(EditRequest $request, $id)
 	{
 		$this->company->fill($request->all());
         $this->company->save();

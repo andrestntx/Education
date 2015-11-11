@@ -1,4 +1,4 @@
-<?php namespace Education\Http\Requests\Areas;
+<?php namespace Education\Http\Requests\Companies;
 
 use Education\Http\Requests\Request;
 
@@ -20,7 +20,7 @@ class CreateRequest extends Request {
 	public function rules()
 	{
 		return [
-            'name'     => 'required|max:100',
+			'name'	=> 'required|unique:companies'
 		];
 	}
 }
