@@ -25,7 +25,7 @@
                         <tr>
                             <td><strong>{{$area->name}}</strong></td>
                             <td>{{$area->description}}</td>
-                            <td>{{ $area->updated_at }}</td>
+                            <td>{{ $area->updated_at_hummans }}</td>
                             <td class="text-center">
                                 <a href="{{route('areas.edit', $area->id)}}" data-toggle="tooltip" title="Editar Area" class="btn btn-effect-ripple btn-warning">
                                     <i class="fa fa-pencil"></i>

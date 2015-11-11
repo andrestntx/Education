@@ -17,7 +17,9 @@ class ComposerServiceProvider extends ServiceProvider
                                                                         'dashboard.pages.*'],
             'Education\Http\ViewComposers\Categories\ListComposer'      => 'dashboard.pages.categoies.lists-table',
             'Education\Http\ViewComposers\Companies\ListComposer'       => 'dashboard.pages.companies.list',
-            'Education\Http\ViewComposers\Areas\ListComposer'           => 'dashboard.pages.areas.list',
+            'Education\Http\ViewComposers\Areas\ListComposer'           => 'dashboard.pages.companies.users.areas.list',
+            'Education\Http\ViewComposers\Roles\ListComposer'           => 'dashboard.pages.companies.users.roles.list',
+
 
         ]);
     }

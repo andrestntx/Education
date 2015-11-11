@@ -1,6 +1,8 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
 use Education\Http\Controllers\Controller;
+use Education\Http\Requests\Roles\CreateRequest;
+use Education\Http\Requests\Roles\EditRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -12,8 +14,8 @@ class RolesController extends Controller {
 
     private $role;
     private $form_data;
-    private static $prefixRoute = 'users.roles.';
-    private static $prefixView = 'dashboard.pages.user.role.';
+    private static $prefixRoute = 'roles.';
+    private static $prefixView = 'dashboard.pages.companies.users.roles.';
 
     public function __construct()
     {
@@ -53,7 +55,7 @@ class RolesController extends Controller {
 
 	public function index()
 	{
-        return view(self::$prefixView . 'lists-table');
+        return view(self::$prefixView . 'list');
 	}
 
 
@@ -77,7 +79,7 @@ class RolesController extends Controller {
 	public function store(CreateRequest $request)
 	{
         $this->role->fill($request->all());
-        $this->role->save();
+        \Auth::user()->rolesCreated()->save($this->role);
 
         Flash::info('Perfil creado correctamente');
 

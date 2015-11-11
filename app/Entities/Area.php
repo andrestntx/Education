@@ -1,6 +1,7 @@
 <?php namespace Education\Entities; 
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Area extends Model
 {
@@ -8,7 +9,11 @@ class Area extends Model
 	public $timestamps = true;
 	public $increments = true;
 
-
+    public function getUpdatedAtHummansAttribute()
+    {
+        Carbon::setLocale('es');
+        return ucfirst($this->updated_at->diffForHumans());
+    }
 
     public function Protocols()
     {

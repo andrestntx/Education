@@ -15,7 +15,7 @@ class AreasController extends Controller {
     private $area;
     private $form_data;
     private static $prefixRoute = 'areas.';
-    private static $prefixView = 'dashboard.pages.areas.';
+    private static $prefixView = 'dashboard.pages.companies.users.areas.';
 
     public function __construct()
     {

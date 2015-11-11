@@ -1,43 +1,18 @@
 <?php namespace Education\Entities; 
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 	
 class Role extends Model
 {
-	protected $fillable = ['name', 'description', 'company_id'];
+	protected $fillable = ['name', 'description'];
 	public $timestamps = true;
 	public $increments = true;
 
-	public function isValid($data)
+    public function getUpdatedAtHummansAttribute()
     {
-        $rules = array(
-            'name'     => 'required|max:100',
-            'company_id' => 'required'
-        );
-
-        $validator = Validator::make($data, $rules);
-        
-        if ($validator->passes())
-        {
-            return true;
-        }
-        
-        $this->errors = $validator->errors();
-        
-        return false;
-    }
-
-    public function validAndSave($data)
-    {
-        if ($this->isValid($data))
-        {
-            $this->fill($data);
-            $this->save();
-            
-            return true;
-        }
-        
-        return false;
+        Carbon::setLocale('es');
+        return ucfirst($this->updated_at->diffForHumans());
     }
 
     public function users()

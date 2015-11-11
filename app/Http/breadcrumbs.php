@@ -72,4 +72,26 @@ Breadcrumbs::register('areas.area', function($breadcrumbs, $area)
 	}
 });
 
+// Home > Roles
+Breadcrumbs::register('roles', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Perfiles', route('roles.index'));
+});
+
+// Home > Roles > Role
+Breadcrumbs::register('roles.role', function($breadcrumbs, $role)
+{
+	$breadcrumbs->parent('roles');
+
+	if($role->exists)
+	{
+		$breadcrumbs->push($role->name, route('roles.show', $role->id));
+	}
+	else
+	{
+		$breadcrumbs->push('Nuevo', route('roles.create'));
+	}
+});
+
 ?>
