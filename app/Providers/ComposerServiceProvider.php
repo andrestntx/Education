@@ -16,6 +16,7 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\MenuComposer'             => ['auth.login',
                                                                         'dashboard.pages.*'],
             'Education\Http\ViewComposers\CategoriesComposer'        => 'dashboard.pages.category.lists-table',
+            'Education\Http\ViewComposers\Areas\ListComposer'        => 'dashboard.pages.area.list',
         ]);
     }
 
