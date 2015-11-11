@@ -32,8 +32,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 		Route::resource('areas', 'AreasController');
 		Route::resource('roles', 'RolesController');
 		Route::resource('categories', 'CategoriesController');
-
-		//Route::resource('users', 'UsersController');
+		Route::resource('users', 'UsersController');
 		
 		
 		/*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));

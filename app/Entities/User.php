@@ -135,4 +135,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
 
+    public function getAreaIdListsAttribute()
+    {
+        return $this->areas->lists('id')->all();
+    }
+
+    public function getRoleIdListsAttribute()
+    {
+        return $this->roles->lists('id')->all();
+    }
+
+    public function syncRelations($data)
+    {
+        if(array_key_exists('areas', $data))
+        {
+            $this->areas()->sync($data['areas']);
+        }
+
+        if(array_key_exists('roles', $data))
+        {
+            $this->roles()->sync($data['roles']);
+        }
+    }
+
+
 }
