@@ -5,6 +5,9 @@ use Education\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
+use Education\Http\Requests\Companies\Users\CreateRequest;
+use Education\Http\Requests\Companies\Users\EditRequest;
+
 use Education\Entities\Company;
 use Education\Entities\User;
 
@@ -96,7 +99,7 @@ class CompanyUsersController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request, $company_id)
+	public function store(CreateRequest $request, $company_id)
 	{
 		$this->user->fill($request->all());
 		$this->company->users()->save($this->user);
@@ -140,7 +143,7 @@ class CompanyUsersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Request $request, $company_id, $user_id)
+	public function update(EditRequest $request, $company_id, $user_id)
 	{
 		$this->user->fill($request->all());
         $this->user->save();

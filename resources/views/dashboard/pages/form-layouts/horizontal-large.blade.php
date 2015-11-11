@@ -10,13 +10,11 @@
                   <h2>@yield('title_form')</h2>
               </div>
               <!-- END Validation Wizard Title -->
-                @include('dashboard.includes.alerts')
               <!-- Validation Wizard Content -->
               <div class="form-horizontal form-bordered">
                 @yield('form')
               </div>
               <!-- END Validation Wizard Content -->
-                @include('dashboard.includes.alerts')
           </div>
           <!-- END Validation Wizard Block -->
       </div>
