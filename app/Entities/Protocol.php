@@ -1,21 +1,19 @@
 <?php namespace Education\Entities; 
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use File, Storage;
 
 class Protocol extends Model
 {
-	protected $fillable = array('name', 'description', 'user_id');
+	protected $fillable = array('name', 'description', 'aviable', 'url_doc');
 	public $timestamps = true;
 	public $increments = true;
     
-    public function getSurveyAviableAttribute()
+    public function getUpdatedAtHummansAttribute()
     {
-        if($survey = $this->survey)
-        {
-            return $survey->aviable;
-        }
-
-        return false;
+        Carbon::setLocale('es');
+        return ucfirst($this->updated_at->diffForHumans());
     }
 
     public function getUserValueAttribute()
@@ -23,25 +21,19 @@ class Protocol extends Model
         return $this->user->name;
     }
 
-    public function getCategoriesListsAttribute()
+    public function getCategoryIdListsAttribute()
     {
-        return $this->categories->lists('id');
+        return $this->categories->lists('id')->all();
     }
 
-    public function getAreasListsAttribute()
+    public function getAreaIdListsAttribute()
     {
-        if(!is_null($this->survey))
-        {
-            return $this->survey->areas_lists;  
-        }
+        return $this->areas->lists('id')->all();
     }
 
-    public function getRolesListsAttribute()
+    public function getRoleIdListsAttribute()
     {
-        if(!is_null($this->survey))
-        {
-            return $this->survey->roles_lists;
-        }
+        return $this->roles->lists('id')->all();
     }
 
     /* Exams */
@@ -138,31 +130,22 @@ class Protocol extends Model
 
     public function getNumberAnnexAttribute()
     {
-        return $this->annex->count();
+        return $this->annexes->count();
     }
 
     public function getNumberQuestionsAttribute()
     {
-        return $this->survey->number_questions;
+        return $this->questions->count();
     }
 
     /* End Exams */
 
     /***** Relations *****/
-
-
-
-
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /** 
-     * Relation
-     * @return Education\Entities\Protocol
-     */
     public function categories()
     {
         return $this->belongsToMany(Category::class);
@@ -180,14 +163,13 @@ class Protocol extends Model
 
     public function annexes()
     {
-        return $this->hasMany('Annex', 'protocol_id');
+        return $this->hasMany(Annex::class);
     }
 
     public function questions()
     {
         return $this->hasMany(Question::class);
     }
-
     /***** End Relations *****/
 
     public function getAnnexFileAttribute()
@@ -200,9 +182,9 @@ class Protocol extends Model
         return $annex;
     }
 
-    public function getAnnexLinkAttribute()
+    public function getLinksAttribute()
     {
-        $links = $this->annex->filter(function($annex)
+        $links = $this->annexes->filter(function($annex)
         {
             return $annex->isLink();
         });
@@ -225,116 +207,46 @@ class Protocol extends Model
 
     /****** End Scopes ******/
 
-	public function isValid($data)
+    public function fillAndClear($data)
     {
-        $rules = array(
-            'name'     => 'required|max:100|unique:protocol',
-            'user_id' => 'required'
-        );
-
-        if ($this->exists)
-        {
-			$rules['name'] .= ',name,'.$this->id.',id';
-        }
-        else 
-        {
-            $rules['url_pdf'] = 'required';
-        }
+        $this->fill($data);
         
-        $validator = Validator::make($data, $rules);
-        
-        if ($validator->passes())
+        if(array_key_exists('aviable', $data))
         {
-            return true;
-        }
-        
-        $this->errors = $validator->errors();
-        
-        return false;
-    }
-
-    public function isValidPDF($pdf)
-    {
-        if(!is_null($pdf) && !$pdf->isValid())
-        {
-            $this->errors = array('El campo PDF debe ser menor que '.ini_get('upload_max_filesize'));
-            return false;
-        }
-
-        return true;
-    }
-
-    public function validAndSave($data, $pdf)
-    {
-        if ($this->uploadPdf($pdf) && $this->isValid($data))
-        {
-            $this->fill($data);
-            if(!$this->exists)
-            {
-                $survey = Survey::create(array('name' => 'Examen de Protocolo ' + $data['name'], 'created_by' => Auth::user()->id, 'type_id' => 2));
-                $this->survey_id = $survey->id;
-            }
-
-            $this->save();
-            $survey = $this->survey;
-            if(array_key_exists('survey_aviable', $data))
-            {
-                $survey->aviable = true;  
-            }
-            else
-            {
-                $survey->aviable = false;    
-            }
-
-            $survey->save();
-            
-
-            if(array_key_exists('categories', $data))
-            {
-                $this->syncCategories($data['categories']);
-            }
-
-            if(array_key_exists('areas', $data))
-            {
-                $this->survey->syncAreas($data['areas']);
-            }          
-
-            if(array_key_exists('roles', $data))
-            {
-                $this->survey->syncRoles($data['roles']);
-            }
-            
-            return true;
-        }
-        
-        return false;
-    }
-
-    public function syncCategories($categories = array())
-    {
-        $this->categories()->sync($categories);
-    }
-
-    public function uploadPdf($pdf)
-    {
-        if (File::isFile($pdf))
-        {
-            if($this->isValidPDF($pdf))
-            {
-            	$url = Config::get('constant.path_protocols_pdf').'/'.$this->id.'.'.$pdf->getClientOriginalExtension();
-                
-                $pdf->move(Config::get('constant.path_protocols_pdf'), $this->id.'.'.$pdf->getClientOriginalExtension());
-            	$this->url_pdf = $url;
-
-                return true;
-            }
+            $this->aviable = 1;
         }
         else
         {
-            if(!is_null($pdf))
-            {
-                $this->url_pdf = $pdf;
-            }
+            $this->aviable = 0;
+        }
+    }
+
+    public function syncRelations($data)
+    {
+        if(array_key_exists('categories', $data))
+        {
+            $this->categories()->sync($data['categories']);
+        }
+
+        if(array_key_exists('areas', $data))
+        {
+            $this->areas()->sync($data['areas']);
+        }          
+
+        if(array_key_exists('roles', $data))
+        {
+            $this->roles()->sync($data['roles']);
+        }
+    }
+
+    public function uploadDoc($file)
+    {
+        if($file)
+        {
+            $path = '/protocols/' . $this->id . '/doc.pdf';   
+            Storage::disk('local')->put($path,  File::get($file));  
+            $this->url_doc = $path;
+
             return true;
         }
 

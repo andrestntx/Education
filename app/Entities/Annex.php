@@ -4,10 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Annex extends Model
 {
-	protected $table = 'annex';
-	protected $primaryKey = 'id';
-	protected $fillable = array('name', 'description', 'protocol_id');
-	protected $globalModel = 2;
+	protected $table = 'annexes';
+	protected $fillable = ['name', 'description', 'protocol_id'];
 	public $timestamps = true;
 	public $increments = true;
 	public $errors;

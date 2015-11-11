@@ -116,5 +116,51 @@ Breadcrumbs::register('categories.category', function($breadcrumbs, $category)
 	}
 });
 
+// Home > Protocols
+Breadcrumbs::register('protocols', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Protocolos', route('protocols.index'));
+});
+
+// Home > Protocols > Protocol
+Breadcrumbs::register('protocols.protocol', function($breadcrumbs, $protocol)
+{
+	$breadcrumbs->parent('protocols');
+
+	if($protocol->exists)
+	{
+		$breadcrumbs->push($protocol->name, route('protocols.show', $protocol->id));
+	}
+	else
+	{
+		$breadcrumbs->push('Nuevo', route('protocols.create'));
+	}
+});
+
+// Home > Protocols > Protocol > Annexes
+Breadcrumbs::register('protocols.protocol.annexes', function($breadcrumbs, $protocol)
+{
+	$breadcrumbs->parent('protocols.protocol', $protocol);
+
+	$breadcrumbs->push('Usuarios', route('protocols.annexes.index', $protocol->id));
+
+});
+
+// Home > Protocols > Protocol > Annexes > Annex
+Breadcrumbs::register('protocols.protocol.annexes.annex', function($breadcrumbs, $protocol, $annex)
+{
+	$breadcrumbs->parent('protocols.protocol.annexes', $protocol);
+
+	if($annex->exists)
+	{
+		$breadcrumbs->push($annex->name, route('protocols.annexes.show', [$protocol->id, $annex->id]));
+	}
+	else
+	{
+		$breadcrumbs->push('Nuevo', route('protocols.annexes.create', $protocol->id));
+	}
+});
+
 
 ?>

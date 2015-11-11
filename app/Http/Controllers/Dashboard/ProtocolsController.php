@@ -1,25 +1,57 @@
-<?php
-
 <?php namespace Education\Http\Controllers\Dashboard;
-
-use Education\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-
+use Education\Http\Controllers\Controller;
+use Education\Http\Requests\Protocols\CreateRequest;
+use Education\Http\Requests\Protocols\EditRequest;
 use Education\Entities\Protocol;
+use Auth, Storage, File;
 
-class ProtocolsController extends <?php
+class ProtocolsController extends Controller {
 
-<?php namespace Education\Http\Controllers\Dashboard;
+	private $protocol;
+	private $form_data;
 
-use Education\Http\Controllers\Controller;
+	private static $prefixRoute = 'protocols.';
+    private static $prefixView  = 'dashboard.pages.companies.users.protocols.';
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+    public function __construct() 
+	{
+		$this->beforeFilter('@newProtocol', ['only' => ['create', 'store']]);
+		$this->beforeFilter('@findProtocol', ['only' => ['show', 'edit', 'update']]);
+	}
 
-use Education\Entities\Company;
-Controller {
+	/**
+	 * Create a new Company
+	 *
+	 * @return void
+	 */
+	public function newProtocol()
+	{
+		$this->protocol = new Protocol;
+	}
+
+	/**
+	 * Find the Company or App Abort 404
+	 *
+	 * @return void
+	 */
+	public function findProtocol(Route $route)
+	{
+	 	$this->protocol = Protocol::findOrFail($route->getParameter('protocols'));
+	} 
+
+	/**
+	 * Return the default Form View for Companies
+	 *
+	 * @return void
+	 */
+	public function getFormView($viewName = 'form')
+	{
+	 	return view(self::$prefixView . $viewName)
+			->with(['form_data' => $this->form_data, 'protocol' => $this->protocol]);
+	} 
 
 	/**
 	 * Display a listing of the resource.
@@ -29,8 +61,7 @@ Controller {
 
 	public function index()
 	{	
-		$protocols = Auth::user()->preferredCompany->protocols()->orderBy('id')->get();
-		return View::make('dashboard.pages.protocol.lists-table', compact('protocols'));
+		return view(self::$prefixView . 'list');
 	}
 
 
@@ -41,14 +72,8 @@ Controller {
 	 */
 	public function create()
 	{
-		$protocol = new Protocol;
-		
-		$roles = Auth::user()->preferredCompany->roles()->lists('name', 'id');
-		$areas = Auth::user()->preferredCompany->areas()->lists('name', 'id');
-		$categories = Auth::user()->preferredCompany->protocolCategories()->lists('name', 'id');
-		
-		$form_data = array('route' => 'protocolos.store', 'method' => 'POST', 'files' => true);
-		return View::make('dashboard.pages.protocol.form', compact('protocol', 'form_data', 'roles', 'areas', 'categories'));
+		$this->form_data = ['route' => self::$prefixRoute . 'store', 'method' => 'POST', 'files' => true];
+		return $this->getFormView();		
 	}
 
 
@@ -57,17 +82,16 @@ Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(CreateRequest $request)
 	{
-        $protocol = new Protocol;
-        $data = Input::all();
+		$this->protocol->fillAndClear($request->all());
+        Auth::user()->protocolsCreated()->save($this->protocol);
 
-	    if($protocol->validAndSave($data, $data['url_pdf']))
-        {
-            return Redirect::route('protocolos.index');
-        }
+        $this->protocol->syncRelations($request->all());
+		$this->protocol->uploadDoc($request->file('file_doc'));
+		$this->protocol->save();
 
-		return Redirect::route('protocolos.create')->withInput()->withErrors($protocol->errors);
+        return redirect()->route(self::$prefixRoute . 'index');
 	}
 
 
@@ -79,9 +103,9 @@ Controller {
 	 */
 	public function show($id)
 	{
-		$protocol = Protocol::findOrFail($id);
-		$protocol->load('annex', 'survey.questions');
-
+		$this->protocol->load('annex');
+		return view(self::$prefixView . 'show')->with('protocol', $this->protocol);
+		
 		$annex = $protocol->annex_file;
 		$links = $protocol->annex_link;
 
@@ -89,7 +113,7 @@ Controller {
 		$number_links = $links->count();
 		$number_questions = $protocol->survey->questions->count();
 
-		return View::make('dashboard.pages.protocol.show-admin', compact('protocol', 
+		return view()->make('dashboard.pages.protocol.show-admin', compact('protocol', 
 			 'number_questions', 'number_annex', 'annex', 'number_links', 'links'
 		));
 	}
@@ -103,7 +127,7 @@ Controller {
 
 		}))->canStudyProtocol($protocol->id)->get();	
 
-		return View::make('dashboard.pages.protocol.exams', compact('protocol', 'users'));
+		return view()->make('dashboard.pages.protocol.exams', compact('protocol', 'users'));
 	}
 
 
@@ -115,16 +139,8 @@ Controller {
 	 */
 	public function edit($id)
 	{
-		$protocol = Protocol::findOrFail($id);
-		
-		$roles = Auth::user()->preferredCompany->roles()->lists('name', 'id');
-		$areas = Auth::user()->preferredCompany->areas()->lists('name', 'id');
-		$categories = Auth::user()->preferredCompany->protocolCategories()->lists('name', 'id');
-
-		$form_data = array('route' => array('protocolos.update', $protocol->id), 'method' => 'PUT', 'files' => true);
-		return View::make('dashboard.pages.protocol.form', compact('roles', 
-			'protocol', 'form_data',  'areas', 'categories'
-		));
+		$this->form_data = ['route' => [self::$prefixRoute . 'update', $this->protocol->id], 'method' => 'PUT', 'files' => true];
+		return $this->getFormView();
 	}
 
 
@@ -134,47 +150,14 @@ Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		$protocol = Protocol::findOrFail($id);
-		$data = Input::all();
-        
-        if ($protocol->validAndSave($data, $data['url_pdf']))
-        {
-            return Redirect::route('protocolos.index');
-        }
-        else
-        {
-			return Redirect::route('protocolos.edit', $protocol->id)->withInput()->withErrors($protocol->errors);
-        }
+	public function update(EditRequest $request, $id)
+	{		
+		$this->protocol->uploadDoc($request->file('file_doc'));
+		$this->protocol->fillAndClear($request->all());
+        $this->protocol->save();
+        $this->protocol->syncRelations($request->all());
+
+        return redirect()->route(self::$prefixRoute . 'index');
 	}
 
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		$protocol = Protocol::findOrFail($id);
-
-    	try {
-    		$protocol->delete();
-    		$result = array('success' => true, 'msg' => 'Protocolo "' . $protocol->name . '" eliminada', 'id' => $protocol->id);
-    	} catch (Exception $e) {
-    		$result = array('success' => false, 'msg' => '.', 'id' => $protocol->id);
-    	}
-   
-
-        if (Request::ajax())
-        {
-            return Response::json($result);
-        }
-        else
-        {
-            return Redirect::route('protocolos.index');
-        }
-	}
 }
