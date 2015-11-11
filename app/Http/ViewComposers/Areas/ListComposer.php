@@ -12,7 +12,7 @@ class ListComposer {
      */
     public function compose(View $view)
     {        
-        $areas= Area::paginate(20);
+        $areas = \Auth::user()->company->areas()->orderBy('updated_at', 'desc')->paginate(20);
 
         $view->with([
             'areas' => $areas

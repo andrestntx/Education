@@ -7,9 +7,9 @@ use Illuminate\Routing\Route;
 
 use Education\Entities\Category;
 
-class CategoriesController extends Controller
+class CategoriesController extends Controller {
 	
-	private $this->category;
+	private $category;
 	private $form_data;
 
 	private static $prefixRoute = 'categories.';

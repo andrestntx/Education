@@ -12,7 +12,7 @@ class DashboardController extends Controller {
 
 		if($user->isAdmin())
 		{
-			return view('dashboard.pages.company.show')->with(['user' => $user]);
+			return view('dashboard.pages.companies.show')->with(['user' => $user]);
 		}
 		else if($user->isRegistered())
 		{

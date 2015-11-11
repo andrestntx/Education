@@ -1,15 +1,14 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-sitemap @stop
-@section('title_page') Áreas de la Institución @stop
-@section('breadcrumbs')
-
+@section('title_page') 
+    Áreas de la Institución 
+    <a href="{{route('areas.create')}}" class="btn btn-primary" title="Nueva área"><i class="fa fa-plus"></i> </a>
 @stop
+
+@section('breadcrumbs') {!! Breadcrumbs::render('areas') !!} @stop
+
 @section('content_body_page')
-    <div class="row" id="title_page" style="margin-bottom: 10px;">
-    	<div class="col-md-12">
-            <a href="{{route('areas.create')}}" class="btn btn-primary"><i class="fa fa-plus-square"></i> Nueva Área</a>
-        </div>
-    </div>
+
     <div class="block full">
         <div class="table-responsive">
             <table id="datatable" class="table table-striped table-bordered table-vcenter">

@@ -4,7 +4,7 @@ Breadcrumbs::register('home', function($breadcrumbs){
 	$breadcrumbs->push('<i class="fa fa-home"></i>', url('/'));
 });		
 
-	// Home > Companies
+// Home > Companies
 Breadcrumbs::register('companies', function($breadcrumbs)
 {
 	$breadcrumbs->parent('home');
@@ -47,6 +47,28 @@ Breadcrumbs::register('companies.company.users.user', function($breadcrumbs, $co
 	else
 	{
 		$breadcrumbs->push('Nuevo', route('companies.users.create', $company->id));
+	}
+});
+
+// Home > Areas
+Breadcrumbs::register('areas', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Áreas', route('areas.index'));
+});
+
+// Home > Areas > Area
+Breadcrumbs::register('areas.area', function($breadcrumbs, $area)
+{
+	$breadcrumbs->parent('areas');
+
+	if($area->exists)
+	{
+		$breadcrumbs->push($area->name, route('areas.show', $area->id));
+	}
+	else
+	{
+		$breadcrumbs->push('Nueva', route('areas.create'));
 	}
 });
 
