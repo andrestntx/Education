@@ -16,7 +16,7 @@
 
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
-                'widget_url'    => '/users/roles', 
+                'widget_url'    => '/roles', 
                 'widget_title'  => 'Perfiles', 
                 'widget_count'  => $user->company->roles->count(), 
                 'widget_icon'   => 'gi gi-old_man',
@@ -36,7 +36,7 @@
 
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
-                'widget_url'    => '/protocols/categories', 
+                'widget_url'    => '/categories', 
                 'widget_title'  => 'Categorías', 
                 'widget_count'  => $user->company->categories->count(), 
                 'widget_icon'   => 'fa fa-folder-open',

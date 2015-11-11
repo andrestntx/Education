@@ -94,4 +94,27 @@ Breadcrumbs::register('roles.role', function($breadcrumbs, $role)
 	}
 });
 
+// Home > Categories
+Breadcrumbs::register('categories', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Categoría', route('categories.index'));
+});
+
+// Home > Categories > Category
+Breadcrumbs::register('categories.category', function($breadcrumbs, $category)
+{
+	$breadcrumbs->parent('categories');
+
+	if($category->exists)
+	{
+		$breadcrumbs->push($category->name, route('categories.show', $category->id));
+	}
+	else
+	{
+		$breadcrumbs->push('Nuevo', route('categories.create'));
+	}
+});
+
+
 ?>

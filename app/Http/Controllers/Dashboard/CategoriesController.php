@@ -1,11 +1,14 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
 use Education\Http\Controllers\Controller;
+use Education\Http\Requests\Categories\CreateRequest;
+use Education\Http\Requests\Categories\EditRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
 use Education\Entities\Category;
+use Flash;
 
 class CategoriesController extends Controller {
 	
@@ -13,7 +16,7 @@ class CategoriesController extends Controller {
 	private $form_data;
 
 	private static $prefixRoute = 'categories.';
-    private static $prefixView  = 'dashboard.pages.category.';
+    private static $prefixView  = 'dashboard.pages.companies.users.categories.';
 
 	public function __construct() 
 	{
@@ -46,9 +49,9 @@ class CategoriesController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function getFormView($viewName)
+	public function getFormView($viewName = 'form')
 	{
-	 	return view(self::$prefixView . 'form')
+	 	return view(self::$prefixView . $viewName)
 			->with(['form_data' => $this->form_data, 'category' => $this->category]);
 	} 
 
@@ -60,7 +63,7 @@ class CategoriesController extends Controller {
 
 	public function index()
 	{
-		return view()->make(self::$prefixView . 'lists-table');
+		return view()->make(self::$prefixView . 'list');
 	}
 
 
@@ -81,10 +84,12 @@ class CategoriesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store(CreateRequest $request)
 	{
 		$this->category->fill($request->all());        
-        $this->category->save();
+        \Auth::user()->categoriesCreated()->save($this->category);
+
+        Flash::info('Categoria creada correctamente');
 
         return redirect()->route(self::$prefixRoute . 'index');
 	}
@@ -110,7 +115,7 @@ class CategoriesController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$form_data = ['route' => [self::$prefixRoute . 'update', $this->category->id], 'method' => 'PUT', 'files' => true];
+		$this->form_data = ['route' => [self::$prefixRoute . 'update', $this->category->id], 'method' => 'PUT', 'files' => true];
 		return $this->getFormView();
 	}
 
@@ -121,7 +126,7 @@ class CategoriesController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Request $request, $id)
+	public function update(EditRequest $request, $id)
 	{
         $this->category->fill($request->all());        
         $this->category->save();

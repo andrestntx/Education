@@ -15,12 +15,10 @@ class ComposerServiceProvider extends ServiceProvider
         View::composers([
             'Education\Http\ViewComposers\MenuComposer'                 => ['auth.login',
                                                                         'dashboard.pages.*'],
-            'Education\Http\ViewComposers\Categories\ListComposer'      => 'dashboard.pages.categoies.lists-table',
             'Education\Http\ViewComposers\Companies\ListComposer'       => 'dashboard.pages.companies.list',
             'Education\Http\ViewComposers\Areas\ListComposer'           => 'dashboard.pages.companies.users.areas.list',
             'Education\Http\ViewComposers\Roles\ListComposer'           => 'dashboard.pages.companies.users.roles.list',
-
-
+            'Education\Http\ViewComposers\Categories\ListComposer'      => 'dashboard.pages.companies.users.categories.list'
         ]);
     }
 

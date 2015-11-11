@@ -12,7 +12,7 @@ class ListComposer {
      */
     public function compose(View $view)
     {        
-        $categories = Category::paginate(20);
+        $categories = \Auth::user()->company->categories()->orderBy('updated_at', 'desc')->paginate(20);
 
         $view->with([
             'categories' => $categories
