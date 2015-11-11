@@ -14,13 +14,14 @@ class CompaniesTableSeeder extends Seeder
     	$company = factory(Company::class, 'developer')->create()
     		->users()->save(factory(User::class, 'superadmin')->make());
 
-    	$companies = factory(Company::class, 2)->create()->each(function($company) {
-	        $company->users()->saveMany(factory(User::class, 'admin', 2)->make());
-	        $company->users()->saveMany(factory(User::class, 5)->make());
+    	 $companies = factory(Company::class, 2)->create()->each(function($company) {
+	        $company->users()->save(factory(User::class, 'admin')->make());
 
-	        $company->roles()->saveMany(factory(Role::class, 5)->make());
-	        $company->areas()->saveMany(factory(Area::class, 5)->make());
-	        $company->categories()->saveMany(factory(Category::class, 5)->make());
+	        $company->users()->saveMany(factory(User::class, 5)->make())->each(function($user) {
+                $user->rolesCreated()->saveMany(factory(Role::class, 2)->make());
+                $user->areasCreated()->saveMany(factory(Area::class, 2)->make());
+                $user->categoriesCreated()->saveMany(factory(Category::class, 2)->make());
+            });
 	    });
 	}
 }

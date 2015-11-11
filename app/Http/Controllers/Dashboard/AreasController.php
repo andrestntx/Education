@@ -1,6 +1,8 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
 use Education\Http\Controllers\Controller;
+use Education\Http\Requests\Areas\CreateRequest;
+use Education\Http\Requests\Areas\EditRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -77,7 +79,7 @@ class AreasController extends Controller {
 	public function store(CreateRequest $request)
 	{
         $this->area->fill($request->all());
-        $this->area->save();
+        \Auth::user()->areasCreated()->save($this->area);
 
         Flash::info('Area creada correctamente');
 

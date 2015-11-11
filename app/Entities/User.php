@@ -116,7 +116,22 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function protocolsCreated()
     {
-        return $this->hasMany(Protocol::class, 'user_id');
+        return $this->hasMany(Protocol::class);
+    }
+
+    public function rolesCreated()
+    {
+        return $this->hasMany(Role::class);
+    }
+
+    public function areasCreated()
+    {
+        return $this->hasMany(Area::class);
+    }
+
+    public function categoriesCreated()
+    {
+        return $this->hasMany(Category::class);
     }
 
 

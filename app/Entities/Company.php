@@ -57,37 +57,21 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
 
-    /** 
-     * Relation
-     * @return Education\Entities\Role
-     */
     public function roles()
     {
-        return $this->hasMany(Role::class);
+        return $this->hasManyThrough(Role::class, User::class);
     }
 
-    /** 
-     * Relation
-     * @return Education\Entities\Area
-     */
     public function areas()
     {
-        return $this->hasMany('Education\Entities\Area');
+        return $this->hasManyThrough(Area::class, User::class);
     }
 
-    /**
-     * Relation
-     * @return Education\Entities\Category
-     */
     public function categories()
     {
-        return $this->hasMany('Education\Entities\Category');
+        return $this->hasManyThrough(Category::class, User::class);
     }
 
-    /** 
-     * Relation
-     * @return Education\Entities\Protocol
-     */
     public function protocols()
     {
         return $this->hasManyThrough(Protocol::class, User::class);
