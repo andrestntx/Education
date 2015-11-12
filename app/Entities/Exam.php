@@ -23,7 +23,7 @@ class Exam extends Model
 
     public function answers()
     {
-        return $this->hasMany(Answer::class);
+        return $this->belongsToMany(Answer::class);
     }
 
     public function user()
@@ -73,7 +73,12 @@ class Exam extends Model
 
     public function getScoreAttribute()
     {
-        return ($this->count_correct_answers / $this->count_answers) * 100;
+        if($this->count_answers > 0)
+        {
+            return ($this->count_correct_answers / $this->count_answers) * 100;
+        }
+        
+        return 'NA';
     }
 
     public function isScoreOk()
@@ -88,7 +93,7 @@ class Exam extends Model
 
     public function isPending()
     {
-        return ! $this->isScoreOk()
+        return ! $this->isScoreOk();
     }
 
 }

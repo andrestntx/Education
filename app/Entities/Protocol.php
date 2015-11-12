@@ -202,23 +202,23 @@ class Protocol extends Model
     }
 
     public function getUserExams($user)
-    {
-        $exams = $this->exams->where('user_id', $user->id);
+    {        
+        return $this->exams->where('user_id', $user->id);
     }
 
-    public function getUserExamsCountAttribute($user)
+    public function getUserExamsCount($user)
     {
-        return $this->getUserExams()->count();
+        return $this->getUserExams($user)->count();
     }
 
     public function getUserBestExam($user)
     {
-        return $this->getUserExams($user)->orderByDesc('score')->first();
+        return $this->getUserExams($user)->sortByDesc('score')->first();
     }
 
     public function getUserLastExam($user)
     {
-        return $this->getUserExams($user)->orderByDesc('created_at')->first();
+        return $this->getUserExams($user)->sortByDesc('created_at')->first();
     }
 
     public function isExamPending($user)
