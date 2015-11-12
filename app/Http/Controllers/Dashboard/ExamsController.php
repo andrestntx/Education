@@ -26,7 +26,7 @@ use Education\Http\Controllers\Controller;
 
 			$exam = new ResolvedSurvey;
 			$form_data = array('route' => array('examenes.store', $protocol->id), 'method' => 'POST');
-			return View::make('dashboard.pages.exam.form', compact('protocol', 'exam', 'form_data'));
+			return View::make('dashboard.pages.exams.form', compact('protocol', 'exams', 'form_data'));
 
 			
 		}

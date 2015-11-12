@@ -4,8 +4,8 @@
 @stop
 @section('title_form') Responda las siguientes Preguntas @stop
 @section('form')
-  {{ Form::model($exam, $form_data) }}    
-    @foreach($protocol->survey->randomQuestions() as $question)
+  {!! Form::model($exam, $form_data) !!}
+    @foreach($protocol->randomQuestions() as $question)
       <div class="form-group">  
         <label class="col-md-4 control-label h4">{{$question->text}}</label>   
         <div class="col-md-8"> 
