@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
 use Education\Entities\Annex;
+use Storage, File;
 
-class ProtocolAnnexesController extends Controller {
+class ProtocolLinksController extends Controller {
 
     private $annex;
     private $protocol;
     private $form_data;
-    private static $prefixRoute = 'protocols.annexes.';
+    private static $prefixRoute = 'protocols.links.';
     private static $prefixView  = 'dashboard.pages.models.';
 
     public function __construct()
@@ -95,14 +96,24 @@ class ProtocolAnnexesController extends Controller {
 	 * @return Response
 	 */
 
-    public function store(CreateRequest $request, $doc)
+    public function store(Request $request, $protocol_id)
     {
-        $this->annex->fill($request->all());
+        $file = $request->file('file');
+        $name = $file->getClientOriginalName();
+
+        Storage::disk('local')->put(
+            'protocols/' . $this->protocol->id . '/annexes/' . $name,  
+            File::get($file)
+        );
+
+        return 'file saved';
+
+        /*$this->annex->fill($request->all());
         $this->annex = $this->protocol->annexes()->save($this->annex);
 
         Flash::info('Anexo guardado correctamente');
 
-        return redirect()->route('protocols.show', $this->protocol->id);
+        return redirect()->route('protocols.show', $this->protocol->id);*/
     }
 	/**
 	 * Display the specified resource.

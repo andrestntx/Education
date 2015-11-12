@@ -91,7 +91,7 @@ class ProtocolsController extends Controller {
 		$this->protocol->uploadDoc($request->file('file_doc'));
 		$this->protocol->save();
 
-        return redirect()->route(self::$prefixRoute . 'index');
+        return redirect()->route(self::$prefixRoute . 'show', $this->protocol);
 	}
 
 
@@ -103,19 +103,8 @@ class ProtocolsController extends Controller {
 	 */
 	public function show($id)
 	{
-		$this->protocol->load('annex');
-		return view(self::$prefixView . 'show')->with('protocol', $this->protocol);
-		
-		$annex = $protocol->annex_file;
-		$links = $protocol->annex_link;
-
-		$number_annex = $annex->count();
-		$number_links = $links->count();
-		$number_questions = $protocol->survey->questions->count();
-
-		return view()->make('dashboard.pages.protocol.show-admin', compact('protocol', 
-			 'number_questions', 'number_annex', 'annex', 'number_links', 'links'
-		));
+		$this->protocol->load('links', 'questions');
+		return view(self::$prefixView . 'show-admin')->with('protocol', $this->protocol);
 	}
 
 	public function stats($id)
@@ -157,7 +146,7 @@ class ProtocolsController extends Controller {
         $this->protocol->save();
         $this->protocol->syncRelations($request->all());
 
-        return redirect()->route(self::$prefixRoute . 'index');
+        return redirect()->route(self::$prefixRoute . 'show', $this->protocol);
 	}
 
 }

@@ -1,25 +1,13 @@
-<?php
+<?php 
 
-<?php namespace Education\Http\Controllers\Dashboard;
-
-use Education\Http\Controllers\Controller;
+namespace Education\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-
-use Education\Entities\Company;
-
-class SurveysQuestionsController extends <?php
-
-<?php namespace Education\Http\Controllers\Dashboard;
-
 use Education\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-
 use Education\Entities\Company;
-Controller {
+
+class ProtocolQuestionsController extends Controller {
 
 	/**
 	 * Display a listing of the resource.

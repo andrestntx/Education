@@ -50,9 +50,9 @@ class Protocol extends Model
         return null;
     }
 
-    public function isPdfCorrect()
+    public function isDocCorrect()
     {
-        if(!is_null($this->url_pdf))
+        if(!is_null($this->url_doc))
         {
             return true;
         }
@@ -60,11 +60,11 @@ class Protocol extends Model
         return false;
     }
 
-    public function getPdfAttribute()
+    public function getDocAttribute()
     {
-        if($this->isPdfCorrect())
+        if($this->isDocCorrect())
         {
-            return $this->url_pdf;
+            return $this->url_doc;
         }
 
         return '#';
@@ -128,9 +128,9 @@ class Protocol extends Model
         return 'NO PRESENTADO';
     }
 
-    public function getNumberAnnexAttribute()
+    public function getNumberAttribute()
     {
-        return $this->annexes->count();
+        return count($this->getAnnexes());
     }
 
     public function getNumberQuestionsAttribute()
@@ -161,9 +161,14 @@ class Protocol extends Model
         return $this->belongsToMany(Area::class);
     }
 
-    public function annexes()
+    public function links()
     {
-        return $this->hasMany(Annex::class);
+        return $this->hasMany(Link::class);
+    }
+
+    public function getAnnexes()
+    {
+        return Storage::files('protocols/' . $this->id . '/annexes');
     }
 
     public function questions()
@@ -171,26 +176,6 @@ class Protocol extends Model
         return $this->hasMany(Question::class);
     }
     /***** End Relations *****/
-
-    public function getAnnexFileAttribute()
-    {
-        $annex = $this->annex->filter(function($annex)
-        {
-            return $annex->isFile();
-        });
-
-        return $annex;
-    }
-
-    public function getLinksAttribute()
-    {
-        $links = $this->annexes->filter(function($annex)
-        {
-            return $annex->isLink();
-        });
-
-        return $links;
-    }
 
     /***** Scopes *****/
 
@@ -210,7 +195,7 @@ class Protocol extends Model
     public function fillAndClear($data)
     {
         $this->fill($data);
-        
+
         if(array_key_exists('aviable', $data))
         {
             $this->aviable = 1;
@@ -243,9 +228,9 @@ class Protocol extends Model
     {
         if($file)
         {
-            $path = '/protocols/' . $this->id . '/doc.pdf';   
+            $path = 'protocols/' . $this->id . '/doc.pdf';   
             Storage::disk('local')->put($path,  File::get($file));  
-            $this->url_doc = $path;
+            $this->url_doc = '/storage/' . $path;
 
             return true;
         }

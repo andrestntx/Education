@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Annex extends Model
+class Link extends Model
 {
 	protected $table = 'annexes';
 	protected $fillable = ['name', 'description', 'protocol_id'];

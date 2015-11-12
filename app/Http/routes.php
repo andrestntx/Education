@@ -36,12 +36,11 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 		//Route::resource('users', 'UsersController');
 		
 		Route::resource('protocols', 'ProtocolsController');
-		
-		/*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));
-		Route::resource('protocols', 'ProtocolsController');
-		Route::resource('protocols.annexes', 'AnnexController');
-		Route::resource('protocols.links', 'LinksController');
-		Route::resource('protocols.questions', 'QuestionsController');*/
+		Route::resource('protocols.questions', 'ProtocolQuestionsController');
+		Route::resource('protocols.links', 'ProtocolLinksController');
+		Route::resource('protocols.annexes', 'ProtocolAnnexesController');
+
+		/*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));*/
 	});
 
 	Route::group(['middleware' => 'user_type:registred'], function()
