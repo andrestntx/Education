@@ -58,6 +58,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
+    public function scopeRegistereds($query)
+    {
+        return $query->where('type', '=', 'registered');
+    }
+
     public function isAdmin()
     {
         return $this->isType('admin');

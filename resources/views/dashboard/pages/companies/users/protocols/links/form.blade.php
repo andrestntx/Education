@@ -3,6 +3,7 @@
   @if($link->exists) Editar Link: {{$link->name}}
   @else Nuevo Link @endif
 @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('protocols.protocol.link', $protocol, $link) !!} @stop
 @section('title_form') Datos del Link @stop
 @section('form')
   {!! Form::model($link, $form_data) !!}

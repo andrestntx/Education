@@ -138,27 +138,33 @@ Breadcrumbs::register('protocols.protocol', function($breadcrumbs, $protocol)
 	}
 });
 
-// Home > Protocols > Protocol > Links
-Breadcrumbs::register('protocols.protocol.annexes', function($breadcrumbs, $protocol)
+// Home > Protocols > Protocol > Link
+Breadcrumbs::register('protocols.protocol.link', function($breadcrumbs, $protocol, $link)
 {
 	$breadcrumbs->parent('protocols.protocol', $protocol);
 
-	$breadcrumbs->push('Usuarios', route('protocols.annexes.index', $protocol->id));
-
-});
-
-// Home > Protocols > Protocol > Links > Link
-Breadcrumbs::register('protocols.protocol.annexes.annex', function($breadcrumbs, $protocol, $annex)
-{
-	$breadcrumbs->parent('protocols.protocol.annexes', $protocol);
-
-	if($annex->exists)
+	if($link->exists)
 	{
-		$breadcrumbs->push($annex->name, route('protocols.annexes.show', [$protocol->id, $annex->id]));
+		$breadcrumbs->push('Link: ' . $link->name, route('protocols.links.show', [$protocol->id, $link->id]));
 	}
 	else
 	{
-		$breadcrumbs->push('Nuevo', route('protocols.annexes.create', $protocol->id));
+		$breadcrumbs->push('Nuevo Link', route('protocols.links.create', $protocol->id));
+	}
+});
+
+// Home > Protocols > Protocol > Question
+Breadcrumbs::register('protocols.protocol.question', function($breadcrumbs, $protocol, $question)
+{
+	$breadcrumbs->parent('protocols.protocol', $protocol);
+
+	if($question->exists)
+	{
+		$breadcrumbs->push('Editar Pregunta', route('protocols.questions.show', [$protocol->id, $question->id]));
+	}
+	else
+	{
+		$breadcrumbs->push('Nueva Pregunta', route('protocols.questions.create', $protocol->id));
 	}
 });
 
