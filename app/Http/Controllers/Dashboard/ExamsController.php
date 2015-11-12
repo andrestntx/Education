@@ -29,7 +29,7 @@ use Auth;
 			$exam = new Exam(['user_id' => Auth::user()->id, 'protocol_id' => $protocol_id]);
 			$form_data = ['route' => ['exams.store', $protocol->id], 'method' => 'POST'];
 
-			return view('dashboard.pages.companies.useres.protocols.exams.form', compact('protocol', 'exam', 'form_data'));
+			return view('dashboard.pages.companies.users.protocols.exams.form', compact('protocol', 'exam', 'form_data'));
 			
 		}
 
