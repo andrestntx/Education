@@ -2,36 +2,38 @@
 
 use Education\Entities\Protocol;
 use Education\Entities\User;
+use Education\Entities\Exam;
 use Education\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Auth;
 
 	class ExamsController extends Controller
 	{
 		public function studyProtocol($protocol_id)
 		{
 			$protocol = Protocol::findOrFail($protocol_id);
-
-			$user = \Auth::user();
-			
-			return \View::make('dashboard.pages.companies.users.protocols.study', compact('protocol', 'user'));
+			$user = Auth::user();
+			return view()->make('dashboard.pages.companies.users.protocols.study', compact('protocol', 'user'));
 		}
 
 		public function create($protocol_id)
 		{
 			$protocol = Protocol::findOrFail($protocol_id);
-			$protocol->load('survey.questions');
-			if(!$protocol->survey_aviable)
+			
+			if( ! $protocol->aviable)
 			{
-				App::abort('404');
+				abort('404');
 			}
+			
+			$protocol->load('questions');
+			$exam = new Exam(['user_id' => Auth::user()->id, 'protocol_id' => $protocol_id]);
+			$form_data = ['route' => ['exams.store', $protocol->id], 'method' => 'POST'];
 
-			$exam = new ResolvedSurvey;
-			$form_data = array('route' => array('examenes.store', $protocol->id), 'method' => 'POST');
-			return View::make('dashboard.pages.exam.form', compact('protocol', 'exam', 'form_data'));
-
+			return view('dashboard.pages.companies.useres.protocols.exams.form', compact('protocol', 'exam', 'form_data'));
 			
 		}
 
-		public function store($protocol_id)
+		public function store(Request $request, $protocol_id)
 		{
 			$protocol = Protocol::findOrFail($protocol_id);
 			$data = Input::only('answers');

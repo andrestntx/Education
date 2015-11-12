@@ -33,7 +33,7 @@
                                             <a href="{{route('study', $protocol->id)}}" data-toggle="tooltip" title="Estudiar Protocolo" class="btn btn btn-sm btn-effect-ripple btn-info">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a href="{{route('exams.create', $protocol->id)}}" data-toggle="tooltip" title="Presentar examen" class="btn btn btn-sm btn-effect-ripple btn-success" disabled  >
+                                            <a href="{{route('exams.create', $protocol->id)}}" data-toggle="tooltip" title="Presentar examen" class="btn btn btn-sm btn-effect-ripple btn-success" @if(! $protocol->aviable) disabled @endif >
                                                 <i class="fa fa-graduation-cap"></i>
                                             </a>
 		                            	</td>
