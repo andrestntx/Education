@@ -26,9 +26,9 @@
 			                        <tr>
                                         <td><a href="{{route('study', $protocol->id)}}" title="Estudiar Protocolo">{{$protocol->name}}</a></td>
 			                            <td class="text-center">{{ $protocol->getUserExamsCount($user) }}</td>
-			                            <td class="text-center">{{ $protocol->getUserBestExam($user)->score }}</td>
-			                            <td class="text-center">{{ $protocol->getUserLastExam($user)->created_at_hummans }} </td>
-			                        	<td class="text-center">{{ $protocol->getUserLastExam($user)->score }}</td>
+			                            <td class="text-center">@if($bestExam = $protocol->getUserBestExam($user)) {{ $bestExam->score }} @endif</td>
+			                            <td class="text-center">@if($lastExam = $protocol->getUserLastExam($user)) {{ $lastExam->created_at_hummans }} @endif</td>
+			                        	<td class="text-center">@if($lastExam){{ $lastExam->score }} @endif</td>
 			                        	<td class="text-center">
                                             <a href="{{route('study', $protocol->id)}}" data-toggle="tooltip" title="Estudiar Protocolo" class="btn btn btn-sm btn-effect-ripple btn-info">
                                                 <i class="fa fa-eye"></i>

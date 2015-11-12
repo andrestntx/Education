@@ -155,7 +155,11 @@ class Protocol extends Model
 
     public function getUserLastExam($user)
     {
-        return $this->getUserExams($user)->sortByDesc('created_at')->first();
+        $exam = $this->getUserExams($user)->sortByDesc('created_at')->first();
+
+        if($exam){
+            return $exam;
+        }
     }
 
     public function isExamPending($user)
