@@ -9,6 +9,7 @@ use Storage, File;
 class ProtocolAnnexesController extends Controller {
 
     private $protocol;
+    private $form_data;
 
     public function __construct()
     {

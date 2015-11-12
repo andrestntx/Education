@@ -90,7 +90,7 @@
 			                            		<h4 style="font-size:16px;"><a href="{{ $link->url }}" target="_blank">{{ $link->name }}</a></h4>
 			                            	</div>
 			                            	<div class="col-xs-4">
-					                            <a href="{{route('protocols.links.edit', array($protocol->id, $link->id))}}" data-toggle="tooltip" title="Editar Enlace" class="btn btn-xs btn-effect-ripple btn-warning">
+					                            <a href="{!! route('protocols.links.edit', [$protocol->id, $link->id]) !!}" data-toggle="tooltip" title="Editar Enlace" class="btn btn-xs btn-effect-ripple btn-warning">
 					                                <i class="fa fa-pencil"></i>
 					                            </a>
 					                            {!! Form::open(['route' => ['protocols.links.destroy', $protocol->id, $link->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}

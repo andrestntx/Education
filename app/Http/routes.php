@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 		/*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));*/
 	});
 
-	Route::group(['middleware' => 'user_type:registred'], function()
+	Route::group(['middleware' => 'user_type:registered'], function()
 	{
 		/*Route::get('study/{protocol}', array('as' => 'study', 'uses' => 'ExamsController@studyProtocol'));
 		Route::get('exams/doit/{protocol}', array('as' => 'exams.create', 'uses' => 'ExamsController@create'));

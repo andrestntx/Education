@@ -153,12 +153,12 @@ var App = function() {
 
     /* Sidebar Navigation functionality */
     var handleNav = function() {
-        // Get all vital links
+        // Get all vital Links
         var allLinks        = $('.sidebar-nav a', sidebar);
         var menuLinks       = $('.sidebar-nav-menu', sidebar);
         var submenuLinks    = $('.sidebar-nav-submenu', sidebar);
 
-        // Add ripple effect to all navigation links
+        // Add ripple effect to all navigation Links
         allLinks.on('click', function(e){
             var link = $(this), ripple, d, x, y;
 

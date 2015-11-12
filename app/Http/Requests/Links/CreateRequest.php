@@ -1,4 +1,4 @@
-<?php namespace Education\Http\Requests\Users;
+<?php namespace Education\Http\Requests\Links;
 
 use Education\Http\Requests\Request;
 
@@ -20,11 +20,7 @@ class CreateRequest extends Request {
 	public function rules()
 	{
 		return [
-            'username'     	=> 'required|max:100|unique:users',
-            'name'     		=> 'required',
-            'email'     	=> 'required|max:100',
-            'password' 		=>  'required|confirmed',
-            'url_photo' 	=> 'mimes:jpeg,png,bmp|max:1500'
+            'name'     => 'required|max:100',
 		];
 	}
 }

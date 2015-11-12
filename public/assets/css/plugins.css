@@ -473,7 +473,7 @@ temporary rendered events).
 
 .fc-event[href],
 .fc-event.fc-draggable {
-    cursor: pointer; /* give events with links and draggable events a hand mouse pointer */
+    cursor: pointer; /* give events with Links and draggable events a hand mouse pointer */
 }
 
 

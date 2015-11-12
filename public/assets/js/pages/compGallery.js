@@ -19,7 +19,7 @@ var CompGallery = function() {
 
                 // Procceed only if the user clicked on an inactive category
                 if ( ! $(this).hasClass('active')) {
-                    // Remove active class from all filter links
+                    // Remove active class from all filter Links
                     galleryFilter.find('a').removeClass('active');
 
                     // Add the active class to the clicked link
