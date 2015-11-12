@@ -5,9 +5,70 @@ namespace Education\Http\Controllers\Dashboard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
-use Education\Entities\Company;
+use Education\Http\Requests\Questions\CreateRequest;
+use Education\Http\Requests\Questions\EditRequest;
+use Education\Entities\Protocol;
+use Education\Entities\Question;
+use Education\Entities\Answer;
 
 class ProtocolQuestionsController extends Controller {
+
+	private $protocol;
+	private $question;
+	private $form_data;
+
+	private static $prefixRoute = 'protocols.questions.';
+    private static $prefixView  = 'dashboard.pages.companies.users.protocols.questions.';
+
+	public function __construct() 
+	{
+		$this->beforeFilter('@newQuestion', ['only' => ['create', 'store']]);
+		$this->beforeFilter('@findProtocol');
+		$this->beforeFilter('@findQuestion', ['only' => ['show', 'edit', 'update']]);
+	}
+
+	/**
+	 * Create a new Protocol
+	 *
+	 * @return void
+	 */
+	public function newQuestion()
+	{
+		$this->question = new Question;
+	}
+
+	/**
+	 * Find the Protocol or App Abort 404
+	 *
+	 * @return void
+	 */
+	public function findProtocol(Route $route)
+	{
+	 	$this->protocol = Protocol::findOrFail($route->getParameter('protocols'));
+	} 
+
+	/**
+	 * Find the Question of Protocol or App Abort 404
+	 *
+	 * @return void
+	 */
+	public function findQuestion(Route $route)
+	{
+	 	$this->question = $this->protocol->questions()->findOrFail($route->getParameter('questions'));
+	} 
+
+	/**
+	 * Return the default Form View for Companies
+	 *
+	 * @return void
+	 */
+	public function getFormView($number_answers = 2, $viewName = 'form')
+	{
+	 	return view(self::$prefixView . $viewName)
+			->with(['form_data' => $this->form_data, 'protocol' => $this->protocol, 'question' => $this->question,
+				'number_answers' => $number_answers
+			]);
+	} 
 
 	/**
 	 * Display a listing of the resource.
@@ -15,11 +76,9 @@ class ProtocolQuestionsController extends Controller {
 	 * @return Response
 	 */
 
-	public function index($survey_id)
+	public function index($protocol_id)
 	{
-		$survey = Survey::findOrFail($survey_id);
-		$survey->load('questions');
-		return View::make('dashboard.pages.survey.question.lists-table', compact('survey'));	
+		return redirect()->route('protocols.show', $protocol_id);
 	}
 
 
@@ -28,45 +87,11 @@ class ProtocolQuestionsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create($survey_id)
-	{
-		$survey = Survey::findOrFail($survey_id);
-		$question = new Question;		
-		$form_data = array('route' => array('formularios.preguntas.store', $survey_id), 'method' => 'POST');
-
-		$number_answers = Input::get('respuestas');
-		$type = Input::get('tipo');
-
-		if(is_null($number_answers))
-		{
-			if(is_null($type))
-			{
-				$type_id = 2;
-				return View::make('dashboard.pages.survey.question.simple.form', compact('question', 'form_data', 'survey', 'type_id'));
-			}
-			else
-			{
-				$type_id = 3;
-				return View::make('dashboard.pages.survey.question.text.form', compact('question', 'form_data', 'survey', 'type_id'));
-			}
-			
-		}
-		else
-		{
-			$type_id = 1;
-			if($survey->type->isCheck())
-			{
-				return View::make('dashboard.pages.survey.question.multiple.form-check', compact('question', 'form_data', 'survey', 'number_answers', 'type_id'));
-			}
-			else if($survey->type->isMath())
-			{
-				return View::make('dashboard.pages.survey.question.multiple.form-math', compact('question', 'form_data', 'survey', 'number_answers', 'type_id'));
-			}
-			else if($survey->type->isObservations())
-			{
-				return View::make('dashboard.pages.survey.question.multiple.form-observation', compact('question', 'form_data', 'survey', 'number_answers', 'type_id'));
-			}
-		}	
+	public function create(Request $request, $protocol_id)
+	{	
+		$this->form_data = ['route' => [self::$prefixRoute . 'store', $this->protocol->id], 'method' => 'POST'];
+		return $this->getFormView($request->get('answers'));
+		
 	}
 
 
@@ -75,44 +100,25 @@ class ProtocolQuestionsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store($survey_id)
+	public function store(CreateRequest $request, $protocol_id)
 	{
-        $question = new Question;
-        $data = Input::all();
+        $this->question->fill($request->all());
+		$this->protocol->questions()->save($this->question);
 
-        if ($question->validAndSave($data))
-        {
-            return Redirect::route('formularios.preguntas.index', $survey_id);
-        }
-        else
-        {
-        	if(array_key_exists('answers', $data))
-        	{
-        		return Redirect::route('formularios.preguntas.create', array($survey_id, 'respuestas='.count($data['answers'])))->withInput()->withErrors($question->errors);
-        	}
-        	else if(array_key_exists('type', $data))
-        	{
-        		return Redirect::route('formularios.preguntas.create', array($survey_id, 'tipo='.$data['type']))->withInput()->withErrors($question->errors);
-        	}
-        	else
-        	{
-        		return Redirect::route('formularios.preguntas.create', array($survey_id))->withInput()->withErrors($question->errors);	
-        	}
-        } 
+		$answers = $request->get('answers');
+		$answers[$request->get('answers_correct')]['correct'] = 1;
+
+		$newAnswers = [];
+
+		foreach($answers as $answer) 
+		{
+			array_push($newAnswers, new Answer($answer));	
+		}
+
+		$this->question->answers()->saveMany($newAnswers);
+
+        return redirect()->route(self::$prefixRoute . 'index', $this->protocol->id);
 	}
-
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
 
 	/**
 	 * Show the form for editing the specified resource.
@@ -120,45 +126,10 @@ class ProtocolQuestionsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($survey_id, $id)
+	public function edit($protocol_id, $question_id)
 	{
-		$survey = Survey::findOrFail($survey_id);
-		$question = $survey->questions()->findOrFail($id);
-		
-		$form_data = array(
-			'route' => array('formularios.preguntas.update', $survey->id, $question->id), 
-			'method' => 'PUT', 
-			'files' => true
-		);
-
-		if($question->isMultiple())
-		{
-			$type_id = 1;
-			if($survey->type->isCheck())
-			{
-				return View::make('dashboard.pages.survey.question.multiple.form-check', compact('question', 'form_data', 'survey', 'type_id'));
-			}
-			else if($survey->type->isMath())
-			{
-				return View::make('dashboard.pages.survey.question.multiple.form-math', compact('question', 'form_data', 'survey', 'type_id'));
-			}
-			else if($survey->type->isObservations())
-			{
-				return View::make('dashboard.pages.survey.question.multiple.form-observation', compact('question', 'form_data', 'survey', 'type_id'));
-			}
-			
-		}
-		else if($question->isSimple())
-		{
-			$type_id = 2;
-			return View::make('dashboard.pages.survey.question.simple.form', compact('question', 'form_data', 'survey', 'type_id'));
-		}
-		else
-		{
-			$type_id = 3;
-			return View::make('dashboard.pages.survey.question.text.form', compact('question', 'form_data', 'survey', 'type_id'));
-		}
-		
+		$this->form_data = ['route' => [self::$prefixRoute . 'update', $this->protocol->id, $this->question->id], 'method' => 'PUT'];
+		return $this->getFormView();
 	}
 
 
@@ -168,47 +139,21 @@ class ProtocolQuestionsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($survey_id, $id)
+	public function update(EditRequest $request, $protocol_id, $question_id)
 	{
-		$survey = Survey::findOrFail($survey_id);
-        $question = $survey->questions()->findOrFail($id);
-        $data = Input::all();
+        $this->question->fill($request->all());
+        $this->question->save();
+        $this->question->answers()->update(['correct' => 0]);
 
-        if ($question->validAndSave($data))
-        {
-            return Redirect::route('formularios.preguntas.index', $survey_id);
-        }
-        else
-        {
-			return Redirect::route('formularios.preguntas.edit', array($survey_id, $id))->withInput()->withErrors($question->errors);
-        } 
+        $answers = $request->get('answers');
+		$answers[$request->get('answers_correct')]['correct'] = 1;
+
+		foreach ($answers as $id => $answer) 
+		{
+			Answer::findOrFail($id)->fill($answer)->save();
+		}
+
+        return redirect()->route(self::$prefixRoute . 'index', $this->protocol->id);	
 	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($protocol_id, $id)
-	{
-    	$question = Question::findOrFail($id);
-        $question->delete();
-
-        if (Request::ajax())
-        {
-            return Response::json(array (
-                'success' => true,
-                'msg'     => 'Pregunta "' . $question->text . '" eliminada',
-                'id'      => $question->id
-            ));
-        }
-        else
-        {
-            return Redirect::route('protocolos.show', $protocol_id);
-        }
-	}
-
 
 }

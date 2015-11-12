@@ -1,13 +1,10 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
-use Education\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-
+use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Companies\Users\CreateRequest;
 use Education\Http\Requests\Companies\Users\EditRequest;
-
 use Education\Entities\Company;
 use Education\Entities\User;
 

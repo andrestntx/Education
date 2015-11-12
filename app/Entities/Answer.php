@@ -4,9 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
 {
-	protected $table = 'answer';
-	protected $primaryKey = 'id';
-	protected $fillable = array('text', 'value', 'observation', 'question_id', 'correct');
+	protected $table = 'answers';
+	protected $fillable = ['text', 'correct'];
 	public $timestamps = true;
 	public $increments = true;
 	public $errors;
@@ -16,7 +15,6 @@ class Answer extends Model
     {
         return $this->belongsTo('Question', 'question_id');
     }
-
 
     public function exams()
     {

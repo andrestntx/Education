@@ -40,7 +40,7 @@
 						<div class="block-title">
 							<div class="block-options pull-right">
 								{!! Form::open(['route' => ['protocols.questions.create', $protocol->id], 'method' => 'GET', 'class' => 'form-inline']) !!}
-									{!! Form::text('respuestas', null, array('class' => 'form-control', 'required', 'style' => 'max-width:120px;', 'title' => 'Número de Respuestas', 'placeholder' => 'Respuestas')) !!}
+									{!! Form::text('answers', null, array('class' => 'form-control', 'required', 'style' => 'max-width:120px;', 'title' => 'Número de Respuestas', 'placeholder' => 'Respuestas')) !!}
 									<button type="submit" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" data-original-title="Nueva Pregunta">
 										<i class="fa fa-plus"></i>
 									</button>
@@ -54,17 +54,17 @@
 		                        <li title="Pregunta">
 		                        	<div class="row">
 		                            	<div class="col-xs-8">
-		                            		<h4 style="font-size:16px;">{{$question->text}}</h4>
+		                            		<p style="font-size:16px;">{{$question->text}}</p>
 		                            	</div>
 		                            	<div class="col-xs-4">
-				                            <a href="{{route('protocols.questions.edit', array($protocol->id, $question->id))}}" data-toggle="tooltip" title="Editar Pregunta" class="btn btn-xs btn-effect-ripple btn-warning">
+				                            <a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" class="btn btn-xs btn-effect-ripple btn-warning">
 				                                <i class="fa fa-pencil"></i>
 				                            </a>
-				                            {{Form::open(array('route' => array('protocols.questions.destroy', $protocol->id, $question->id), 'method' => 'DELETE', 'style' => 'display:inline-block;'))}}
+				                            {!! Form::open(['route' => ['protocols.questions.destroy', $protocol->id, $question->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
 				                            <button type="submit" title="Borrar Pregunta" class="btn btn-xs btn-effect-ripple btn-danger">
 				                                <i class="fa fa-times"></i>
 				                            </button>
-				                            {{Form::close()}}
+				                            {!! Form::close() !!}
 			                        	</div>
 		                        	</div>
 		                        </li>
