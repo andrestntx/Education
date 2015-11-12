@@ -114,6 +114,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsToMany(Area::class);
     }
 
+    public function protocols()
+    {
+        return $this->belongsToMany(Protocol::class);
+    }
+
     public function exams()
     {
         return $this->hasMany(Exam::class);
