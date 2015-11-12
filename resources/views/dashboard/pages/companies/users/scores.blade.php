@@ -23,6 +23,7 @@
 			                <tbody>
 			                    @foreach($protocols as $protocol)
 			                        <tr>
+			                        	{{ $protocol->getUserExams($user) }}
 			                        	@if(Auth::user()->isAdmin())
 			                            	<td><a href="{{route('protocols.show', $protocol->id)}}" title="Ver Protocolo">{{$protocol->name}}</a></td>
 			                            @else

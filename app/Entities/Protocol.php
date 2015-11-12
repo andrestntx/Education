@@ -191,9 +191,39 @@ class Protocol extends Model
         return $this->hasMany(Question::class);
     }
 
+    public function exams()
+    {
+        return $this->hasMany(Exam::class);
+    }
+
     public function getAnnexes()
     {
         return Storage::files('protocols/' . $this->id . '/annexes');
+    }
+
+    public function getUserExams($user)
+    {
+        $exams = $this->exams->where('user_id', $user->id);
+    }
+
+    public function getUserExamsCountAttribute($user)
+    {
+        return $this->getUserExams()->count();
+    }
+
+    public function getUserBestExam($user)
+    {
+        return $this->getUserExams($user)->orderByDesc('score')->first();
+    }
+
+    public function getUserLastExam($user)
+    {
+        return $this->getUserExams($user)->orderByDesc('created_at')->first();
+    }
+
+    public function isExamPending($user)
+    {
+        return $this->getUserLastExam($user)->isPending();
     }
 
     public function randomQuestions()
