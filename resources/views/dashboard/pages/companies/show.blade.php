@@ -1,6 +1,7 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-hospital-o @stop
 @section('title_page')Institución {{ $user->company->name }} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('home') !!} @stop
 @section('content_body_page')
 	<div class="row">
         
@@ -8,7 +9,7 @@
             @include('dashboard.extends.widget',[
                 'widget_url'    => '/users', 
                 'widget_title'  => 'Usuarios', 
-                'widget_count'  => $user->company->users->count(), 
+                'widget_count'  => $user->company->users()->registereds()->count(), 
                 'widget_icon'   => 'gi gi-group',
                 'widget_themed' => 'themed-background'
             ])
@@ -51,16 +52,6 @@
                 'widget_count'  => $user->company->protocols->count(), 
                 'widget_icon'   => 'fa fa-file-text',
                 'widget_themed' => 'themed-background-info'
-            ])
-        </div>
-
-        <div class="col-sm-6 col-lg-3">
-            @include('dashboard.extends.widget',[
-                'widget_url'    => '/exams', 
-                'widget_title'  => 'Examenes', 
-                'widget_count'  => $user->company->exams->count(), 
-                'widget_icon'   => 'fa fa-check',
-                'widget_themed' => 'themed-background'
             ])
         </div>
 

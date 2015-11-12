@@ -4,6 +4,7 @@
   @if($question->exists) Editar Pregunta
   @else Nueva Pregunta @endif
 @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('protocols.protocol.question', $protocol, $question) !!} @stop
 @section('title_form') Datos de la Pregunta @stop
 @section('form')
   {!! Form::model($question, $form_data) !!}

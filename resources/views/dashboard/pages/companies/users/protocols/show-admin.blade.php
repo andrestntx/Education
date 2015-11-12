@@ -57,14 +57,9 @@
 		                            		<p style="font-size:16px;">{{$question->text}}</p>
 		                            	</div>
 		                            	<div class="col-xs-4">
-				                            <a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" class="btn btn-xs btn-effect-ripple btn-warning">
+				                            <a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" class="btn btn-sm btn-effect-ripple btn-warning">
 				                                <i class="fa fa-pencil"></i>
 				                            </a>
-				                            {!! Form::open(['route' => ['protocols.questions.destroy', $protocol->id, $question->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
-				                            <button type="submit" title="Borrar Pregunta" class="btn btn-xs btn-effect-ripple btn-danger">
-				                                <i class="fa fa-times"></i>
-				                            </button>
-				                            {!! Form::close() !!}
 			                        	</div>
 		                        	</div>
 		                        </li>
