@@ -2,7 +2,8 @@
 
 use Illuminate\Contracts\View\View;
 use Education\Entities\Category;
- 
+use Auth;
+
 class ListComposer {
     /**
      * Bind data to the view.
@@ -12,7 +13,7 @@ class ListComposer {
      */
     public function compose(View $view)
     {        
-        $protocols = \Auth::user()->company->protocols()->orderBy('updated_at', 'desc')->paginate(20);
+        $protocols = Auth::user()->company->protocols()->orderBy('updated_at', 'desc')->paginate(20);
 
         $view->with([
             'protocols' => $protocols

@@ -144,6 +144,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany(Category::class);
     }
 
+    public function getExamProtocolsPending()
+    {
+        return $this->protocols->filter(function ($protocol) {
+            return $protocol->isExamPending($this);
+        });    
+    }
+
+    public function getExamProtocolsOk()
+    {
+        return $this->protocols->filter(function ($protocol) {
+            return ! $protocol->isExamPending($this);
+        }); 
+    }
 
     public function getAreaIdListsAttribute()
     {

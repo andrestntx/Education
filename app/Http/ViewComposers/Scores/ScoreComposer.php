@@ -1,7 +1,7 @@
 <?php namespace Education\Http\ViewComposers\Scores;
 
-
 use Illuminate\Contracts\View\View;
+use Auth;
 
 class ScoreComposer {
     /**
@@ -12,12 +12,15 @@ class ScoreComposer {
      */
     public function compose(View $view)
     {
-        $protocols = \Auth::user()->protocols()->orderBy('updated_at', 'desc')->paginate(20);
-        $user = \Auth::user()->load(['company']);
+        $protocolsPending   = Auth::user()->getExamProtocolsPending();
+        $protocolsOk        = Auth::user()->getExamProtocolsOk();
+
+        $user = Auth::user()->load(['company']);
 
         $view->with([
-            'protocols' => $protocols,
-            'user'      => $user,
+            'protocolsPending'  => $protocolsPending,
+            'protocolsOk'       => $protocolsOk,
+            'user'              => $user
         ]);
     }
  

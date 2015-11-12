@@ -5,14 +5,14 @@
 		<div class="col-sm-6">
 			<div class="block">
 				<div class="block-title">
-					<h2>Mis Notas</h2>
+					<h2>Protocolos pendientes</h2>
 				</div>
 				<div class="block-section">
 					<div class="table-responsive">
 			            <table id="datatable" class="table table-striped table-bordered table-vcenter">
 			                <thead>
 			                    <tr>
-			                        <th title="Nombre del Protocolo">Protocolo Evaluado</th>
+			                        <th title="Nombre del Protocolo">Protocolo</th>
                                     <th class="text-center" style="width: 95px;" title="Número de Intentos"><i class="fa fa-list-ol"></i></th>
                                     <th class="text-center" style="width: 95px;" title="Mejor Calificación"><i class="fa fa-check"></i></th>
                                     <th class="text-center" style="width: 95px;" title="Último Intento"><i class="fa fa-calendar"></i></th>
@@ -21,13 +21,13 @@
 			                    </tr>
 			                </thead>
 			                <tbody>
-			                    @foreach($protocols as $protocol)
+			                    @foreach($protocolsPending as $protocol)
 			                        <tr>
                                         <td><a href="{{route('study', $protocol->id)}}" title="Estudiar Protocolo">{{$protocol->name}}</a></td>
-			                            <td class="text-center"></td>
-			                            <td class="text-center"></td>
-			                            <td>  </td>
-			                        	<td class="text-center"></td>
+			                            <td class="text-center">{{ $protocol->getUserExamsCount($user) }}</td>
+			                            <td class="text-center">{{ $protocol->getUserBestExam($user)->score }}</td>
+			                            <td class="text-center">{{ $protocol->getUserLastExam($user)->created_at_hummans }} </td>
+			                        	<td class="text-center">{{ $protocol->getUserLastExam($user)->score }}</td>
 			                        	<td class="text-center">
                                             <a href="{{route('study', $protocol->id)}}" data-toggle="tooltip" title="Estudiar Protocolo" class="btn btn btn-sm btn-effect-ripple btn-info">
                                                 <i class="fa fa-eye"></i>
@@ -49,14 +49,14 @@
     <div class="col-sm-6">
         <div class="block">
             <div class="block-title">
-                <h2>Mis Notas</h2>
+                <h2>Protocolos al día</h2>
             </div>
             <div class="block-section">
                 <div class="table-responsive">
                     <table id="datatable" class="table table-striped table-bordered table-vcenter">
                         <thead>
                         <tr>
-                            <th title="Nombre del Protocolo">Protocolo Evaluado</th>
+                            <th title="Nombre del Protocolo">Protocolo</th>
                             <th class="text-center" style="width: 95px;" title="Número de Intentos"><i class="fa fa-list-ol"></i></th>
                             <th class="text-center" style="width: 95px;" title="Mejor Calificación"><i class="fa fa-check"></i></th>
                             <th class="text-center" style="width: 95px;" title="Último Intento"><i class="fa fa-calendar"></i></th>
@@ -65,13 +65,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($protocols as $protocol)
+                        @foreach($protocolsOk as $protocol)
                         <tr>
                             <td><a href="{{route('study', $protocol->id)}}" title="Estudiar Protocolo">{{$protocol->name}}</a></td>
-                            <td class="text-center"></td>
-                            <td class="text-center"></td>
-                            <td>  </td>
-                            <td class="text-center"></td>
+                            <td class="text-center">{{ $protocol->getUserExamsCount($user) }}</td>
+                            <td class="text-center">{{ $protocol->getUserBestExam($user)->score }}</td>
+                            <td class="text-center">{{ $protocol->getUserLastExam($user)->created_at_hummans }} </td>
+                        	<td class="text-center">{{ $protocol->getUserLastExam($user)->score }}</td>
                             <td class="text-center">
                                 <a href="{{route('study', $protocol->id)}}" data-toggle="tooltip" title="Estudiar Protocolo" class="btn btn btn-sm btn-effect-ripple btn-info">
                                     <i class="fa fa-eye"></i>
