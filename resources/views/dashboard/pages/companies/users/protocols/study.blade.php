@@ -76,7 +76,11 @@
 
 			<div class="row">
 				<a href="@if($protocol->aviable) {{ route('exams.create', $protocol->id) }} @endif" class="widget" title="@if($protocol->aviable) Presentar Examen @else Examen no disponible @endif">
-					@include('dashboard.extends.widget_percent', ['title' => 'Presentar examen', 'value' => $protocol->getUserBestExam($user)->score])
+					@if($bestExam = $protocol->getUserBestExam($user))
+                        @include('dashboard.extends.widget_percent', ['title' => 'Presentar examen', 'value' => $bestExam->score])
+                    @else
+                        @include('dashboard.extends.widget_percent', ['title' => 'Presentar examen', 'value' => 0])
+                    @endif
 				</a>
 			</div>
 		</div>
