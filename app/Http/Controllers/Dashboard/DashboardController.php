@@ -16,7 +16,7 @@ class DashboardController extends Controller {
 		}
 		else if($user->isRegistered())
 		{
-			return view('dashboard.pages.user.scores', compact('user'));
+			return view('dashboard.pages.companies.users.scores');
 		}
 
 		return redirect()->to('companies');
