@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAnnexesTable extends Migration {
+class CreateLinksTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,12 +12,12 @@ class CreateAnnexesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('annexes', function($table)
+		Schema::create('links', function($table)
 		{
 		    $table->increments('id');
 		    $table->string('name', 45);
 		    $table->text('description')->nullable();
-		    $table->text('url')->nullable();	    
+		    $table->text('url');
 
 		    $table->integer('protocol_id')->unsigned();	    
 		    $table->foreign('protocol_id')
@@ -35,7 +35,7 @@ class CreateAnnexesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('annexes');
+		Schema::drop('links');
 	}
 
 }

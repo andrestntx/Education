@@ -103,7 +103,7 @@ class ProtocolsController extends Controller {
 	 */
 	public function show($id)
 	{
-		$this->protocol->load('links', 'questions');
+		$this->protocol->load('Links', 'questions');
 		return view(self::$prefixView . 'show-admin')->with('protocol', $this->protocol);
 	}
 

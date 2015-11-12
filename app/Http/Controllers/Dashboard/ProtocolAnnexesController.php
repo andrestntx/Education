@@ -14,7 +14,7 @@ class ProtocolLinksController extends Controller {
     private $annex;
     private $protocol;
     private $form_data;
-    private static $prefixRoute = 'protocols.links.';
+    private static $prefixRoute = 'protocols.Links.';
     private static $prefixView  = 'dashboard.pages.models.';
 
     public function __construct()

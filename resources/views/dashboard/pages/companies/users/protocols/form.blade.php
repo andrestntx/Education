@@ -41,7 +41,7 @@
         </div>
         <div class="input-group" id="div_link_pdf">
           {!! Form::text('url_doc', null, array('class' => 'form-control', 
-            'placeholder' => 'http://pagina-externa/archivo.pdf', 'id' => 'link_pdf', 'required')) 
+            'placeholder' => 'http://pagina-externa/archivo.pdf', 'id' => 'link_pdf'))
           !!}
           <span class="input-group-addon"><i class="fa fa-file-text-o"></i></span>
         </div>

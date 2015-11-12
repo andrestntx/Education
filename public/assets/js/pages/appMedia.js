@@ -19,7 +19,7 @@ var AppMedia = function() {
 
                 // Procceed only if the user clicked on an inactive category
                 if ( ! $(this).parent().hasClass('active')) {
-                    // Remove active class from all filter links
+                    // Remove active class from all filter Links
                     mediaFilter.find('a').parent().removeClass('active');
 
                     // Add the active class to the clicked link

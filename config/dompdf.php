@@ -103,7 +103,7 @@ return array(
          * image and font support, etc.) differ between backends.  Please see
          * {@link PDFLib_Adapter} for more information on the PDFLib backend
          * and {@link CPDF_Adapter} and lib/class.pdf.php for more information
-         * on CPDF. Also see the documentation for each backend at the links
+         * on CPDF. Also see the documentation for each backend at the Links
          * below.
          *
          * The GD rendering backend is a little different than PDFLib and
