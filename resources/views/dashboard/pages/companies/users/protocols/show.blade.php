@@ -21,15 +21,38 @@
 					<h2>{{$protocol->description}}</h2>
 				</div>
 				<div class="block-section">
-					@if($protocol->isPdfCorrect())
+
 						<iframe src="https://drive.google.com/viewerng/viewer?url={{URL::to($protocol->pdf)}}&embedded=true" style="width:100%; height:550px;" frameborder="0"></iframe>
-					@else
+
 						<h4>El protocolo no se ha subido</h4>
-					@endif
+
 				</div>
 			</div>
 		</div>
+
 		<div class="col-lg-3">
+
+            <div class="row">
+                <div class="block">
+                    <div class="block-title">
+                        <h2>Enlaces</h2>
+                    </div>
+                    <div class="block-section">
+                        <ul class="list-unstyled">
+                            @foreach($protocol->links as $link)
+                            <li title="{{$link->description}}">
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                        <h4 style="font-size:16px;"><a title="{{ $link->description }}" href="{{ $link->url }}" target="_blank">{{ $link->name }}</a></h4>
+                                    </div>
+                                </div>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
 			<div class="row">
 				<div class="block">
 					<div class="block-title">
@@ -39,58 +62,17 @@
 					</div>
 					<div class="block-section">
 						<ul class="fa-ul">
-		                    @foreach($protocol->annex as $annex)
-	                            <li title="{{$annex->description}}">
-	                            	<i class="{{$annex->icon}} fa-li"></i>
-	                            	@if($annex->isLink() && !$annex->islinkYoutube())
-	                            		<h4><a href="{{URL::to($annex->url)}}" target="_blank">{{$annex->name}}</a></h4>	
-	                            	@else
-		                           		<h4><a href="#modal-annex-{{$annex->id}}" data-toggle="modal">{{$annex->name}}</a></h4>	
-		                           	@endif		                            	
-	                            </li>	
-	                            @if($annex->isFile() || $annex->islinkYoutube())	
-		                            <div id="modal-annex-{{$annex->id}}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-		                                <div class="modal-dialog modal-lg">
-		                                    <div class="modal-content">
-		                                        <div class="modal-header">
-		                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                                            <h3 class="modal-title"><strong>{{$annex->name}}</strong></h3>
-		                                        </div>
-		                                        <div class="modal-body">
-		                                        	@if($annex->isImage())
-		                                        		<img src="{{URL::to($annex->url)}}" class="text-center" style="max-height:400px; margin: 0 auto; display:block;">
-		                                        	@elseif($annex->isVideo())
-		                                        		<video style="max-height:400px; max-width:100%; margin: 0 auto; display:block;" controls>
-														 	<source src="{{URL::to($annex->url)}}" type="video/mp4">
-															El navegador no soporta HTML5
-														</video>
-		                                        	@elseif($annex->isPdf())
-		                                        		<iframe src="https://drive.google.com/viewerng/viewer?url={{URL::to($annex->url)}}&embedded=true" style="width:100%; height:450px;" frameborder="0"></iframe>
-		                                        	@elseif($annex->islinkYoutube())
-		                                        		<iframe width="100%" height="450" src="//www.youtube.com/embed/{{$annex->id_link_youtube}}" frameborder="0" allowfullscreen></iframe>
-		                                        	@else
-		                                        		<h3>El tipo de archivo no se puede visuarlizar. Miralo aquí <a href="{{URL::to($annex->url)}}" target="_blank">Anexo {{var_dump($annex->type)}}</a></h3>
-		                                        	@endif
-		                                        </div>
-		                                        <div class="modal-footer">
-		                                            <button type="button" class="btn btn-effect-ripple btn-danger" data-dismiss="modal">Cerrar</button>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                            </div>
-	                            @endif
-	                            <!-- END Regular Fade -->                            
-		                    @endforeach
+
 		                </ul>
 					</div>
 				</div>
 			</div>
 			<div class="row">
-				@if($protocol->survey->aviable)
-					<a href=" {{route('examenes.create', $protocol->id)}}" class="widget" title="Presentar Examen">
-				@else
+
+					<a href=" {{route('exams.create', $protocol->id)}}" class="widget" title="Presentar Examen">
+
 					<a href="#" class="widget" title="Examen no disponible">
-				@endif
+
 					<div class="widget-content widget-content-mini themed-background-muted text-center">
 						<i class="fa fa-bar-chart-o"></i> @if($user->best_exam_score > 0) Mejorar Calificación @else Presentar Examen @endif
 					</div>

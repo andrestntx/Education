@@ -1,21 +1,18 @@
-<?php 
-	/**
-	* 
-	*/
+<?php namespace Education\Http\Controllers\Dashboard;
 
-	class ExamsController extends BaseController
+use Education\Entities\Protocol;
+use Education\Entities\User;
+use Education\Http\Controllers\Controller;
+
+	class ExamsController extends Controller
 	{
 		public function studyProtocol($protocol_id)
 		{
 			$protocol = Protocol::findOrFail($protocol_id);
 
-			$user = User::with(array('examScores' => function($query) use($protocol)
-			{
-			    $query->whereSurveyId($protocol->survey_id);
-
-			}))->whereId(Auth::user()->id)->first();	
+			$user = \Auth::user();
 			
-			return View::make('dashboard.pages.protocol.show', compact('protocol', 'user'));
+			return \View::make('dashboard.pages.companies.users.protocols.show', compact('protocol', 'user'));
 		}
 
 		public function create($protocol_id)
