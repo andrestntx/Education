@@ -138,7 +138,7 @@ Breadcrumbs::register('protocols.protocol', function($breadcrumbs, $protocol)
 	}
 });
 
-// Home > Protocols > Protocol > Annexes
+// Home > Protocols > Protocol > Links
 Breadcrumbs::register('protocols.protocol.annexes', function($breadcrumbs, $protocol)
 {
 	$breadcrumbs->parent('protocols.protocol', $protocol);
@@ -147,7 +147,7 @@ Breadcrumbs::register('protocols.protocol.annexes', function($breadcrumbs, $prot
 
 });
 
-// Home > Protocols > Protocol > Annexes > Annex
+// Home > Protocols > Protocol > Links > Link
 Breadcrumbs::register('protocols.protocol.annexes.annex', function($breadcrumbs, $protocol, $annex)
 {
 	$breadcrumbs->parent('protocols.protocol.annexes', $protocol);
@@ -160,6 +160,28 @@ Breadcrumbs::register('protocols.protocol.annexes.annex', function($breadcrumbs,
 	{
 		$breadcrumbs->push('Nuevo', route('protocols.annexes.create', $protocol->id));
 	}
+});
+
+// Home > Users
+Breadcrumbs::register('users', function($breadcrumbs)
+{
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push('Usuarios', route('users.index'));
+});
+
+// Home > Users > User
+Breadcrumbs::register('users.user', function($breadcrumbs, $user)
+{
+    $breadcrumbs->parent('users');
+
+    if($user->exists)
+    {
+        $breadcrumbs->push($user->name, route('users.show', $user->id));
+    }
+    else
+    {
+        $breadcrumbs->push('Nueva', route('users.create'));
+    }
 });
 
 

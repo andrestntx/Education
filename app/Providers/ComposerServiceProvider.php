@@ -21,6 +21,8 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\Categories\ListComposer'      => 'dashboard.pages.companies.users.categories.list',
             'Education\Http\ViewComposers\Protocols\ListComposer'       => 'dashboard.pages.companies.users.protocols.list',
             'Education\Http\ViewComposers\Protocols\FormComposer'       => 'dashboard.pages.companies.users.protocols.form'
+            'Education\Http\ViewComposers\Users\ListComposer'           => 'dashboard.pages.companies.users.admin.list',
+            'Education\Http\ViewComposers\Users\FormComposer'           => 'dashboard.pages.companies.users.admin.form'
         ]);
     }
 

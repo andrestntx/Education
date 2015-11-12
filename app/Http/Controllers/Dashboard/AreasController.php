@@ -55,7 +55,6 @@ class AreasController extends Controller {
 	public function index()
 	{
         return view(self::$prefixView . 'list');
-
 	}
 
 
