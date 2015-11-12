@@ -21,6 +21,26 @@ class Protocol extends Model
         return $this->user->name;
     }
 
+    public function isAviable()
+    {
+        if($this->aviable)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getStateAttribute()
+    {
+        if($this->aviable)
+        {
+            return 'Disponible';
+        }
+
+        return 'No Disponible';
+    }
+
     public function getCategoryIdListsAttribute()
     {
         return $this->categories->lists('id')->all();
@@ -166,31 +186,28 @@ class Protocol extends Model
         return $this->hasMany(Link::class);
     }
 
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
     public function getAnnexes()
     {
         return Storage::files('protocols/' . $this->id . '/annexes');
     }
 
-    public function questions()
+    public function randomQuestions()
     {
-        return $this->hasMany(Question::class);
+        if($this->questions->count() >= 10)
+        {
+            return $this->questions->random(10);
+        }
+
+        return $this->questions;
     }
+
     /***** End Relations *****/
 
-    /***** Scopes *****/
-
-    public function scopeUserCanStudy($query, $user_id)
-    {
-        return $query->joinCanStudyProtocols()
-            ->where('users_has_access_surveys.user_id', $user_id);
-    }
-
-    public function scopeJoinCanStudyProtocols($query)
-    {
-        return $query->join('users_has_access_surveys', 'users_has_access_surveys.survey_id', '=', 'protocol.survey_id');
-    }
-
-    /****** End Scopes ******/
 
     public function fillAndClear($data)
     {

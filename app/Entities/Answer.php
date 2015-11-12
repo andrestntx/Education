@@ -10,10 +10,9 @@ class Answer extends Model
 	public $increments = true;
 	public $errors;
 
-
     public function question()
     {
-        return $this->belongsTo('Question', 'question_id');
+        return $this->belongsTo(Question::class);
     }
 
     public function exams()
@@ -23,12 +22,12 @@ class Answer extends Model
 
     public function scopeCorrects($query)
     {
-        return $query->whereCorrect(true);
+        return $query->whereCorrect(1);
     }
 
     public function scopeIncorrects($query)
     {
-        return $query->where('correct', '<>', true);
+        return $query->where('correct', '<>', 1);
     }
 
         
