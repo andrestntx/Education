@@ -12,7 +12,6 @@ class DashboardController extends Controller {
 
 		if($user->isAdmin())
 		{
-			dd($user->protocols);
 			return view('dashboard.pages.companies.show')->with(['user' => $user]);
 		}
 		else if($user->isRegistered())
