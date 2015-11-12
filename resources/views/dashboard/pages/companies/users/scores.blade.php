@@ -1,5 +1,6 @@
 @extends('dashboard.pages.layout')
-@section('title_page') Institución {{$user->company->name}} @stop
+@section('title_page') <i class="gi gi-building"></i> {{$user->company->name}} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('study') !!} @stop
 @section('content_body_page')
 	<div class="row">
 		<div class="col-sm-6">

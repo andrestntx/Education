@@ -190,5 +190,18 @@ Breadcrumbs::register('users.user', function($breadcrumbs, $user)
     }
 });
 
+// Home > Study 
+Breadcrumbs::register('study', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Estudiar', route('home'));
+});
 
+
+// Home > Study > Protocol
+Breadcrumbs::register('study.protocol', function($breadcrumbs, $protocol)
+{
+	$breadcrumbs->parent('study');
+    $breadcrumbs->push($protocol->name, route('study', $protocol));
+});
 ?>

@@ -90,69 +90,6 @@ class Protocol extends Model
         return '#';
     }
 
-    public function getLastExamUpdateAttribute()
-    {
-        if($examScore = $this->lastExam())
-        {
-            return $examScore->updated_at;
-        } 
-
-        return 'SIN EXAMEN';
-    }
-
-    public function getLastExamScoreAttribute()
-    {
-        if($examScore = $this->lastExam())
-        {
-            return $examScore->formated_score;
-        } 
-
-        return 'NA';
-    }
-
-    public function bestExam()
-    {
-        $examScore = $this->examScores->sortByDesc('score')->first();
-
-        if(!is_null($examScore))
-        {
-            return $examScore;
-        }
-
-        return null;
-    }
-
-    public function getBestExamScoreAttribute()
-    {
-        if($exam = $this->bestExam())
-        {
-            return $exam->formated_score;
-        }
-
-        return 'NA';
-    }
-
-    public function getbestExamStatusAttribute()
-    {
-        if($exam = $this->bestExam())
-        {
-            if($exam->score > 80){
-                return 'APROBADO';
-            }
-            else
-            {
-                return 'SIN APROBAR';
-            }
-        }
-
-        return 'NO PRESENTADO';
-    }
-
-    public function getNumberAttribute()
-    {
-        return count($this->getAnnexes());
-    }
-
     public function getNumberQuestionsAttribute()
     {
         return $this->questions->count();
@@ -223,7 +160,12 @@ class Protocol extends Model
 
     public function isExamPending($user)
     {
-        return $this->getUserLastExam($user)->isPending();
+        if( ! $this->getUserLastExam($user) || $this->getUserLastExam($user)->isPending())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public function randomQuestions()

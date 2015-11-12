@@ -12,7 +12,7 @@ use Education\Http\Controllers\Controller;
 
 			$user = \Auth::user();
 			
-			return \View::make('dashboard.pages.companies.users.protocols.show', compact('protocol', 'user'));
+			return \View::make('dashboard.pages.companies.users.protocols.study', compact('protocol', 'user'));
 		}
 
 		public function create($protocol_id)
