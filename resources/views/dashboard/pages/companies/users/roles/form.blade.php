@@ -1,6 +1,7 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 
 @section('title_page')
+  <i class="gi gi-old_man"></i>
   @if($role->exists) Editar Perfil: {{$role->name}}
   @else Nuevo Perfil @endif
 @stop

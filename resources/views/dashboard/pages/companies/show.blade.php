@@ -30,7 +30,7 @@
                 'widget_url'    => '/areas', 
                 'widget_title'  => 'Áreas', 
                 'widget_count'  => $user->company->areas->count(), 
-                'widget_icon'   => 'gi gi-building',
+                'widget_icon'   => 'fa fa-sitemap',
                 'widget_themed' => 'themed-background-danger'
             ])
         </div>
