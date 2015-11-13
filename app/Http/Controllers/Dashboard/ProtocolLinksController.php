@@ -84,7 +84,7 @@ class ProtocolLinksController extends Controller {
         $this->link->fill($request->all());
         $this->link = $this->protocol->links()->save($this->link);
 
-        Flash::info('Link '. $this->link->name .' guardado correctamente');
+        Flash::info('Link '. $this->link->name .' Guardado correctamente');
 
         return redirect()->route('protocols.show', $this->protocol->id);
 	}
@@ -114,7 +114,7 @@ class ProtocolLinksController extends Controller {
         $this->link->fill($request->all());
         $this->link->save();
 
-        Flash::info('Link '. $this->link->name .' actualizado correctamente');
+        Flash::info('Link '. $this->link->name .' Actualizado correctamente');
 
         return redirect()->route('protocols.show', $this->protocol->id);
 	}

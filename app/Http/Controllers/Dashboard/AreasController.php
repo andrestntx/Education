@@ -79,7 +79,7 @@ class AreasController extends Controller {
         $this->area->fill($request->all());
         \Auth::user()->areasCreated()->save($this->area);
 
-        Flash::info('Area creada correctamente');
+        Flash::info('Area '.$this->area->name.' Guardada correctamente');
 
         return redirect()->route(self::$prefixRoute .'index');
 	}
@@ -121,7 +121,7 @@ class AreasController extends Controller {
         $this->area->fill($request->all());
         $this->area->save();
 
-        Flash::info('Area editada correctamente');
+        Flash::info('Area '.$this->area->name.' Actualizada correctamente');
 
         return redirect()->route(self::$prefixRoute . 'index');
 	}

@@ -1,15 +1,13 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-hospital-o @stop
-@section('title_page') <i class="gi gi-building"></i> Instituciones registradas @stop
+
+@section('title_page') <i class="gi gi-building-o"></i> Instituciones registradas
+<a href="{{route('companies.create')}}" class="btn btn-primary" title="Nueva Institución"><i class="fa fa-plus"></i> </a>
+@stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('companies') !!} @stop
 
 @section('content_body_page')
-	<div class="row" id="title_page" style="margin-bottom: 10px;">
-    	<div class="col-md-12">
-            <a href="{{ route('companies.create') }}" class="btn btn-primary"> <i class="fa fa-plus-square"></i> Nueva Institución</a>
-        </div>
-    </div>
 	<div class="row">
 		@foreach($companies as $company)
 		    <div class="col-lg-4">

@@ -79,7 +79,7 @@ class RolesController extends Controller {
         $this->role->fill($request->all());
         \Auth::user()->rolesCreated()->save($this->role);
 
-        Flash::info('Perfil creado correctamente');
+        Flash::info('Perfil '.$this->role->name.' Guardado correctamente');
 
         return redirect()->route(self::$prefixRoute .'index');
 	}
@@ -122,7 +122,7 @@ class RolesController extends Controller {
         $this->role->fill($request->all());
         $this->role->save();
 
-        Flash::info('Perfil editado correctamente');
+        Flash::info('Perfil '.$this->role->name.' Actualizado correctamente');
 
         return redirect()->route(self::$prefixRoute . 'index');
 	}
