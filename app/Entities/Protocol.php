@@ -95,6 +95,17 @@ class Protocol extends Model
         return $this->questions->count();
     }
 
+    public function getNumberAnnexesAttribute()
+    {
+        return count($this->getAnnexes());
+    }
+
+    public function getNumberLinksAttribute()
+    {
+        return $this->links->count();
+    }
+
+
     /* End Exams */
 
     /***** Relations *****/

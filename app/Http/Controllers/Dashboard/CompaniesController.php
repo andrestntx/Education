@@ -101,7 +101,7 @@ class CompaniesController extends Controller {
 	 */
 	public function show($id)
 	{
-		return view(self::$prefixView . 'show')->with('company', $this->company);
+		return redirect()->route(self::$prefixRoute . 'edit', $id);
 	}
 
 

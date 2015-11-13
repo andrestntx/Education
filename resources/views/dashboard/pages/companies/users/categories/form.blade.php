@@ -1,5 +1,6 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
+  <i class="fa fa-folder-open"></i>
   @if($category->exists) Editar Categoría: {{$category->name}}
   @else Nueva Categoría @endif
 @stop

@@ -1,6 +1,7 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-hospital-o @stop
-@section('title_page') <i class="fa fa-building-o"></i> Instituciones registradas
+
+@section('title_page') <i class="gi gi-building-o"></i> Instituciones registradas
 <a href="{{route('companies.create')}}" class="btn btn-primary" title="Nueva Institución"><i class="fa fa-plus"></i> </a>
 @stop
 
@@ -21,7 +22,7 @@
 		            <div class="widget-content themed-background-muted text-center">
 		                <div class="btn-group">
 		                    <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-effect-ripple btn-warning"><i class="fa fa-pencil"></i> Editar</a>
-		                    <a href="{{ route('companies.users.index', $company->id) }}" class="btn btn-effect-ripple btn-info"><i class="fa fa-users"></i> Admins.</a>
+		                    <a href="{{ route('companies.users.index', $company->id) }}" class="btn btn-effect-ripple btn-info"><i class="gi gi-group"></i> Admins.</a>
 		                </div>
 		            </div>
 		            <div class="widget-content">

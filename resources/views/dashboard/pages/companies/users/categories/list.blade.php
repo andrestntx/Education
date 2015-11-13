@@ -1,6 +1,6 @@
 @extends('dashboard.pages.layout')
 @section('title_page')
-    Categorías de Protocolos
+    <i class="fa fa-folder-open"></i> Categorías de Protocolos
     <a href="{{route('categories.create')}}" class="btn btn-primary" title="Nueva categoría"><i class="fa fa-plus"></i> </a>
 @stop
 

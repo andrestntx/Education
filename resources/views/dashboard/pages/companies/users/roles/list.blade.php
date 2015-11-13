@@ -1,6 +1,6 @@
 @extends('dashboard.pages.layout')
 @section('title_page')
-    Perfiles de Usuario
+    <i class="gi gi-old_man"></i> Perfiles de Usuario
     <a href="{{route('roles.create')}}" class="btn btn-primary" title="Nuevo Perfil"><i class="fa fa-plus"></i> </a>
 @stop
 

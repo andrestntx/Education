@@ -1,24 +1,24 @@
 <div class="sidebar-section">
     <h2 class="text-light">Mi Perfil</h2>
-    <form action="index.html" method="post" class="form-control-borderless" onsubmit="return false;">
-        <div class="form-group">
-            <label for="side-profile-name">Nombre</label>
-            <input type="text" id="side-profile-name" name="name" class="form-control" value="{{Auth::user()->name}}">
-        </div>
-        <div class="form-group">
-            <label for="side-profile-email">Correo electrónico</label>
-            <input type="email" id="side-profile-email" name="email" class="form-control" value="{{Auth::user()->email}}">
-        </div>
-        <div class="form-group">
-            <label for="side-profile-password">Nueva contraseña</label>
-            <input type="password" id="side-profile-password" name="password" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="side-profile-password-confirm">Confirmar nueva contraseña</label>
-            <input type="password" id="side-profile-password-confirm" name="password-confirm" class="form-control">
-        </div>
+
+    {!! Form::model(Auth::user(), [
+        'route' => ['users.update', Auth::user()->id], 'method' => 'PUT', 'files' => true, 
+        'class' => 'form-control-borderless', 'onsubmit' => 'return true;'
+    ]) !!}
+
+        
+        
+        {!! Field::file('url_photo', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
+        {!! Field::text('username', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
+        {!! Field::text('name', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
+        {!! Field::text('email', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
+        {!! Field::password('password', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
+        {!! Field::password('password-confirm', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
+
         <div class="form-group remove-margin">
-            <button type="submit" class="btn btn-effect-ripple btn-primary" onclick="App.sidebar('close-sidebar-alt');">Guardar</button>
+            <button type="submit" class="btn btn-effect-ripple btn-primary" onclick="App.sidebar('close-sidebar-alt');">Actualizar</button>
         </div>
-    </form>
+
+    {!! Form::close() !!}
+
 </div>

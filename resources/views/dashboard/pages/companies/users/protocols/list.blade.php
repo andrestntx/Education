@@ -1,6 +1,6 @@
 @extends('dashboard.pages.layout')
 @section('title_page') 
-    Todos los Protocolos 
+    <i class="fa fa-file-text"></i> Protocolos 
     <a href="{{route('protocols.create')}}" class="btn btn-primary" title="Nuevo Protocolo"><i class="fa fa-plus"></i> </a>
 @stop
 
@@ -13,30 +13,23 @@
             <table id="datatable" class="table table-striped table-bordered table-vcenter">
                 <thead>
                     <tr>
-                        <th title="Nombre del Protocolo">Nombre</th>
+                        <th title="Nombre del Protocolo"><i class="fa fa-file-text"></i> Nombre</th>
                         <th title="Descripción del Protocolo">Descripción</th>
-                        <th class="text-center" title="Número de Anexos"># Anexos</th>
-                        <th class="text-center" title="Número de Preguntas"># Preguntas</th>
-                        <th title="Ultima actulaización del Protocolo">Actualización</th>
-                        <th class="text-center" style="width: 155px;"><i class="fa fa-flash"></i></th>
+                        <th class="text-center" title="Número de Anexos"><i class="fa fa-file-zip-o"></i></th>
+                        <th class="text-center" title="Número de Links"><i class="fa fa-share-alt"></i></th>
+                        <th class="text-center" title="Número de Preguntas"><i class="fa fa-sort-numeric-desc"></i></th>
+                        <th title="Ultima actulaización del Protocolo"><i class="gi gi-clock"></i> Actualización</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($protocols as $protocol)
                         <tr>
-                            <td><a href="{{route('protocols.show', $protocol->id)}}" title="Ver Protocolo">{{$protocol->name}}</a></td>
+                            <td><a href="{{route('protocols.show', $protocol->id)}}" title="Ver Protocolo"><i class="fa fa-file-text"></i> {{$protocol->name}}</a></td>
                             <td>{{ $protocol->description }}</td>
-                            <td class="text-center"><a href="#">{{ $protocol->number_annex }}</a></td>
-                            <td class="text-center"><a href="#">{{ $protocol->number_questions }}</a></td>
+                            <td class="text-center"> {{ $protocol->number_annexes }} </td>
+                            <td class="text-center"> {{ $protocol->number_links }} </td>
+                            <td class="text-center"> {{ $protocol->number_questions }} </td>
                             <td>{{ $protocol->updated_at_hummans }}</td>
-                            <td class="text-center">
-                                <a href="{{route('protocols.show', $protocol->id)}}" data-toggle="tooltip" title="Ver Protocolo" class="btn btn-effect-ripple btn-success">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a href="{{route('protocols.edit', $protocol->id)}}" data-toggle="tooltip" title="Editar Protocolo" class="btn btn-effect-ripple btn-warning">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
