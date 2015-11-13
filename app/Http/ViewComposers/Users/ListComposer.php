@@ -12,7 +12,7 @@ class ListComposer {
      */
     public function compose(View $view)
     {
-        $users = \Auth::user()->company->users()->whereType('registered')->orderBy('id')->paginate(20);
+        $users = \Auth::user()->company->users()->whereType('registered')->orderBy('updated_at','DESC')->paginate(20);
         $view->with([
             'users' => $users
         ]);
