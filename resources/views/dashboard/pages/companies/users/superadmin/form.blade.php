@@ -1,6 +1,6 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
-  <i class="fa fa-building-o"></i> {{ $company->name }}: 
+  <i class="gi gi-building"></i> {{ $company->name }}: 
   @if($user->exists) Usuario {{ $user->name }} @else Nuevo Usuario @endif 
 @stop
 

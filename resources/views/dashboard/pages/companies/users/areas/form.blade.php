@@ -1,5 +1,5 @@
 @extends('dashboard.pages.form-layouts.horizontal')
-@section('title_page') @if($area->exists) Editar Área: {{$area->name}} @else Nueva Área @endif @stop
+@section('title_page') <i class="fa fa-sitemap"></i> @if($area->exists) Editar Área: {{$area->name}} @else Nueva Área @endif @stop
 @section('title_form') Datos del Área @stop
 @section('breadcrumbs') {!! Breadcrumbs::render('areas.area', $area) !!} @stop
 @section('form')

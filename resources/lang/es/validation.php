@@ -158,10 +158,12 @@ return array(
     'text'          => 'texto',
     'locations'     => 'ubicaciones',
     'poll_id'       => 'sondeo',
-    'can_view_all'  => 'Puede ver todo',
-    'protocol'      => 'Protocolo',
+    'can_view_all'  => 'puede ver todo',
+    'protocol'      => 'protocolo',
     'polling_stations'  => 'Puestos de votación',
-    'polling_station_day_d' => 'puesto de votación'
+    'polling_station_day_d' => 'puesto de votación',
+    'roles'         => 'perfiles',
+    'url_photo'     => 'foto de perfil'
 ),
 
 'translate' => array(

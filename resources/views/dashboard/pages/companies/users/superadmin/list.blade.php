@@ -1,6 +1,6 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-users @stop
-@section('title_page') <i class="fa fa-building-o"></i> {{ $company->name }}: Administradores @stop
+@section('title_page') <i class="gi gi-building"></i> {{ $company->name }}: Administradores @stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('companies.company.users', $company) !!} @stop
 

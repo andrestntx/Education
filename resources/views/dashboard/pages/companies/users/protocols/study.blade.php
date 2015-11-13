@@ -1,5 +1,5 @@
 @extends('dashboard.pages.layout')
-@section('title_page')Estudiar Protocolo: {{$protocol->name}} @stop
+@section('title_page') <i class="fa fa-file-text"></i> Protocolo: {{$protocol->name}} @stop
 @section('breadcrumbs') {!! Breadcrumbs::render('study.protocol', $protocol) !!} @stop
 @section('content_body_page')
 	<div class="row">

@@ -1,6 +1,6 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-hospital-o @stop
-@section('title_page')Institución {{ $user->company->name }} @stop
+@section('title_page')<i class="gi gi-building"></i> {{ $user->company->name }} @stop
 @section('breadcrumbs') {!! Breadcrumbs::render('home') !!} @stop
 @section('content_body_page')
 	<div class="row">

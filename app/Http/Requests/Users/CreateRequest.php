@@ -23,7 +23,7 @@ class CreateRequest extends Request {
             'username'     	=> 'required|max:100|unique:users',
             'name'     		=> 'required',
             'email'     	=> 'required|max:100',
-            'password' 		=>  'required|confirmed',
+            'password' 		=> 'required|confirmed',
             'url_photo' 	=> 'mimes:jpeg,png,bmp|max:1500'
 		];
 	}

@@ -1,7 +1,8 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-sitemap @stop
 @section('title_page')
-Usuarios de la Institución
+
+<i class="gi gi-group"></i> Usuarios
 <a href="{{route('users.create')}}" class="btn btn-primary" title="Nuevo usuario"><i class="fa fa-plus"></i> </a>
 @stop
 

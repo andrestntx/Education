@@ -1,7 +1,7 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('class_icon_page') fa fa-hospital-o @stop
 @section('title_page') 
-  <i class="fa fa-building-o"></i> @if($company->exists) Editar Institución: {{ $company->name }} @else Nueva Institución @endif 
+  <i class="gi gi-building"></i> @if($company->exists) Editar Institución: {{ $company->name }} @else Nueva Institución @endif 
 @stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('companies.company', $company) !!} @stop

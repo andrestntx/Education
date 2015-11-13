@@ -1,6 +1,8 @@
 @extends ('auth.layout')
     @section('title_auth')
-        <img src="{{ env('APP_LOGO_LOGIN') }}" style="width:74%; margin: 0 13%;"> 
+        <h1 class="h2 text-light text-center push-top-bottom animation-slideDown">
+            <i class="fa fa-cube"></i> <strong> {{ env('APP_NAME') }} </strong>
+        </h1>
     @endsection
     @section('buttons_header')
         <a href="/" class="btn btn-effect-ripple btn-primary" data-toggle="tooltip" data-placement="left" title="Olvidaste tu contraseña?"><i class="fa fa-exclamation-circle"></i></a>

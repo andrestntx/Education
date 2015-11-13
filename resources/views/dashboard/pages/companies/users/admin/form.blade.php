@@ -1,5 +1,5 @@
 @extends('dashboard.pages.form-layouts.horizontal')
-@section('title_page') @if($user->exists) Editar Usuario: {{$user->name}} @else Nuevo Usuario @endif @stop
+@section('title_page') <i class="fa fa-user"></i> @if($user->exists) {{$user->name}} @else Nuevo Usuario @endif @stop
 @section('title_form') Datos del Área @stop
 @section('breadcrumbs') {!! Breadcrumbs::render('users.user', $user) !!} @stop
 @section('form')

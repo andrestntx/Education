@@ -1,7 +1,7 @@
 @extends('dashboard.pages.layout')
 @section('class_icon_page') fa fa-sitemap @stop
 @section('title_page') 
-    Áreas de la Institución 
+    <i class="fa fa-sitemap"></i> Áreas de la Institución 
     <a href="{{route('areas.create')}}" class="btn btn-primary" title="Nueva área"><i class="fa fa-plus"></i> </a>
 @stop
 
