@@ -2,13 +2,14 @@
 @section('title_page')
   Presentando Examen : Protocolo {{$protocol->name}}
 @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('study.protocol.exam', $protocol) !!} @stop
 @section('title_form') Responda las siguientes Preguntas @stop
 @section('form')
   {!! Form::model($exam, $form_data) !!}
     @foreach($protocol->randomQuestions() as $question)
       <div class="form-group">  
-        <label class="col-md-4 control-label h4">{{$question->text}}</label>   
-        <div class="col-md-8"> 
+        <label class="col-md-5 control-label h4">{{$question->text}}</label>   
+        <div class="col-md-7"> 
           @foreach($question->answers as $answer)
             <div class="radio">
               <label style="font-size:16px;" for="answers[{{$question->id}}][{{$answer->id}}]">
@@ -22,12 +23,8 @@
     @endforeach
     <div class="form-group form-actions">
       <div class="col-md-8 col-md-offset-4">
-          @if($protocol->survey->questions->isEmpty() || !$protocol->survey_aviable)
-            <button type="submit" class="btn btn-effect-ripple btn-primary" disabled>Enviar Examen</button>
-          @else
             <button type="submit" class="btn btn-effect-ripple btn-primary">Enviar Examen</button>
-          @endif
       </div>
     </div>
-  {{Form::close()}}
+  {!! Form::close() !!}
 @stop

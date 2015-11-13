@@ -204,4 +204,12 @@ Breadcrumbs::register('study.protocol', function($breadcrumbs, $protocol)
 	$breadcrumbs->parent('study');
     $breadcrumbs->push($protocol->name, route('study', $protocol));
 });
+
+// Home > Study > Protocol > Exam
+Breadcrumbs::register('study.protocol.exam', function($breadcrumbs, $protocol)
+{
+	$breadcrumbs->parent('study.protocol', $protocol);
+    $breadcrumbs->push('Examen', route('exams.store', $protocol));
+});
+
 ?>

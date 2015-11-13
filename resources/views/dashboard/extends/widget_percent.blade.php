@@ -9,6 +9,6 @@
 </div>
 <div class="widget-content themed-background-muted">
 	<div class="progress progress-striped progress-mini active remove-margin">
-		<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ $value }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $value }}%"></div>
+		<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $value }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $value }}%"></div>
 	</div>
 </div>

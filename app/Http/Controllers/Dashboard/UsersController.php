@@ -1,14 +1,12 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Users\CreateRequest;
 use Education\Http\Requests\Users\EditRequest;
-
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-use Flash, Alert;
-
 use Education\Entities\User;
+use Flash, Alert;
 
 class UsersController extends Controller {
 
@@ -82,11 +80,11 @@ class UsersController extends Controller {
         $this->user->fill($request->all());
         \Auth::user()->company->users()->save($this->user);
         $this->user->syncRelations($request->all());
+        $this->user->uploadImage($request->file('url_photo'));
 
         Flash::info('Usuario '.$this->user->name.' creado correctamente');
 
         return redirect()->route(self::$prefixRoute .'index');
-        //$image = Input::file('url_photo');
 	}
 
 
@@ -115,6 +113,7 @@ class UsersController extends Controller {
         $this->user->fill($request->all());
         $this->user->save();
         $this->user->syncRelations($request->all());
+        $this->user->uploadImage($request->file('url_photo'));
 
         Flash::info('Usuario '.$this->user->name.' editado correctamente');
 

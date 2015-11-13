@@ -44,9 +44,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 
 	Route::group(['middleware' => 'user_type:registered'], function()
 	{
-		Route::get('study/{protocol}', array('as' => 'study', 'uses' => 'ExamsController@studyProtocol'));
-		Route::get('exams/doit/{protocol}', array('as' => 'exams.create', 'uses' => 'ExamsController@create'));
-		Route::post('exams/doit/{protocol}', array('as' => 'exams.store', 'uses' => 'ExamsController@store'));
+		Route::get('study/{protocols}', ['as' => 'study', 'uses' => 'ExamsController@studyProtocol']);
+		Route::get('exams/doit/{protocols}', ['as' => 'exams.create', 'uses' => 'ExamsController@create']);
+		Route::post('exams/doit/{protocols}', ['as' => 'exams.store', 'uses' => 'ExamsController@store']);
 	});
 
 	Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);	

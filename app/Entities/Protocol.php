@@ -174,9 +174,9 @@ class Protocol extends Model
 
     public function randomQuestions()
     {
-        if($this->questions->count() >= 10)
+        if($this->questions->count() >= env('APP_MAX_QUESTION_EXAM'))
         {
-            return $this->questions->random(10);
+            return $this->questions->random(env('APP_MAX_QUESTION_EXAM'));
         }
 
         return $this->questions;

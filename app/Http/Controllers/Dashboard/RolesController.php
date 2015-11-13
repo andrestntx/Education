@@ -1,14 +1,12 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Roles\CreateRequest;
 use Education\Http\Requests\Roles\EditRequest;
-
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-use Flash, Alert;
-
 use Education\Entities\Role;
+use Flash, Alert;
 
 class RolesController extends Controller {
 

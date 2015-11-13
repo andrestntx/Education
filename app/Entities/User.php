@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Hash;
+use Hash, Storage, File;
 use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
@@ -91,6 +91,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getTypePluralNameAttribute()
     {
         return self::$pluralTypes[$this->type];    
+    }
+
+    public function getImageAttribute()
+    {
+        if(Storage::disk('local')->exists('users/' . $this->id . '/profile.jpg'))
+        {
+            return '/storage/users/'. $this->id .'/profile.jpg';
+        }
+
+        return env('URL_USER_PHOTO_DEMO').'?'.time();
     }
 
     public function getUpdatedAtHummansAttribute()
@@ -179,6 +189,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         {
             $this->roles()->sync($data['roles']);
         }
+    }
+
+    public function uploadImage($file)
+    {
+        if($file)
+        {
+            $path = 'users/' . $this->id . '/profile.jpg';   
+            Storage::disk('local')->put($path,  File::get($file));  
+
+            return true;
+        }
+
+        return false;
     }
 
 

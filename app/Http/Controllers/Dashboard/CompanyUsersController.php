@@ -100,6 +100,7 @@ class CompanyUsersController extends Controller {
 	{
 		$this->user->fill($request->all());
 		$this->company->users()->save($this->user);
+		$this->user->uploadImage($request->file('url_photo'));
 
         return redirect()->route(self::$prefixRoute . 'index', $this->company->id);
 	}
@@ -144,6 +145,7 @@ class CompanyUsersController extends Controller {
 	{
 		$this->user->fill($request->all());
         $this->user->save();
+        $this->user->uploadImage($request->file('url_photo'));
 
         return redirect()->route(self::$prefixRoute . 'index', $this->company->id);	
 	}

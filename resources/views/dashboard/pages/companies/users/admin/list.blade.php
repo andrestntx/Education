@@ -29,7 +29,7 @@ Usuarios de la Institución
                             <td>{{$user->username}}</td>
                             <td><strong>{{$user->name}}</strong></td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ $user->updated_at }}</td>
+                            <td>{{ $user->updated_at_hummans }}</td>
                             <td class="text-center">
                                 <a href="" data-toggle="tooltip" title="Ver Calificaciones" class="btn btn-effect-ripple btn-info">
                                     <i class="fa fa-bar-chart-o"></i>

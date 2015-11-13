@@ -12,7 +12,7 @@
 
         <!-- Header Link -->
         <li class="hidden-xs animation-fadeInQuick">
-            <a href=""><strong>Bienvenido</strong></a>
+            <a href=""><strong>Hola, {{ Auth::user()->name }}</strong></a>
         </li>
         <!-- END Header Link -->
     </ul>
@@ -39,11 +39,11 @@
         <!-- User Dropdown -->
         <li class="dropdown">
             <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="/images/placeholders/avatars/usuario64.png" alt="Menú de Usuario">
+                <img src="{{ Auth::user()->image }}" alt="Menú de Usuario">
             </a>
             <ul class="dropdown-menu dropdown-menu-right">
                 <li class="dropdown-header">
-                    <strong>ADMINISTRADOR</strong>
+                    <strong>{{ ucwords(Auth::user()->name) }}</strong>
                 </li>
                 <li>
                     <a href="page_app_email.html">

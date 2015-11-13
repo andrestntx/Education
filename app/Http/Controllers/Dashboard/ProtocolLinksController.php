@@ -1,13 +1,13 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Education\Entities\Link;
 use Education\Entities\Protocol;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Links\CreateRequest;
 use Education\Http\Requests\Links\EditRequest;
-use Laracasts\Flash\Flash;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+use Flash;
 
 class ProtocolLinksController extends Controller {
     private $link;

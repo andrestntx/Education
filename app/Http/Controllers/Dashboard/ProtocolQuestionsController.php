@@ -1,6 +1,4 @@
-<?php 
-
-namespace Education\Http\Controllers\Dashboard;
+<?php namespace Education\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;

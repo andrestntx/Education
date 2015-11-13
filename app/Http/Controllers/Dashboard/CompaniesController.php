@@ -1,13 +1,10 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
-use Education\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-
+use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Companies\CreateRequest;
 use Education\Http\Requests\Companies\EditRequest;
-
 use Education\Entities\Company;
 
 class CompaniesController extends Controller {
@@ -88,6 +85,7 @@ class CompaniesController extends Controller {
 	{
 		$this->company->fill($request->all());
         $this->company->save();
+        $this->company->uploadLogo($request->file('url_logo'));
 
         return redirect()->route(self::$prefixRoute . 'index');
 
@@ -129,6 +127,7 @@ class CompaniesController extends Controller {
 	{
 		$this->company->fill($request->all());
         $this->company->save();
+        $this->company->uploadLogo($request->file('url_logo'));
 
         return redirect()->route(self::$prefixRoute . 'index');
 	}

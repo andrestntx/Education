@@ -1,12 +1,10 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Categories\CreateRequest;
 use Education\Http\Requests\Categories\EditRequest;
-
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-
 use Education\Entities\Category;
 use Flash;
 

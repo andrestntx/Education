@@ -1,7 +1,7 @@
 <?php namespace Education\Http\Controllers\Dashboard;
 
-use Education\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Education\Http\Controllers\Controller;
 use Auth;
 
 class DashboardController extends Controller {

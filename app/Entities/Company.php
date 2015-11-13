@@ -1,6 +1,7 @@
 <?php namespace Education\Entities; 
 
 use Illuminate\Database\Eloquent\Model;
+use Storage, File;
 
 class Company extends Model
 {
@@ -109,96 +110,35 @@ class Company extends Model
         return $checks;
     }
 
+    public function getImageAttribute()
+    {
+        
+    }
+
 	public function getLogoAttribute()
 	{
-		/*if (File::exists($this->url_logo))
-		{
-			return $this->url_logo.'?'.time();
-		}
-		else
-		{
-			return Config::get('constant.url_company_logo_demo').'?'.time();
-		}*/
+		if(Storage::disk('local')->exists('companies/' . $this->id . '/logo.jpg'))
+        {
+            return '/storage/companies/'. $this->id .'/logo.jpg';
+        }
 
         return env('URL_COMPANY_LOGO_DEMO').'?'.time();
 	}
 
-	public static function findOrActual($id = null)
-	{
-		if(is_null($id))
-		{
-			return Session::get('actual_company');
-		}
-		else
-		{
-			return Company::find($id);
-		}
-	}
-
-	public function isValidLogo($logo)
+    public function uploadLogo($file)
     {
-        if(!is_null($logo) && !$logo->isValid())
+        if($file)
         {
-            $this->errors = array('El logo debe ser menor que '.ini_get('upload_max_filesize'));
-            return false;
-        }
-
-        return true;
-    }
-
-	public function isValid($data)
-    {
-        $rules = array(
-            'name'     => 'required|max:100|unique:company',
-            'url_logo' => 'mimes:jpeg,png,bmp|max:1500'
-        );
-
-        if ($this->exists)
-        {
-			$rules['name'] .= ',name,'.$this->id.',id';
-        }
-        else 
-        {
-            $rules['url_logo'] .= '|required';
-            $rules['type_id'] .= '|required';
-        }
-        
-        $validator = Validator::make($data, $rules);
-        
-        if ($validator->passes())
-        {
-            return true;
-        }
-        
-        $this->errors = $validator->errors();
-        
-        return false;
-    }
-
-    public function validAndSave($data, $logo)
-    {
-        if ($this->isValidLogo($logo) && $this->isValid($data))
-        {
-            $this->fill($data);
-            $this->save();
-            $this->uploadLogo($logo);
+            $path = 'companies/' . $this->id . '/logo.jpg';   
+            Storage::disk('local')->put($path,  File::get($file));  
+            $this->url_logo = '/storage/' . $path;
             
             return true;
         }
-        
+
         return false;
     }
 
-    public function uploadLogo($file)
-    {
-    	if(File::isFile($file))
-    	{
-	    	$url_logo = Config::get('constant.path_companies_logos').'/'.$this->id.'.'.$file->getClientOriginalExtension();
-	    	Image::make($file)->widen(225)->save($url_logo);
-	    	$this->url_logo = $url_logo;
-	    	$this->save();
-    	}
-    }
 
     public function createDefaultData()
     {
