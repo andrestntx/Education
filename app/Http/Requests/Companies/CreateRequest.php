@@ -20,7 +20,8 @@ class CreateRequest extends Request {
 	public function rules()
 	{
 		return [
-			'name'	=> 'required|unique:companies'
+			'name'	=> 'max:50|required|unique:companies',
+            'url_logo'	=> 'max:249'
 		];
 	}
 }

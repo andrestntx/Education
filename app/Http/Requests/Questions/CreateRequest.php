@@ -20,7 +20,8 @@ class CreateRequest extends Request {
 	public function rules()
 	{
 		return [
-			'text'			=> 'max:200|required'
+			'text'			=> 'max:200|required',
+            'answers_'      => 'required|array'
 		];
 	}
 }

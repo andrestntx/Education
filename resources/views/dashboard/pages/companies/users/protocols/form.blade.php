@@ -9,7 +9,7 @@
 @section('form')
   {!! Form::model($protocol, $form_data) !!}
     
-    {!! Field::text('name', ['ph' => 'Nombre del Protocolo', 'required']) !!}
+    {!! Field::text('name', ['ph' => 'Nombre del Protocolo']) !!}
 
     <div class="form-group">
       <label class="col-md-4 control-label" for="survey_aviable">Habilitar Examen </label>
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    {!! Field::text('description', ['ph' => 'Descripción del Protocolo', 'required']) !!}
+    {!! Field::text('description', ['ph' => 'Descripción del Protocolo']) !!}
   
     <div class="form-group">
       <label class="col-md-2 control-label" for="description" 
@@ -48,11 +48,11 @@
       </div>
     </div>   
 
-    {!! Field::select('categories.', $categories, $protocol->category_id_lists, ['ph' => 'Categorias del Protocolo', 'required', 'multiple']) !!}
+    {!! Field::select('categories.', $categories, $protocol->category_id_lists, ['multiple']) !!}
 
-    {!! Field::select('areas.', $areas, $protocol->area_id_lists, ['ph' => 'Áreas del Protocolo', 'required', 'multiple']) !!}
+    {!! Field::select('areas.', $areas, $protocol->area_id_lists, [ 'multiple']) !!}
 
-    {!! Field::select('roles.', $roles, $protocol->role_id_lists, ['ph' => 'Perfiles del Protocolo', 'required', 'multiple']) !!}
+    {!! Field::select('roles.', $roles, $protocol->role_id_lists, [ 'multiple']) !!}
     
     <div class="form-group form-actions">
         <div class="col-md-8 col-md-offset-4">
