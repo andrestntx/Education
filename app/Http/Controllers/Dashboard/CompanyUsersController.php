@@ -7,6 +7,7 @@ use Education\Http\Requests\Companies\Users\CreateRequest;
 use Education\Http\Requests\Companies\Users\EditRequest;
 use Education\Entities\Company;
 use Education\Entities\User;
+use Flash;
 
 class CompanyUsersController extends Controller {
 
@@ -101,7 +102,7 @@ class CompanyUsersController extends Controller {
 		$this->user->fill($request->all());
 		$this->company->users()->save($this->user);
 		$this->user->uploadImage($request->file('url_photo'));
-
+        Flash::info('Administrador '.$this->user->name.' Guardado correctamente');
         return redirect()->route(self::$prefixRoute . 'index', $this->company->id);
 	}
 
@@ -146,7 +147,7 @@ class CompanyUsersController extends Controller {
 		$this->user->fill($request->all());
         $this->user->save();
         $this->user->uploadImage($request->file('url_photo'));
-
+        Flash::info('Administrador '.$this->user->name.' Actualizado correctamente');
         return redirect()->route(self::$prefixRoute . 'index', $this->company->id);	
 	}
 

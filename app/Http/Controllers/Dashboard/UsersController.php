@@ -82,7 +82,7 @@ class UsersController extends Controller {
         $this->user->syncRelations($request->all());
         $this->user->uploadImage($request->file('url_photo'));
 
-        Flash::info('Usuario '.$this->user->name.' creado correctamente');
+        Flash::info('Usuario '.$this->user->name.' Guardado correctamente');
 
         return redirect()->route(self::$prefixRoute .'index');
 	}
@@ -115,7 +115,7 @@ class UsersController extends Controller {
         $this->user->syncRelations($request->all());
         $this->user->uploadImage($request->file('url_photo'));
 
-        Flash::info('Usuario '.$this->user->name.' editado correctamente');
+        Flash::info('Usuario '.$this->user->name.' Actualizado correctamente');
 
         return redirect()->route(self::$prefixRoute . 'index');
 	}

@@ -6,7 +6,8 @@ use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Protocols\CreateRequest;
 use Education\Http\Requests\Protocols\EditRequest;
 use Education\Entities\Protocol;
-use Auth, Storage, File;
+use Auth, Storage, File, Flash;
+
 
 class ProtocolsController extends Controller {
 
@@ -90,7 +91,7 @@ class ProtocolsController extends Controller {
         $this->protocol->syncRelations($request->all());
 		$this->protocol->uploadDoc($request->file('file_doc'));
 		$this->protocol->save();
-
+        Flash::info('Protocolo '.$this->protocol->name.' Guardado correctamente');
         return redirect()->route(self::$prefixRoute . 'show', $this->protocol);
 	}
 
@@ -145,7 +146,7 @@ class ProtocolsController extends Controller {
 		$this->protocol->fillAndClear($request->all());
         $this->protocol->save();
         $this->protocol->syncRelations($request->all());
-
+        Flash::info('Protocolo '.$this->protocol->name.' Actualizado correctamente');
         return redirect()->route(self::$prefixRoute . 'show', $this->protocol);
 	}
 

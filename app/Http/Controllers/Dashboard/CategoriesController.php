@@ -87,7 +87,7 @@ class CategoriesController extends Controller {
 		$this->category->fill($request->all());        
         \Auth::user()->categoriesCreated()->save($this->category);
 
-        Flash::info('Categoria creada correctamente');
+        Flash::info('Categoria '.$this->category->name.' Guardada correctamente');
 
         return redirect()->route(self::$prefixRoute . 'index');
 	}
@@ -128,6 +128,8 @@ class CategoriesController extends Controller {
 	{
         $this->category->fill($request->all());        
         $this->category->save();
+
+        Flash::info('Categoria '.$this->category->name.' Actualizada correctamente');
         
         return redirect()->route(self::$prefixRoute . 'index');
 

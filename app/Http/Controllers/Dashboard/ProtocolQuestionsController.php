@@ -8,6 +8,7 @@ use Education\Http\Requests\Questions\EditRequest;
 use Education\Entities\Protocol;
 use Education\Entities\Question;
 use Education\Entities\Answer;
+use Flash;
 
 class ProtocolQuestionsController extends Controller {
 
@@ -112,10 +113,10 @@ class ProtocolQuestionsController extends Controller {
 		{
 			array_push($newAnswers, new Answer($answer));	
 		}
-
 		$this->question->answers()->saveMany($newAnswers);
+        Flash::info('Pregunta  Guardada correctamente');
 
-        return redirect()->route(self::$prefixRoute . 'index', $this->protocol->id);
+        return redirect()->route('protocols.show', $this->protocol->id);
 	}
 
 	/**
@@ -151,7 +152,9 @@ class ProtocolQuestionsController extends Controller {
 			Answer::findOrFail($id)->fill($answer)->save();
 		}
 
-        return redirect()->route(self::$prefixRoute . 'index', $this->protocol->id);	
+        Flash::info('Pregunta  Actualizada correctamente');
+
+        return redirect()->route('protocols.show', $this->protocol->id);
 	}
 
 }
