@@ -26,8 +26,8 @@ class CreateRequest extends Request {
             'email'     	=> 'email|required|max:100',
             'password' 		=> 'required|confirmed',
             'url_photo' 	=> 'mimes:jpeg,png,bmp|max:1500',
-            'roles_'         => 'required|array',
-            'areas_'         => 'required|array'
+            'roles'        => 'required|array',
+            'areas'        => 'required|array'
 		];
 	}
 }

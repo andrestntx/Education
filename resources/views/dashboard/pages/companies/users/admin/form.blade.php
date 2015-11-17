@@ -21,8 +21,8 @@
     {!! Field::text('name', ['ph' => 'Nombres y Apellidos'])!!}
     {!! Field::text('email', ['ph' => 'Correo electrónico'])!!}
     {!! Field::text('tel', ['ph' => 'Teléfono fijo o Celular'])!!}
-    {!! Field::select('roles.', $roles, $user->role_id_lists, ['multiple']) !!}
-    {!! Field::select('areas.', $areas, $user->area_id_lists, ['multiple']) !!}
+    {!! Field::select('roles.', $roles, $user->role_id_lists, ['multiple', 'required']) !!}
+    {!! Field::select('areas.', $areas, $user->area_id_lists, ['multiple', 'required']) !!}
 
 <div class="form-group form-actions">
     <div class="col-md-8 col-md-offset-4">

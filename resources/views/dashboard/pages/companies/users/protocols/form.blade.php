@@ -48,11 +48,11 @@
       </div>
     </div>   
 
-    {!! Field::select('categories.', $categories, $protocol->category_id_lists, ['multiple']) !!}
+    {!! Field::select('categories.', $categories, $protocol->category_id_lists, ['multiple', 'required']) !!}
 
-    {!! Field::select('areas.', $areas, $protocol->area_id_lists, [ 'multiple']) !!}
+    {!! Field::select('areas.', $areas, $protocol->area_id_lists, [ 'multiple', 'required']) !!}
 
-    {!! Field::select('roles.', $roles, $protocol->role_id_lists, [ 'multiple']) !!}
+    {!! Field::select('roles.', $roles, $protocol->role_id_lists, [ 'multiple', 'required' ]) !!}
     
     <div class="form-group form-actions">
         <div class="col-md-8 col-md-offset-4">
