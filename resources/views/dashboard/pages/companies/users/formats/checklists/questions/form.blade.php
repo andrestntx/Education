@@ -1,10 +1,10 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
-  Protocolo {{ $protocol->name }} -
+  Protocolo {{ $format->name }} -
   @if($question->exists) Editar Pregunta
   @else Nueva Pregunta @endif
 @stop
-@section('breadcrumbs') {!! Breadcrumbs::render('protocols.protocol.question', $protocol, $question) !!} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('formats.format.question', $format, $question) !!} @stop
 @section('title_form') Datos de la Pregunta @stop
 @section('form')
   {!! Form::model($question, $form_data) !!}
