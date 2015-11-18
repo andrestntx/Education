@@ -55,6 +55,16 @@
             ])
         </div>
 
+        <div class="col-sm-6 col-lg-3">
+            @include('dashboard.extends.widget',[
+                'widget_url'    => '/formats', 
+                'widget_title'  => 'Formatos', 
+                'widget_count'  => $user->company->protocols->count(), 
+                'widget_icon'   => 'fa fa-file-excel-o',
+                'widget_themed' => 'themed-background'
+            ])
+        </div>
+
     </div>
 @stop
 

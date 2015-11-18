@@ -25,10 +25,10 @@
 		                    @foreach($format->questions as $question)
 		                        <li title="Pregunta">
 		                        	<div class="row">
-		                            	<div class="col-xs-8">
+		                            	<div class="col-xs-11">
 		                            		<p style="font-size:16px;">{{$question->text}}</p>
 		                            	</div>
-		                            	<div class="col-xs-4">
+		                            	<div class="col-xs-1">
 				                            <a href="{{ route('formats.questions.edit', [$format->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" class="btn btn-sm btn-effect-ripple btn-warning">
 				                                <i class="fa fa-pencil"></i>
 				                            </a>
