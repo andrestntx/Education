@@ -212,4 +212,41 @@ Breadcrumbs::register('study.protocol.exam', function($breadcrumbs, $protocol)
     $breadcrumbs->push('Examen', route('exams.store', $protocol));
 });
 
+// Home > formats
+Breadcrumbs::register('formats', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Formatos', route('formats.index'));
+});
+
+// Home > formats > format
+Breadcrumbs::register('formats.format', function($breadcrumbs, $protocol)
+{
+	$breadcrumbs->parent('formats');
+
+	if($protocol->exists)
+	{
+		$breadcrumbs->push($protocol->name, route('formats.show', $protocol->id));
+	}
+	else
+	{
+		$breadcrumbs->push('Nuevo', route('formats.create'));
+	}
+});
+
+// Home > Protocols > Protocol > Question
+Breadcrumbs::register('formats.format.question', function($breadcrumbs, $format, $question)
+{
+	$breadcrumbs->parent('formats.format', $format);
+
+	if($question->exists)
+	{
+		$breadcrumbs->push('Editar Pregunta', route('formats.questions.show', [$format->id, $question->id]));
+	}
+	else
+	{
+		$breadcrumbs->push('Nueva Pregunta', route('formats.questions.create', $format->id));
+	}
+});
+
 ?>

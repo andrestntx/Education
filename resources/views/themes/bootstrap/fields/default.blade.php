@@ -9,6 +9,7 @@
     <div class="controls">
         <div class="col-md-6">
             {!! $input !!}
+
             @foreach ($errors as $error)
                 <p class="help-block">{{ $error }}</p>
             @endforeach

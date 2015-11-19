@@ -21,7 +21,11 @@ class CreateRequest extends Request {
 	{
 		return [
 			'name'			=> 'max:100|required',
-			'description'	=> 'max:200'
+			'description'	=> 'max:200',
+            'roles'         => 'required|array',
+            'areas'         => 'required|array',
+            'categories'   => 'required|array',
+
 		];
 	}
 }

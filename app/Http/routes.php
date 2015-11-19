@@ -33,11 +33,18 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 		Route::resource('roles', 'RolesController');
 		Route::resource('categories', 'CategoriesController');
 		Route::resource('users', 'UsersController');
-		
+
 		Route::resource('protocols', 'ProtocolsController');
 		Route::resource('protocols.questions', 'ProtocolQuestionsController');
 		Route::resource('protocols.links', 'ProtocolLinksController');
 		Route::resource('protocols.annexes', 'ProtocolAnnexesController');
+
+        Route::group(['namespace' => 'checklists'], function()
+        {
+            Route::resource('formats', 'FormatsController');
+            Route::resource('formats.questions', 'FormatQuestionsController');
+
+        });
 
 		/*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));*/
 	});

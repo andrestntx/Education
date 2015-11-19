@@ -19,12 +19,15 @@ class CreateRequest extends Request {
 	 */
 	public function rules()
 	{
+        //dd($this->all());
 		return [
             'username'     	=> 'required|max:100|unique:users',
             'name'     		=> 'required',
-            'email'     	=> 'required|max:100',
+            'email'     	=> 'email|required|max:100',
             'password' 		=> 'required|confirmed',
-            'url_photo' 	=> 'mimes:jpeg,png,bmp|max:1500'
+            'url_photo' 	=> 'mimes:jpeg,png,bmp|max:1500',
+            'roles'        => 'required|array',
+            'areas'        => 'required|array'
 		];
 	}
 }

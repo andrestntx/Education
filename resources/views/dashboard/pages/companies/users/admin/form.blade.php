@@ -14,14 +14,15 @@
             </div>
         </div>
     </div>
+
     {!! Field::text('username', ['ph' => 'Nombre con el que iniciará sesión', 'required' => 'required'])!!}
     {!! Field::password('password', ['ph' => 'Contraseña'])!!}
     {!! Field::password('password_confirmation', ['ph' => 'Confirmar Contraseña '])!!}
     {!! Field::text('name', ['ph' => 'Nombres y Apellidos'])!!}
     {!! Field::text('email', ['ph' => 'Correo electrónico'])!!}
     {!! Field::text('tel', ['ph' => 'Teléfono fijo o Celular'])!!}
-    {!! Field::select('roles.', $roles, $user->role_id_lists, ['multiple' => 'multiple', 'required' => 'required']) !!}
-    {!! Field::select('areas.', $areas, $user->area_id_lists, ['multiple' => 'multiple', 'required' => 'required']) !!}
+    {!! Field::select('roles.', $roles, $user->role_id_lists, ['multiple', 'required']) !!}
+    {!! Field::select('areas.', $areas, $user->area_id_lists, ['multiple', 'required']) !!}
 
 <div class="form-group form-actions">
     <div class="col-md-8 col-md-offset-4">

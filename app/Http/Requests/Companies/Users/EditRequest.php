@@ -36,7 +36,6 @@ class EditRequest extends Request {
 	{
 		$rules = $this->createRequest->rules();
         $rules['username'] .= ',username,' . $this->route->getParameter('users') . ',id';
-        $rules['email'] .= ',email,' . $this->route->getParameter('users') . ',id';
         $rules['password'] = 'confirmed';
 
 		return $rules;

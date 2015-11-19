@@ -20,8 +20,9 @@ class CreateRequest extends Request {
 	public function rules()
 	{
 		return [
-            'name'     	=> 'required|max:100',
-            'url'		=> 'required'
+            'name'     	    => 'required|max:100',
+            'description' 	=> 'max:254',
+            'url'		    => 'max:254|url|required'
 		];
 	}
 }

@@ -21,10 +21,11 @@ class CreateRequest extends Request {
 	{
 		return [
 			'name'	        => 'max:100|required',
-			'username'		=> 'required|unique:users',
-            'email'			=> 'max:100|required|unique:users',
+			'username'		=> 'max:20|required|unique:users',
+            'email'			=> 'email|max:100|required',
         	'password'		=> 'confirmed|required',
-        	'url_photo'		=> 'max:255'
+        	'url_photo'		=> 'max:255',
+            'tel'           => 'max:25'
 		];
 	}
 }
