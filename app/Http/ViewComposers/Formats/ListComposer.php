@@ -1,4 +1,4 @@
-<?php namespace Education\Http\ViewComposers\Formats\Checklists;
+<?php namespace Education\Http\ViewComposers\Formats;
 
 use Illuminate\Contracts\View\View;
 use Education\Entities\Category;
@@ -13,7 +13,7 @@ class ListComposer {
      */
     public function compose(View $view)
     {        
-        $formats = Auth::user()->company->protocols()->orderBy('updated_at', 'desc')->paginate(20);
+        $formats = Auth::user()->company->formats()->orderBy('updated_at', 'desc')->paginate(20);
 
         $view->with([
             'formats' => $formats

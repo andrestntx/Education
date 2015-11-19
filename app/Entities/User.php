@@ -144,6 +144,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany(Protocol::class);
     }
 
+    public function formatsCreated()
+    {
+        return $this->hasMany(Format::class);
+    }
+
     public function rolesCreated()
     {
         return $this->hasMany(Role::class);

@@ -53,14 +53,11 @@
 		                    @foreach($protocol->questions as $question)
 		                        <li title="Pregunta">
 		                        	<div class="row">
-		                            	<div class="col-xs-8">
-		                            		<p style="font-size:16px;">{{$question->text}}</p>
-		                            	</div>
-		                            	<div class="col-xs-4">
-				                            <a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" class="btn btn-sm btn-effect-ripple btn-warning">
-				                                <i class="fa fa-pencil"></i>
+		                            	<div class="col-xs-12">
+		                            		<a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" style="font-size:16px;">
+				                                <i class="fa fa-pencil"></i> {{$question->text}}
 				                            </a>
-			                        	</div>
+		                            	</div>
 		                        	</div>
 		                        </li>
 		                    @endforeach

@@ -60,7 +60,13 @@
                             </a>
                         </li>
                     </ul>
-                </li>                
+                </li> 
+                <li>
+                    <a href="/formats">
+                        <i class="fa fa-file-text sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Formatos</span>
+                    </a>
+                </li>               
                 @elseif(Auth::user()->isRegistered())
                 <li>
                     <a href="{{url('/')}}">

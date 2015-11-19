@@ -5,16 +5,15 @@
 
 @section('content_body_page')
 	<div class="row">
-		<div class="col-xs-12">			
-			
+		<div class="col-xs-offset-1 col-xs-10">			
 				<div class="row">
 					<div class="block">
 						<div class="block-title">
 							<div class="block-options pull-right">
 								{!! Form::open(['route' => ['formats.questions.create', $format->id], 'method' => 'GET', 'class' => 'form-inline']) !!}
-									{!! Form::text('answers', null, array('class' => 'form-control', 'required', 'style' => 'max-width:120px;', 'title' => 'Número de Respuestas', 'placeholder' => 'Respuestas')) !!}
+									{!! Form::text('answers', null, ['class' => 'form-control', 'required', 'title' => 'Número de Respuestas', 'placeholder' => 'Respuestas']) !!}
 									<button type="submit" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" data-original-title="Nueva Pregunta">
-										<i class="fa fa-plus"></i>
+										<i class="fa fa-plus"> Agregar</i>
 									</button>
 								{!! Form::close() !!}
 							</div>
@@ -25,14 +24,16 @@
 		                    @foreach($format->questions as $question)
 		                        <li title="Pregunta">
 		                        	<div class="row">
-		                            	<div class="col-xs-11">
-		                            		<p style="font-size:16px;">{{$question->text}}</p>
-		                            	</div>
-		                            	<div class="col-xs-1">
-				                            <a href="{{ route('formats.questions.edit', [$format->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" class="btn btn-sm btn-effect-ripple btn-warning">
-				                                <i class="fa fa-pencil"></i>
+		                            	<div class="col-xs-offset-1 col-xs-10 well">
+		                            		<a href="{{ route('formats.questions.edit', [$format->id, $question->id]) }}"  class="h4" data-toggle="tooltip" title="Editar Pregunta" >
+				                                <i class="fa fa-pencil"></i>  {{ $question->text }}
 				                            </a>
-			                        	</div>
+				                            <ul class="fa-ul">
+				                            	@foreach($question->answers as $answer)
+													<li><i class="fa fa-arrow-right fa-li"></i> {{ $answer->text }} </li>
+												@endforeach
+											</ul>
+		                            	</div>
 		                        	</div>
 		                        </li>
 		                    @endforeach

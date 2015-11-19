@@ -78,6 +78,11 @@ class Company extends Model
         return $this->hasManyThrough(Protocol::class, User::class);
     }
 
+    public function formats()
+    {
+        return $this->hasManyThrough(Format::class, User::class);
+    }
+
     /** 
      * Relation
      * @return Education\Entities\Exam

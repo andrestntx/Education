@@ -5,9 +5,9 @@ namespace Education\Http\Controllers\Dashboard\Checklists;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
-use Education\Http\Requests\Protocols\CreateRequest;
-use Education\Http\Requests\Protocols\EditRequest;
-use Education\Entities\Protocol;
+use Education\Http\Requests\Formats\CreateRequest;
+use Education\Http\Requests\Formats\EditRequest;
+use Education\Entities\Format;
 use Auth, Storage, File, Flash;
 
 class FormatsController extends Controller
@@ -16,7 +16,7 @@ class FormatsController extends Controller
     private $form_data;
 
     private static $prefixRoute = 'formats.';
-    private static $prefixView  = 'dashboard.pages.companies.users.formats.checklists.';
+    private static $prefixView  = 'dashboard.pages.companies.users.formats.';
 
     public function __construct()
     {
@@ -31,7 +31,7 @@ class FormatsController extends Controller
      */
     public function newFormat()
     {
-        $this->format = new Protocol;
+        $this->format = new Format;
     }
 
     /**
@@ -41,7 +41,7 @@ class FormatsController extends Controller
      */
     public function findFormat(Route $route)
     {
-        $this->format = Protocol::findOrFail($route->getParameter('formats'));
+        $this->format = Format::findOrFail($route->getParameter('formats'));
     }
 
     /**
@@ -73,7 +73,7 @@ class FormatsController extends Controller
      */
     public function create()
     {
-        $this->form_data = ['route' => self::$prefixRoute . 'store', 'method' => 'POST', 'files' => true];
+        $this->form_data = ['route' => self::$prefixRoute . 'store', 'method' => 'POST'];
         return $this->getFormView();
     }
 
@@ -86,12 +86,13 @@ class FormatsController extends Controller
     public function store(CreateRequest $request)
     {
         $this->format->fillAndClear($request->all());
-        Auth::user()->protocolsCreated()->save($this->format);
+        Auth::user()->formatsCreated()->save($this->format);
 
         $this->format->syncRelations($request->all());
-        $this->format->uploadDoc($request->file('file_doc'));
         $this->format->save();
-        Flash::info('Protocolo '.$this->format->name.' Guardado correctamente');
+
+        Flash::info('Formato ' . $this->format->name . ' Guardado correctamente');
+
         return redirect()->route(self::$prefixRoute . 'show', $this->format);
     }
 
@@ -104,22 +105,9 @@ class FormatsController extends Controller
      */
     public function show($id)
     {
-        $this->format->load('Links', 'questions');
+        $this->format->load('questions');
         return view(self::$prefixView . 'show-admin')->with('format', $this->format);
     }
-
-    public function stats($id)
-    {
-        $format = Protocol::findOrFail($id);
-        $users = User::with(array('examScores' => function($query) use($format)
-            {
-                $query->whereSurveyId($format->survey_id);
-
-            }))->canStudyProtocol($format->id)->get();
-
-        return view()->make('dashboard.pages.protocol.exams', compact('format', 'users'));
-    }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -129,7 +117,7 @@ class FormatsController extends Controller
      */
     public function edit($id)
     {
-        $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->format->id], 'method' => 'PUT', 'files' => true];
+        $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->format->id], 'method' => 'PUT'];
         return $this->getFormView();
     }
 
@@ -146,7 +134,9 @@ class FormatsController extends Controller
         $this->format->fillAndClear($request->all());
         $this->format->save();
         $this->format->syncRelations($request->all());
-        Flash::info('Protocolo '.$this->format->name.' Actualizado correctamente');
+
+        Flash::info('Formato '.$this->format->name.' Actualizado correctamente');
+
         return redirect()->route(self::$prefixRoute . 'show', $this->format);
     }
 }

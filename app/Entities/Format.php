@@ -1,6 +1,8 @@
 <?php namespace Education\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+
 
 class Format extends Model
 {
@@ -17,6 +19,12 @@ class Format extends Model
         return ucfirst($this->updated_at->diffForHumans());
     }
 
+    public function getNumberQuestionsAttribute()
+    {
+        return $this->questions->count();
+    }
+
+
     /**
     * Relations
     */
@@ -27,12 +35,12 @@ class Format extends Model
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->morphToMany(Role::class, 'allowed_roles');
     }
 
     public function areas()
     {
-        return $this->belongsToMany(Area::class);
+        return $this->morphToMany(Area::class, 'allowed_areas');
     }
 	
 	public function exams()

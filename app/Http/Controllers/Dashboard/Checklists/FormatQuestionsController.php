@@ -7,7 +7,7 @@ use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Questions\CreateRequest;
 use Education\Http\Requests\Questions\EditRequest;
-use Education\Entities\Protocol;
+use Education\Entities\Format;
 use Education\Entities\Question;
 use Education\Entities\Answer;
 use Flash;
@@ -19,7 +19,7 @@ class FormatQuestionsController extends Controller
     private $form_data;
 
     private static $prefixRoute = 'formats.questions.';
-    private static $prefixView  = 'dashboard.pages.companies.users.formats.checklists.questions.';
+    private static $prefixView  = 'dashboard.pages.companies.users.formats.questions.';
 
     public function __construct()
     {
@@ -29,7 +29,7 @@ class FormatQuestionsController extends Controller
     }
 
     /**
-     * Create a new Protocol
+     * Create a new Format
      *
      * @return void
      */
@@ -39,17 +39,17 @@ class FormatQuestionsController extends Controller
     }
 
     /**
-     * Find the Protocol or App Abort 404
+     * Find the Format or App Abort 404
      *
      * @return void
      */
     public function findFormat(Route $route)
     {
-        $this->format = Protocol::findOrFail($route->getParameter('formats'));
+        $this->format = Format::findOrFail($route->getParameter('formats'));
     }
 
     /**
-     * Find the Question of Protocol or App Abort 404
+     * Find the Question of Format or App Abort 404
      *
      * @return void
      */
@@ -77,9 +77,9 @@ class FormatQuestionsController extends Controller
      * @return Response
      */
 
-    public function index($protocol_id)
+    public function index($format_id)
     {
-        return redirect()->route('protocols.show', $protocol_id);
+        return redirect()->route('formats.show', $format_id);
     }
 
 
@@ -88,7 +88,7 @@ class FormatQuestionsController extends Controller
      *
      * @return Response
      */
-    public function create(Request $request, $protocol_id)
+    public function create(Request $request, $format_id)
     {
         $this->form_data = ['route' => [self::$prefixRoute . 'store', $this->format->id], 'method' => 'POST'];
         return $this->getFormView($request->get('answers'));
@@ -101,24 +101,24 @@ class FormatQuestionsController extends Controller
      *
      * @return Response
      */
-    public function store(CreateRequest $request, $protocol_id)
+    public function store(CreateRequest $request, $format_id)
     {
         $this->question->fill($request->all());
         $this->format->questions()->save($this->question);
 
         $answers = $request->get('answers');
-        $answers[$request->get('answers_correct')]['correct'] = 1;
-
         $newAnswers = [];
 
         foreach($answers as $answer)
         {
             array_push($newAnswers, new Answer($answer));
         }
+
         $this->question->answers()->saveMany($newAnswers);
+        
         Flash::info('Pregunta  Guardada correctamente');
 
-        return redirect()->route('protocols.show', $this->format->id);
+        return redirect()->route('formats.show', $this->format->id);
     }
 
     /**
@@ -127,7 +127,7 @@ class FormatQuestionsController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($protocol_id, $question_id)
+    public function edit($format_id, $question_id)
     {
         $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->format->id, $this->question->id], 'method' => 'PUT'];
         return $this->getFormView();
@@ -140,14 +140,12 @@ class FormatQuestionsController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(EditRequest $request, $protocol_id, $question_id)
+    public function update(EditRequest $request, $format_id, $question_id)
     {
         $this->question->fill($request->all());
         $this->question->save();
-        $this->question->answers()->update(['correct' => 0]);
 
         $answers = $request->get('answers');
-        $answers[$request->get('answers_correct')]['correct'] = 1;
 
         foreach ($answers as $id => $answer)
         {
@@ -156,6 +154,6 @@ class FormatQuestionsController extends Controller
 
         Flash::info('Pregunta  Actualizada correctamente');
 
-        return redirect()->route('protocols.show', $this->format->id);
+        return redirect()->route('formats.show', $this->format->id);
     }
 }

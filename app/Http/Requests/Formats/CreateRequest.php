@@ -1,4 +1,4 @@
-<?php namespace Education\Http\Requests\Questions;
+<?php namespace Education\Http\Requests\Formats;
 
 use Education\Http\Requests\Request;
 
@@ -20,8 +20,10 @@ class CreateRequest extends Request {
 	public function rules()
 	{
 		return [
-			'text'			=> 'max:200|required',
-            'answers_'      => 'array'
+			'name'			=> 'max:100|required',
+			'description'	=> 'max:200',
+            'roles'         => 'array',
+            'areas'         => 'array',
 		];
 	}
 }

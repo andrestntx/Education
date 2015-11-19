@@ -15,8 +15,6 @@
                     <tr>
                         <th title="Titulo"><i class="fa fa-file-text"></i> Nombre</th>
                         <th title="Descripción del Formato">Descripción</th>
-                        <th class="text-center" title="Número de Anexos"><i class="fa fa-file-zip-o"></i></th>
-                        <th class="text-center" title="Número de Links"><i class="fa fa-share-alt"></i></th>
                         <th class="text-center" title="Número de Preguntas"><i class="fa fa-sort-numeric-desc"></i></th>
                         <th title="Ultima actulaización del Formato"><i class="gi gi-clock"></i> Actualización</th>
                     </tr>
@@ -26,8 +24,6 @@
                         <tr>
                             <td><a href="{{route('formats.show', $format->id)}}" title="Ver Formato"><i class="fa fa-file-text"></i> {{$format->name}}</a></td>
                             <td>{{ $format->description }}</td>
-                            <td class="text-center"> {{ $format->number_annexes }} </td>
-                            <td class="text-center"> {{ $format->number_links }} </td>
                             <td class="text-center"> {{ $format->number_questions }} </td>
                             <td>{{ $format->updated_at_hummans }}</td>
                         </tr>

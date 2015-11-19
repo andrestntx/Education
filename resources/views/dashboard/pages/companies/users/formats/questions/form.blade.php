@@ -1,6 +1,6 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
-  Protocolo {{ $format->name }} -
+  Formato {{ $format->name }} -
   @if($question->exists) Editar Pregunta
   @else Nueva Pregunta @endif
 @stop
@@ -22,21 +22,13 @@
       <div class="form-group"> 
         <h4 style="margin-left:10%;">Respuestas</h4>
       </div>
-      @if(!$question->exists)
+      @if( !$question->exists)
         @for($i=1; $i <= $number_answers; $i++ )
           <div class="form-group">
             <label class="col-md-3 control-label" for="answers[{{$i}}][text]">Respuesta {{$i}} <span class="text-danger">*</span></label> 
             <div class="col-md-6">      
               {!! Form::text('answers['.$i.'][text]', null, array('required' => 'required', 
                 'placeholder' => 'Respuesta '.$i, 'class' => 'form-control')) !!}
-            </div>
-            <div class="col-md-3">
-              <div class="radio">
-                <label>
-                    <input type="radio" name="answers_correct" value="{{$i}}"/>
-                    Verdadera 
-                </label>
-              </div>
             </div>
           </div>
         @endfor
@@ -47,14 +39,6 @@
               <div class="col-md-6">      
                 {!! Form::text('answers['.$answer->id.'][text]', $answer->text, ['required', 
                   'placeholder' => 'Respuesta ', 'class' => 'form-control']) !!}
-              </div>
-              <div class="col-md-3">
-                <div class="radio">
-                  <label>
-                      <input type="radio" name="answers_correct" value="{{$answer->id}}" @if($answer->correct) checked @endif/>
-                      Verdadera 
-                  </label>
-                </div>
               </div>
             </div>
           @endforeach

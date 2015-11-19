@@ -1,4 +1,4 @@
-<?php namespace Education\Http\ViewComposers\Formats\Checklists;
+<?php namespace Education\Http\ViewComposers\Formats;
 
 use Illuminate\Contracts\View\View;
 use Education\Entities\Category;
