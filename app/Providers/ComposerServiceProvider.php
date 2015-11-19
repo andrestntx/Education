@@ -26,6 +26,7 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\Scores\ScoreComposer'             => 'dashboard.pages.companies.users.scores',
             'Education\Http\ViewComposers\Formats\ListComposer'             => 'dashboard.pages.companies.users.formats.list',
             'Education\Http\ViewComposers\Formats\FormComposer'             => 'dashboard.pages.companies.users.formats.form',
+            'Education\Http\ViewComposers\Formats\Users\ShowComposer'       => 'dashboard.pages.companies.users.formats.checklists.show',
 
         ]);
     }

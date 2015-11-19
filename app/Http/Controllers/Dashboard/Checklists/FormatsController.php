@@ -139,4 +139,9 @@ class FormatsController extends Controller
 
         return redirect()->route(self::$prefixRoute . 'show', $this->format);
     }
+
+    public function showUser()
+    {
+        return view(self::$prefixView . 'checklists.show');
+    }
 }
