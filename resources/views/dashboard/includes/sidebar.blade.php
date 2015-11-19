@@ -69,6 +69,12 @@
                 </li>               
                 @elseif(Auth::user()->isRegistered())
                 <li>
+                    <a href="{{url('myformats')}}">
+                        <i class="fa fa-file-text-o sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Mis Formatos</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{url('/')}}">
                         <i class="fa fa-bar-chart-o sidebar-nav-icon"></i>
                         <span class="sidebar-nav-mini-hide">Mis Notas</span>

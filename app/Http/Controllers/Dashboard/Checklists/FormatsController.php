@@ -21,7 +21,7 @@ class FormatsController extends Controller
     public function __construct()
     {
         $this->beforeFilter('@newFormat', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findFormat', ['only' => ['show', 'edit', 'update']]);
+        $this->beforeFilter('@findFormat', ['only' => ['show', 'edit', 'update', 'showChecklistsUser']]);
     }
 
     /**
@@ -140,7 +140,7 @@ class FormatsController extends Controller
         return redirect()->route(self::$prefixRoute . 'show', $this->format);
     }
 
-    public function showUser()
+    public function showFormatsUser()
     {
         return view(self::$prefixView . 'checklists.show');
     }

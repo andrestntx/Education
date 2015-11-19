@@ -249,4 +249,26 @@ Breadcrumbs::register('formats.format.question', function($breadcrumbs, $format,
 	}
 });
 
+// Home > Study 
+Breadcrumbs::register('myFormats', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Mis formatos', route('myformats.user'));
+});
+
+
+// Home > Study > Protocol
+Breadcrumbs::register('myFormats.checklists', function($breadcrumbs, $format)
+{
+	$breadcrumbs->parent('myFormats');
+    $breadcrumbs->push($format->name, route('checklists.show', $format));
+});
+
+// Home > Study > Protocol > Exam
+Breadcrumbs::register('myFormats.checklists.apply', function($breadcrumbs, $format)
+{
+	$breadcrumbs->parent('myFormats.checklists', $format);
+    $breadcrumbs->push('Aplicar', route('checklists.store', $format));
+});
+
 ?>

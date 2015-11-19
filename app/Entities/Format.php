@@ -89,4 +89,5 @@ class Format extends Model
             $this->roles()->sync($data['roles']);
         }
     }
+
 }

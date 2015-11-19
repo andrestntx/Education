@@ -54,9 +54,13 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 		Route::get('study/{protocols}', ['as' => 'study', 'uses' => 'ExamsController@studyProtocol']);
 		Route::get('exams/doit/{protocols}', ['as' => 'exams.create', 'uses' => 'ExamsController@create']);
 		Route::post('exams/doit/{protocols}', ['as' => 'exams.store', 'uses' => 'ExamsController@store']);
+
         Route::group(['namespace' => 'checklists'], function()
         {
-            Route::get('myformats', [ 'as' => 'myformats.user', 'uses' => 'FormatsController@showUser']);
+            Route::get('myformats', [ 'as' => 'myformats.user', 'uses' => 'FormatsController@showFormatsUser']);
+            Route::get('checklists/{formats}', [ 'as' => 'checklists.show', 'uses' => 'ChecklistsController@show']);
+            Route::get('checklists/apply/{formats}', ['as' => 'checklists.create', 'uses' => 'ChecklistsController@create']);
+            Route::post('checklists/apply/{formats}', ['as' => 'checklists.store', 'uses' => 'ChecklistsController@store']);
         });
 	});
 

@@ -163,7 +163,9 @@ return array(
     'polling_stations'  => 'Puestos de votación',
     'polling_station_day_d' => 'puesto de votación',
     'roles'         => 'perfiles',
-    'url_photo'     => 'foto de perfil'
+    'url_photo'     => 'foto de perfil',
+    'applied'       => 'Aplicado',
+    'observation'   => 'Observaciones'
 ),
 
 'translate' => array(
