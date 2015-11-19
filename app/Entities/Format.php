@@ -24,7 +24,6 @@ class Format extends Model
         return $this->questions->count();
     }
 
-
     /**
     * Relations
     */
@@ -43,22 +42,22 @@ class Format extends Model
         return $this->morphToMany(Area::class, 'allowed_areas');
     }
 	
-	public function exams()
+	public function checklists()
     {
-        return $this->hasMany(Exam::class);
+        return $this->hasMany(Checklist::class);
     }
 	
 	/**
     * Querys
     */
-	public function getUserExams($user)
+	public function getUserChecklists($user)
     {        
-        return $this->exams->where('user_id', $user->id);
+        return $this->checklists->where('user_id', $user->id);
     }
 	
-	public function getUserExamsCount($user)
+	public function getUserChecklistsCount($user)
     {
-        return $this->getUserExams($user)->count();
+        return $this->getUserChecklists($user)->count();
     }
 	
 	/**
