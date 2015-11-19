@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAreaProtocolTable extends Migration
+class CreateAllowedAreasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,18 @@ class CreateAreaProtocolTable extends Migration
      */
     public function up()
     {
-        Schema::create('area_protocol', function (Blueprint $table) {
+        Schema::create('allowed_areas', function (Blueprint $table) 
+        {
+            $table->increments('id');
+            $table->integer('allowed_areas_id')->unsigned();     
+            $table->string('allowed_areas_type');
+    
             $table->integer('area_id')->unsigned();       
             $table->foreign('area_id')
-              ->references('id')->on('roles')
+              ->references('id')->on('areas')
               ->onUpdate('cascade');
 
-            $table->integer('protocol_id')->unsigned();
-            $table->foreign('protocol_id')
-              ->references('id')->on('protocols')
-              ->onUpdate('cascade');
-    
-            $table->primary(['protocol_id', 'area_id']);
+            //$table->unique(['allowed_areas_id', 'allowed_areas_type', 'area_id']);
         });
     }
 
@@ -34,6 +34,6 @@ class CreateAreaProtocolTable extends Migration
      */
     public function down()
     {
-        Schema::drop('area_protocol');
+        Schema::drop('allowed_areas');
     }
 }

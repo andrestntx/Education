@@ -6,7 +6,7 @@ use File, Storage;
 
 class Protocol extends Model
 {
-	protected $fillable = array('name', 'description', 'aviable', 'url_doc');
+	protected $fillable = ['name', 'description', 'aviable', 'url_doc'];
 	public $timestamps = true;
 	public $increments = true;
     
@@ -121,12 +121,12 @@ class Protocol extends Model
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->morphToMany(Role::class, 'allowed_roles');
     }
 
     public function areas()
     {
-        return $this->belongsToMany(Area::class);
+        return $this->morphToMany(Area::class, 'allowed_areas');
     }
 
     public function links()
@@ -136,7 +136,7 @@ class Protocol extends Model
 
     public function questions()
     {
-        return $this->hasMany(Question::class);
+        return $this->morphMany(Question::class, 'document');
     }
 
     public function exams()

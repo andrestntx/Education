@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProtocolRoleTable extends Migration
+class CreateAllowedRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,18 @@ class CreateProtocolRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('protocol_role', function (Blueprint $table) {
-            $table->integer('protocol_id')->unsigned();
-            $table->foreign('protocol_id')
-              ->references('id')->on('protocols')
-              ->onUpdate('cascade');
+        Schema::create('allowed_roles', function (Blueprint $table) 
+        {
+            $table->increments('id');
+            $table->integer('allowed_roles_id')->unsigned();     
+            $table->string('allowed_roles_type');
     
             $table->integer('role_id')->unsigned();       
             $table->foreign('role_id')
               ->references('id')->on('roles')
               ->onUpdate('cascade');
 
-            $table->primary(['protocol_id', 'role_id']);
+            //$table->unique(['allowed_roles_id', 'allowed_roles_type', 'role_id']);
         });
     }
 
@@ -34,6 +34,6 @@ class CreateProtocolRoleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('protocol_role');
+        Schema::drop('allowed_roles');
     }
 }

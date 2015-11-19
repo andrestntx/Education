@@ -124,9 +124,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsToMany(Area::class);
     }
 
+    public function formats()
+    {
+        return $this->morphedByMany(Format::class, 'allowed_users');
+    }
+
     public function protocols()
     {
-        return $this->belongsToMany(Protocol::class);
+        return $this->morphedByMany(Protocol::class, 'allowed_users');
     }
 
     public function exams()

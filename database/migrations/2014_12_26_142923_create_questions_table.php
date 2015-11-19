@@ -17,10 +17,8 @@ class CreateQuestionsTable extends Migration {
 		    $table->increments('id');
 		    $table->text('text');
 
-		    $table->integer('protocol_id')->unsigned();	    
-		    $table->foreign('protocol_id')
-		      ->references('id')->on('protocols')
-		      ->onUpdate('cascade');
+		    $table->integer('document_id')->unsigned();	    
+		    $table->string('document_type');	    
 
 		    $table->timestamps();
 		});

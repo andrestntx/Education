@@ -1,0 +1,48 @@
+<?php namespace Education\Entities;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Checklist extends Model
+{
+	protected $fillable = ['observations', 'applied'];
+	public $timestamps = true;
+	public $increments = true;
+    
+    public function getUpdatedAtHummansAttribute()
+    {
+        Carbon::setLocale('es');
+        return ucfirst($this->updated_at->diffForHumans());
+    }
+
+    /**
+    * Relations
+    */
+    public function answers()
+    {
+        return $this->belongsToMany(Answer::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function format()
+    {
+        return $this->belongsTo(Protocol::class);
+    }
+
+    /**
+    * Scopes
+    */
+    public function isUser($user)
+    {
+        if($this->user_id == $user)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+}

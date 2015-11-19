@@ -22,7 +22,12 @@ class Role extends Model
 
     public function protocols()
     {
-        return $this->belongsToMany(Protocol::class);
+        return $this->morphedByMany(Protocol::class, 'allowed_roles');
+    }
+
+    public function formats()
+    {
+        return $this->morphedByMany(Protocol::class, 'allowed_roles');
     }
 
     public function companies()

@@ -1,24 +1,28 @@
 <?php namespace Education\Entities; 
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use File, Storage;
 
 class Question extends Model
 {
-	protected $fillable = array('text', 'survey_id', 'type_id');
+	protected $fillable = ['text'];
 	public $timestamps = true;
 	public $increments = true;
 
-    /* Relations */
+    /**
+     * Get all of the owning document models.
+     */
+    public function document()
+    {
+        return $this->morphTo();
+    }
 
+    /* Relations */
 
     public function answers()
     {
         return $this->hasMany(Answer::class);
-    }
-
-    public function protocol()
-    {
-        return $this->belongsTo(Protocol::class);
     }
 
     /* End Relations */

@@ -4,7 +4,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Link extends Model
 {
-	protected $table = 'links';
 	protected $fillable = ['url','name', 'description', 'protocol_id'];
 	public $timestamps = true;
 	public $increments = true;

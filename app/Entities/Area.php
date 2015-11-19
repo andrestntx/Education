@@ -15,9 +15,14 @@ class Area extends Model
         return ucfirst($this->updated_at->diffForHumans());
     }
 
-    public function Protocols()
+    public function protocols()
     {
-        return $this->belongsToMany(Protocol::class);
+        return $this->morphedByMany(Protocol::class, 'allowed_areas');
+    }
+
+    public function formats()
+    {
+        return $this->morphedByMany(Protocol::class, 'allowed_areas');
     }
 
     public function users()
