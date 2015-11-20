@@ -1,8 +1,8 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
-  Aplicar : Lista de chequeo {{$format->name}}
+  <i class="fa fa-check-square-o"></i> {{ $format->name }}: Aplicar 
 @stop
-@section('breadcrumbs') {!! Breadcrumbs::render('myFormats.checklists.apply', $format) !!} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists.apply', $format) !!} @stop
 @section('title_form') Llena la seguiente lista de chequeo @stop
 @section('form')
   {!! Form::model($checklist, $form_data) !!}
@@ -22,7 +22,7 @@
         </div>
       </div>
     @endforeach
-    {!! Field::text('observation', ['ph' => 'Observaciones:']) !!}
+    {!! Field::textarea('observation', ['ph' => 'Observaciones:']) !!}
     <div class="form-group form-actions">
       <div class="col-md-8 col-md-offset-4">
             <button type="submit" class="btn btn-effect-ripple btn-primary">Guardar</button>

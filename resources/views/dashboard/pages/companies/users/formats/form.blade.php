@@ -1,6 +1,7 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
-  @if($format->exists) Editar Formato: {{$format->name}} @else Nuevo Formato @endif
+  <i class="fa fa-check-square-o"></i>
+  @if($format->exists) Editar Formato de Chequeo: {{$format->name}} @else Nuevo Formato de Chequeo @endif
 @stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('formats.format', $format) !!} @stop
@@ -28,7 +29,7 @@
     
     <div class="form-group form-actions">
         <div class="col-md-8 col-md-offset-4">
-            <button type="submit" class="btn btn-effect-ripple btn-primary">Guardar Protocolo</button>
+            <button type="submit" class="btn btn-effect-ripple btn-primary">Guardar Formato</button>
         </div>
     </div>
   {!! Form::close() !!}

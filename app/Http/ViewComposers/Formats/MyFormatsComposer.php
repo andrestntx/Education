@@ -1,10 +1,10 @@
-<?php namespace Education\Http\ViewComposers\Formats\Users;
+<?php namespace Education\Http\ViewComposers\Formats;
 
 use Illuminate\Contracts\View\View;
 use Education\Entities\Category;
 use Auth;
 
-class ShowComposer {
+class MyFormatsComposer {
     /**
      * Bind data to the view.
      *

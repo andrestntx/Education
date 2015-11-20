@@ -106,7 +106,7 @@ class FormatsController extends Controller
     public function show($id)
     {
         $this->format->load('questions');
-        return view(self::$prefixView . 'show-admin')->with('format', $this->format);
+        return view(self::$prefixView . 'show')->with('format', $this->format);
     }
 
     /**
@@ -130,7 +130,6 @@ class FormatsController extends Controller
      */
     public function update(EditRequest $request, $id)
     {
-        $this->format->uploadDoc($request->file('file_doc'));
         $this->format->fillAndClear($request->all());
         $this->format->save();
         $this->format->syncRelations($request->all());
@@ -142,6 +141,6 @@ class FormatsController extends Controller
 
     public function showFormatsUser()
     {
-        return view(self::$prefixView . 'checklists.show');
+        return view(self::$prefixView . 'myformats');
     }
 }

@@ -1,7 +1,7 @@
 @extends('dashboard.pages.layout')
 @section('title_page') 
-    <i class="fa fa-check-square-o fa-fw"></i> Formatos
-    <a href="{{route('formats.create')}}" class="btn btn-primary" title="Nueva lista de chequeo"><i class="fa fa-plus"></i> </a>
+    <i class="fa fa-check-square-o fa-fw"></i> Formatos de Chequeo
+    <a href="{{route('formats.create')}}" class="btn btn-primary" title="Nueva formato de chequeo"><i class="fa fa-plus"></i> </a>
 @stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('formats') !!} @stop

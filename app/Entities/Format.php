@@ -24,6 +24,16 @@ class Format extends Model
         return $this->questions->count();
     }
 
+    public function getAreaIdListsAttribute()
+    {
+        return $this->areas->lists('id')->all();
+    }
+
+    public function getRoleIdListsAttribute()
+    {
+        return $this->roles->lists('id')->all();
+    }
+
     /**
     * Relations
     */
@@ -63,6 +73,16 @@ class Format extends Model
 	/**
     * Funcions
     */
+    public function isAviable()
+    {
+        if( $this->aviable && $this->questions->count() > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 	public function fillAndClear($data)
     {
         $this->fill($data);

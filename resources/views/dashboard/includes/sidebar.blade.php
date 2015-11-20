@@ -63,15 +63,15 @@
                 </li> 
                 <li>
                     <a href="/formats">
-                        <i class="fa fa-file-text sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Formatos</span>
+                        <i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Formatos de Chequeo</span>
                     </a>
                 </li>               
                 @elseif(Auth::user()->isRegistered())
                 <li>
                     <a href="{{url('myformats')}}">
-                        <i class="fa fa-file-text-o sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Mis Formatos</span>
+                        <i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Mis Formatos de Chequeo</span>
                     </a>
                 </li>
                 <li>

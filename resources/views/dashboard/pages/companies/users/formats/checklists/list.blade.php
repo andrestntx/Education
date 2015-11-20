@@ -1,10 +1,12 @@
 @extends('dashboard.pages.layout')
 @section('title_page') 
-    <i class="fa fa-check-square-o fa-fw"></i> Listas de chequeo
-    <a href="{{route('checklists.create', $format)}}" class="btn btn-primary" title="Apicar lista de chequeo"><i class="fa fa-plus"></i> </a>
+    <i class="fa fa-check-square-o fa-fw"></i> {{ $format->name }}: Listas de chequeo
+    <a href="{{route('myformats.checklists.create', $format)}}" class="btn btn-primary @if(! $format->isAviable()) disabled @endif" title="Apicar lista de chequeo">
+        <i class="fa fa-plus"></i> 
+    </a>
 @stop
 
-@section('breadcrumbs') {!! Breadcrumbs::render('myFormats.checklists', $format) !!} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists', $format) !!} @stop
 
 @section('content_body_page')
 
@@ -25,7 +27,7 @@
                             <td>{{ $checklist->applied }}</td>
                             <td>{{ $checklist->observation }}</td>                            
                             <td>{{ $checklist->updated_at_hummans }}</td>
-                            <td><a href="{{route('formats.show', $checklist->id)}}" title="Ver Formato"><i class="fa fa-file-text"></i></a></td>
+                            <td><a href="{{route('myformats.checklists.show', [$format, $checklist])}}" title="Ver Formato"><i class="fa fa-file-text"></i></a></td>
                         </tr>
                     @endforeach
                 </tbody>

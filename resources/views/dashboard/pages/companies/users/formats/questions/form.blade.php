@@ -1,6 +1,6 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
-  Formato {{ $format->name }} -
+  <i class="fa fa-check-square-o"></i> {{ $format->name }} -
   @if($question->exists) Editar Pregunta
   @else Nueva Pregunta @endif
 @stop

@@ -58,9 +58,9 @@
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
                 'widget_url'    => '/formats', 
-                'widget_title'  => 'Formatos', 
+                'widget_title'  => 'Formatos de Chequeo', 
                 'widget_count'  => $user->company->protocols->count(), 
-                'widget_icon'   => 'fa fa-file-excel-o',
+                'widget_icon'   => 'fa fa-check-square-o',
                 'widget_themed' => 'themed-background'
             ])
         </div>

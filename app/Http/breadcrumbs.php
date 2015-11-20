@@ -216,7 +216,7 @@ Breadcrumbs::register('study.protocol.exam', function($breadcrumbs, $protocol)
 Breadcrumbs::register('formats', function($breadcrumbs)
 {
 	$breadcrumbs->parent('home');
-    $breadcrumbs->push('Formatos', route('formats.index'));
+    $breadcrumbs->push('Formatos de Chequeo', route('formats.index'));
 });
 
 // Home > formats > format
@@ -249,26 +249,26 @@ Breadcrumbs::register('formats.format.question', function($breadcrumbs, $format,
 	}
 });
 
-// Home > Study 
-Breadcrumbs::register('myFormats', function($breadcrumbs)
+// Home > My Formats 
+Breadcrumbs::register('myformats', function($breadcrumbs)
 {
 	$breadcrumbs->parent('home');
-    $breadcrumbs->push('Mis formatos', route('myformats.user'));
+    $breadcrumbs->push('Mis formatos de Chequeo', route('myformats'));
 });
 
 
-// Home > Study > Protocol
-Breadcrumbs::register('myFormats.checklists', function($breadcrumbs, $format)
+// Home > My Formats > Checklists
+Breadcrumbs::register('myformats.checklists', function($breadcrumbs, $format)
 {
-	$breadcrumbs->parent('myFormats');
-    $breadcrumbs->push($format->name, route('checklists.show', $format));
+	$breadcrumbs->parent('myformats');
+    $breadcrumbs->push($format->name, route('myformats.checklists.index', $format));
 });
 
-// Home > Study > Protocol > Exam
-Breadcrumbs::register('myFormats.checklists.apply', function($breadcrumbs, $format)
+// Home > My Formats > Checklists > Apply
+Breadcrumbs::register('myformats.checklists.apply', function($breadcrumbs, $format)
 {
-	$breadcrumbs->parent('myFormats.checklists', $format);
-    $breadcrumbs->push('Aplicar', route('checklists.store', $format));
+	$breadcrumbs->parent('myformats.checklists', $format);
+    $breadcrumbs->push('Aplicar', route('myformats.checklists.create', $format));
 });
 
 ?>

@@ -1,5 +1,10 @@
 @extends('dashboard.pages.layout')
-@section('title_page')Protocolo: {{$format->name}} @stop
+@section('title_page')
+	<i class="fa fa-check-square-o"></i> Formato de Chequeo: {{$format->name}} 
+	<a href="{{route('formats.edit', $format)}}" class="btn btn-sm btn-warning" title="Editar formato de chequeo">
+        <i class="fa fa-pencil"></i> 
+    </a>
+@stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('formats.format', $format) !!} @stop
 
