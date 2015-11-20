@@ -2,9 +2,10 @@
 
 use Education\Http\Requests\Request;
 use Illuminate\Routing\Route;
+use Auth;
 
 
-class EditRequest extends Request {
+class ProfileRequest extends Request {
 
 	/**
 	 * @var Route
@@ -36,8 +37,10 @@ class EditRequest extends Request {
 	public function rules()
 	{
         $rules = $this->createRequest->rules();
-        $rules['username'] .= ',username,' . $this->route->getParameter('users') . ',id';
+        $rules['username'] .= ',username,' . Auth::user()->id . ',id';
         $rules['password'] = 'confirmed';
+        $rules['areas'] = '';
+        $rules['roles'] = '';
 
 		return $rules;
 	}

@@ -8,7 +8,7 @@ Breadcrumbs::register('home', function($breadcrumbs){
 Breadcrumbs::register('companies', function($breadcrumbs)
 {
 	$breadcrumbs->parent('home');
-    $breadcrumbs->push('Empresas', route('companies.index'));
+    $breadcrumbs->push('Instituciones', route('companies.index'));
 });
 
 // Home > Companies > Company

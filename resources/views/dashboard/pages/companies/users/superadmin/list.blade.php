@@ -1,8 +1,7 @@
 @extends('dashboard.pages.layout')
-@section('class_icon_page') fa fa-users @stop
 
 @section('title_page') 
-    <i class="gi gi-building-o"></i> {{ $company->name }}: Administradores
+    <i class="gi gi-building"></i> {{ $company->name }}: Administradores
     <a href="{{ route('companies.users.create', $company->id) }}" class="btn btn-primary" title="Nuevo Administrador"><i class="fa fa-plus"></i> </a>
 @stop
 

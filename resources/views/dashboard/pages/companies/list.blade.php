@@ -1,7 +1,6 @@
 @extends('dashboard.pages.layout')
-@section('class_icon_page') fa fa-hospital-o @stop
 
-@section('title_page') <i class="gi gi-building-o"></i> Instituciones registradas
+@section('title_page') <i class="gi gi-building"></i> Instituciones registradas
 <a href="{{route('companies.create')}}" class="btn btn-primary" title="Nueva Institución"><i class="fa fa-plus"></i> </a>
 @stop
 

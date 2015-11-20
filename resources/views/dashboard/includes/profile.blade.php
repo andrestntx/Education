@@ -2,12 +2,10 @@
     <h2 class="text-light">Mi Perfil</h2>
 
     {!! Form::model(Auth::user(), [
-        'route' => ['users.update', Auth::user()->id], 'method' => 'PUT', 'files' => true, 
+        'route' => 'profile', 'method' => 'PUT', 'files' => true, 
         'class' => 'form-control-borderless', 'onsubmit' => 'return true;'
     ]) !!}
 
-        
-        
         {!! Field::file('url_photo', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
         {!! Field::text('username', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
         {!! Field::text('name', ['tpl' => 'themes.bootstrap.fields.simple']) !!}

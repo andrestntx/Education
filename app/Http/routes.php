@@ -62,5 +62,6 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
         });
 	});
 
-	Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);	
+	Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);
+	Route::put('profile', ['as' => 'profile', 'uses' => 'UsersController@profile']);	
 });

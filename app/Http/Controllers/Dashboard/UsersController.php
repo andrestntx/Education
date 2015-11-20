@@ -5,8 +5,9 @@ use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Users\CreateRequest;
 use Education\Http\Requests\Users\EditRequest;
+use Education\Http\Requests\Users\ProfileRequest;
 use Education\Entities\User;
-use Flash, Alert;
+use Flash, Alert, Auth;
 
 class UsersController extends Controller {
 
@@ -150,13 +151,16 @@ class UsersController extends Controller {
         }	
 	}
 
-	public function profile()
+	public function profile(ProfileRequest $request)
 	{
-		$user = Auth::user();
-		$form_data = array('route' => array('usuarios.update-profile', $user->id), 'method' => 'POST', 'files' => true);
-		$number_protocols = $user->protocolsForStudy()->count();
-		$number_exams = $user->examScores()->count();
-		
-		return View::make('dashboard.pages.user.profile', compact('user', 'form_data', 'number_protocols', 'number_exams'));
+        $this->user = Auth::user();
+        $this->user->fill($request->all());
+        $this->user->save();
+        $this->user->uploadImage($request->file('url_photo'));
+
+        Flash::info('Pefil actualizado correctamente');
+
+        return redirect()->route(self::$prefixRoute . 'index');
+
 	}
 }
