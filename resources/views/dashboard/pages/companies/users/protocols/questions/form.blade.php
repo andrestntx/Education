@@ -1,6 +1,6 @@
 @extends('dashboard.pages.form-layouts.horizontal')
 @section('title_page')
-  Protocolo {{ $protocol->name }} -
+  <i class="fa fa-file-text"></i> {{ $protocol->name }} -
   @if($question->exists) Editar Pregunta
   @else Nueva Pregunta @endif
 @stop

@@ -16,7 +16,8 @@ class DashboardController extends Controller {
 		}
 		else if($user->isRegistered())
 		{
-			return view('dashboard.pages.companies.users.scores');
+			$user = Auth::user()->load(['company']);
+			return view('dashboard.pages.companies.users.scores', compact('user'));
 		}
 
 		return redirect()->to('companies');

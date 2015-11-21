@@ -14,7 +14,7 @@
                     <tr>
                         <th title="Nombre del Categoría">Nombre</th>
                         <th title="Descripción del Categoría">Descripción</th>
-                        <th title="Ultima actulaización del Categoría">Actualización</th>
+                        <th title="Ultima actulaización del Categoría"><i class="gi gi-clock"></i> Actualización</th>
                         <th class="text-center" style="width: 75px;"><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>

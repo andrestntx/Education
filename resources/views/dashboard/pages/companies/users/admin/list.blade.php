@@ -32,10 +32,10 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->updated_at_hummans }}</td>
                             <td class="text-center">
-                                <a href="" data-toggle="tooltip" title="Ver Calificaciones" class="btn btn-effect-ripple btn-info">
+                                <a href="{{ route('users.scores', $user->id) }}" data-toggle="tooltip" title="Ver Calificaciones" class="btn btn-effect-ripple btn-info">
                                     <i class="fa fa-bar-chart-o"></i>
                                 </a>
-                                <a href="{{route('users.edit', $user->id)}}" data-toggle="tooltip" title="Editar Administrador" class="btn btn-effect-ripple btn-warning">
+                                <a href="{{ route('users.edit', $user->id) }}" data-toggle="tooltip" title="Editar Administrador" class="btn btn-effect-ripple btn-warning">
                                     <i class="fa fa-pencil"></i>
                                 </a>
                             </td>

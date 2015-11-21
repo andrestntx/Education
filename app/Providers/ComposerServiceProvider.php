@@ -23,7 +23,6 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\Protocols\FormComposer'           => 'dashboard.pages.companies.users.protocols.form',
             'Education\Http\ViewComposers\Users\ListComposer'               => 'dashboard.pages.companies.users.admin.list',
             'Education\Http\ViewComposers\Users\FormComposer'               => 'dashboard.pages.companies.users.admin.form',
-            'Education\Http\ViewComposers\Scores\ScoreComposer'             => 'dashboard.pages.companies.users.scores',
             'Education\Http\ViewComposers\Formats\ListComposer'             => 'dashboard.pages.companies.users.formats.list',
             'Education\Http\ViewComposers\Formats\FormComposer'             => 'dashboard.pages.companies.users.formats.form',
             'Education\Http\ViewComposers\Formats\MyFormatsComposer'       => 'dashboard.pages.companies.users.formats.myformats',

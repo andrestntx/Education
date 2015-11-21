@@ -19,7 +19,7 @@ class UsersController extends Controller {
     public function __construct()
     {
         $this->beforeFilter('@newUser', ['only' => ['store','create']]);
-        $this->beforeFilter('@findUser', ['only' => ['show', 'edit', 'update', 'destroy']]);
+        $this->beforeFilter('@findUser', ['only' => ['show', 'edit', 'update', 'destroy', 'scores']]);
     }
 
     /**
@@ -123,33 +123,8 @@ class UsersController extends Controller {
 
     public function scores($id)
     {
-        $user = User::findOrFail($id);
-
-        $protocols = Protocol::with(array('examScores' => function($query) use($user)
-            {
-                $query->whereUserId($user->id);
-
-            }))->userCanStudy($user->id)->get();
-
-        return View::make('dashboard.pages.user.scores', compact('protocols','user'));
+        return view()->make('dashboard.pages.companies.users.scores')->with('user', $this->user);
     }
-
-
-	public function updateProfile($id)
-	{
-		$user = User::findOrFail($id);
-        $image = Input::file('url_photo');
-        $data = Input::all();
-
-        if ($user->validAndSave($data, $image))
-        {
-            return Redirect::to('mi-perfil');
-        }
-        else
-        {
-        	return Redirect::intended('mi-perfil')->withErrors($user->errors);
-        }	
-	}
 
 	public function profile(ProfileRequest $request)
 	{

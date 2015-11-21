@@ -1,6 +1,14 @@
 @extends('dashboard.pages.layout')
-@section('title_page') <i class="gi gi-building"></i> {{$user->company->name}} @stop
-@section('breadcrumbs') {!! Breadcrumbs::render('study') !!} @stop
+
+@section('title_page') 
+    @if(Auth::user()->isAdmin())
+        <i class="fa fa-users"></i> Calificaciones de {{ $user->name }}
+    @else
+        <i class="gi gi-building"></i> {{ $user->company->name }} 
+    @endif
+@stop
+
+@section('breadcrumbs') {!! Breadcrumbs::render('scores') !!} @stop
 @section('content_body_page')
 	<div class="row">
 		<div class="col-sm-6">
@@ -21,7 +29,7 @@
 			                    </tr>
 			                </thead>
 			                <tbody>
-			                    @foreach($protocolsPending as $protocol)
+			                    @foreach($user->getExamProtocolsPending() as $protocol)
 			                        <tr>
                                         <td><a href="{{route('study', $protocol->id)}}" title="Estudiar Protocolo">{{$protocol->name}}</a></td>
 			                            <td class="text-center">{{ $protocol->getUserExamsCount($user) }}</td>
@@ -74,7 +82,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($protocolsOk as $protocol)
+                            @foreach($user->getExamProtocolsOk() as $protocol)
                             <tr>
                                 <td><a href="{{route('study', $protocol->id)}}" title="Estudiar Protocolo">{{$protocol->name}}</a></td>
                                 <td class="text-center">{{ $protocol->getUserExamsCount($user) }}</td>

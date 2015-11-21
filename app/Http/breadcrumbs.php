@@ -212,6 +212,13 @@ Breadcrumbs::register('study.protocol.exam', function($breadcrumbs, $protocol)
     $breadcrumbs->push('Examen', route('exams.store', $protocol));
 });
 
+// Home > Study 
+Breadcrumbs::register('scores', function($breadcrumbs)
+{
+	$breadcrumbs->parent('home');
+    $breadcrumbs->push('Calificaciones', route('home'));
+});
+
 // Home > formats
 Breadcrumbs::register('formats', function($breadcrumbs)
 {

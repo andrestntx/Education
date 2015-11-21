@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 		Route::resource('roles', 'RolesController');
 		Route::resource('categories', 'CategoriesController');
 		Route::resource('users', 'UsersController');
+		Route::get('users/{users}/scores', ['as' => 'users.scores', 'uses' => 'UsersController@scores']);
 
 		Route::resource('protocols', 'ProtocolsController');
 		Route::resource('protocols.questions', 'ProtocolQuestionsController');
