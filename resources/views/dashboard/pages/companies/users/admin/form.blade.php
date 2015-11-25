@@ -5,7 +5,7 @@
 
 @section('breadcrumbs') {!! Breadcrumbs::render('users.user', $user) !!} @stop
 @section('form')
-{!! Form::model($user, $form_data) !!}
+{!! Form::model($user, $form_data + ['id' => 'form-validation']) !!}
     <div class="form-group">
         <label class="col-md-4 control-label" for="url_photo">Foto de Perfil <span class="text-danger">*</span></label>
         <div class="col-md-6">
@@ -15,14 +15,14 @@
         </div>
     </div>
 
-    {!! Field::text('username', ['ph' => 'Nombre con el que iniciará sesión', 'required' => 'required'])!!}
+    {!! Field::text('username', ['ph' => 'Nombre con el que iniciará sesión'])!!}
     {!! Field::password('password', ['ph' => 'Contraseña'])!!}
     {!! Field::password('password_confirmation', ['ph' => 'Confirmar Contraseña '])!!}
     {!! Field::text('name', ['ph' => 'Nombres y Apellidos'])!!}
     {!! Field::text('email', ['ph' => 'Correo electrónico'])!!}
     {!! Field::text('tel', ['ph' => 'Teléfono fijo o Celular'])!!}
-    {!! Field::select('roles.', $roles, $user->role_id_lists, ['multiple', 'required']) !!}
-    {!! Field::select('areas.', $areas, $user->area_id_lists, ['multiple', 'required']) !!}
+    {!! Field::selectMultiple('roles.', $roles, $user->role_id_lists) !!}
+    {!! Field::selectMultiple('areas.', $areas, $user->area_id_lists) !!}
 
 <div class="form-group form-actions">
     <div class="col-md-8 col-md-offset-4">
@@ -44,4 +44,8 @@
   </script>
 
   {!! Html::script('assets/js/plugins/forms/file-validator.js') !!}
+
+  <!-- Load and execute javascript code used only in this page -->
+  {!! Html::script('assets/js/validations/users.js') !!}
+  <script>$(function(){ FormsValidation.init(); });</script>
 @stop

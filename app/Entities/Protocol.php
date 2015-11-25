@@ -144,9 +144,14 @@ class Protocol extends Model
         return $this->hasMany(Exam::class);
     }
 
+    public function getPathAnnexes()
+    {
+        return 'protocols/' . $this->id . '/annexes/';
+    }
+
     public function getAnnexes()
     {
-        return Storage::files('protocols/' . $this->id . '/annexes');
+        return Storage::files($this->getPathAnnexes());
     }
 
     public function getUserExams($user)

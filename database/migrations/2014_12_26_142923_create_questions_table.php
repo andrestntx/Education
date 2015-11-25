@@ -17,6 +17,7 @@ class CreateQuestionsTable extends Migration {
 		    $table->increments('id');
 		    $table->text('text');
 
+		    $table->boolean('aviable')->default(true)->nullable();
 		    $table->integer('document_id')->unsigned();	    
 		    $table->string('document_type');	    
 

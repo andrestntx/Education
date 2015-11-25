@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Entities\Protocol;
-use Storage, File;
+use Storage, File, Flash;
 
 class ProtocolAnnexesController extends Controller {
 
@@ -42,6 +42,27 @@ class ProtocolAnnexesController extends Controller {
         );
 
         return 'file saved';
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($protocol_id, $fileName)
+    {
+        if(Storage::has($this->protocol->getPathAnnexes() . $fileName))
+        {
+            Storage::delete($this->protocol->getPathAnnexes() . $fileName);        
+            Flash::info('Anexo '. $fileName .' Eliminado correctamente');
+        }
+        else
+        {
+            Flash::error('Anexo '. $fileName .' no existe');
+        }
+        
+        return redirect()->route('protocols.show', $this->protocol->id);
     }
 
 }

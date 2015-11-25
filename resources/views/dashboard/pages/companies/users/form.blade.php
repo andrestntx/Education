@@ -17,7 +17,7 @@
           <label class="col-md-4 control-label" for="roles[]">Perfiles <span class="text-danger">*</label>
           <div class="col-md-6">
               <div class="input-group">
-                  {!! Form::select('roles[]', $roles, $user->roles()->lists('id'), array('class' => 'form-control', 'multiple' => 'multiple', 'required' => 'required')) !!}
+                  {!! Form::select('roles[]', $roles, $user->roles()->lists('id'), array('class' => 'form-control', 'multiple')) !!}
                   <span class="input-group-addon"><i class="gi gi-old_man"></i></span>
               </div>
           </div>
@@ -27,7 +27,7 @@
           <label class="col-md-4 control-label" for="areas[]">Áreas <span class="text-danger">*</label>
           <div class="col-md-6">
               <div class="input-group">
-                  {!! Form::select('areas[]', $areas, $user->areas()->lists('id'), array('class' => 'form-control', 'multiple' => 'multiple', 'required' => 'required')) !!}
+                  {!! Form::select('areas[]', $areas, $user->areas()->lists('id'), array('class' => 'form-control', 'multiple')) !!}
                   <span class="input-group-addon"><i class="fa fa-tags"></i></span>
               </div>
           </div>

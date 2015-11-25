@@ -6,7 +6,7 @@ use Education\Http\Controllers\Controller;
 use Education\Entities\format;
 use Education\Entities\Checklist;
 use Education\Http\Requests\Checklists\CreateRequest;
-use Auth, Flash;
+use Auth, Flash, PDF, App;
 
 class MyFormatChecklistsController extends Controller
 {
@@ -21,6 +21,7 @@ class MyFormatChecklistsController extends Controller
 		$this->beforeFilter('@findFormat');	
 		$this->beforeFilter('@validateChecklist', ['only' => ['create']]);
 		$this->beforeFilter('@newChecklist', ['only' => ['create', 'store']]);
+		$this->beforeFilter('@findChecklist', ['only' => ['show', 'download']]);
 	}
 
 	/**
@@ -57,6 +58,18 @@ class MyFormatChecklistsController extends Controller
 		$this->checklist = new Checklist;
 	}
 
+	/**
+	 * Find the Checklist or App Abort 404
+	 *
+	 * @return void
+	 */
+	public function findChecklist(Route $route)
+	{
+	 	$this->checklist = Checklist::findOrFail($route->getParameter('checklists'));
+	 	$this->checklist->load('answers.question');
+	} 
+
+
 	public function index($format_id)
     {
         $checklists = $this->format->getUserChecklists(Auth::user());
@@ -89,7 +102,24 @@ class MyFormatChecklistsController extends Controller
 
 	public function show($format_id, $checklist_id)
 	{
-		# code...
+		$this->format->load('questions');
+
+        return view(self::$prefixView .'checklists.show')
+			->with(['checklist' => $this->checklist, 'format' => $this->format]);
+	}
+
+	public function download($format_id, $checklist_id)
+	{
+		$this->format->load('questions');
+
+		$view =  view()->make(self::$prefixView .'checklists.download')
+			->with(['format' => $this->format, 'checklist' => $this->checklist])
+			->render();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+
+        return $pdf->stream('checklist');
 	}
 }
 

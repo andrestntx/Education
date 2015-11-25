@@ -58,9 +58,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
+    public function scopeSuperadmins($query)
+    {
+        return $query->whereType('superadmin');
+    }
+
+    public function scopeAdmins($query)
+    {
+        return $query->whereType('admin');
+    }
+
     public function scopeRegistereds($query)
     {
-        return $query->where('type', '=', 'registered');
+        return $query->whereType('registered');
     }
 
     public function isAdmin()
@@ -186,6 +196,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getRoleIdListsAttribute()
     {
         return $this->roles->lists('id')->all();
+    }
+
+    public function getRoleIdOptions()
+    {
+        return $this->company->roles->lists('name', 'id')->all();
+    }
+
+    public function getAreaIdOptions()
+    {
+        return $this->company->areas->lists('name', 'id')->all();
     }
 
     public function syncRelations($data)

@@ -18,7 +18,13 @@
                 <span class="input-group-addon"><i class="fa fa-bars"></i></span>
             </div>
         </div>
-      </div>  
+        <div class="col-md-3">
+            <div class="input-group">
+                <label class="switch switch-info"><input type="checkbox" name="aviable" value="1" @if($question->aviable) checked @endif ><span></span></label>
+            </div>
+        </div>
+      </div>
+
       <div class="form-group"> 
         <h4 style="margin-left:10%;">Respuestas</h4>
       </div>
@@ -61,7 +67,7 @@
         @endif
       </div>
       <div class="form-group form-actions">
-          <div class="col-md-8 col-md-offset-4">
+          <div class="col-md-9 col-md-offset-3">
               <button type="submit" class="btn btn-effect-ripple btn-primary">Guardar Pregunta</button>
           </div>
       </div>

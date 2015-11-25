@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
         {
             Route::get('myformats', [ 'as' => 'myformats', 'uses' => 'FormatsController@showFormatsUser']);
             Route::resource('myformats.checklists', 'MyFormatChecklistsController', ['only' => ['index', 'create', 'store', 'show']]);
+            Route::get('myformats/{myformats}/checklists/{checklists}/donwload', [ 'as' => 'myformats.checklists.donwload', 'uses' => 'MyFormatChecklistsController@download']);
         });
 	});
 

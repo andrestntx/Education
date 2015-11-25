@@ -44,9 +44,24 @@ class Company extends Model
         return $this->users->count();
     }
 
+    public function getAdminUsersCountAttribute()
+    {
+        return $this->userAdmins()->count();
+    }
+
+    public function getRegisteredUsersCountAttribute()
+    {
+        return $this->userRegistereds()->count();
+    }
+
     public function userAdmins()
     {
-        return $this->users()->whereType('admin')->get();
+        return $this->users()->admins()->get();
+    }
+
+    public function userRegistereds()
+    {
+        return $this->users()->registereds()->get();
     }
 
 	/** 

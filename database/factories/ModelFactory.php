@@ -41,10 +41,22 @@ $factory->define(User::class, function ($faker) {
     ];
 });
 
+$factory->defineAs(User::class, 'user_default', function ($faker) use ($factory) {
+    $user = $factory->raw(User::class);
+
+    return array_merge($user, ['username' => 'miguel']);
+});
+
 $factory->defineAs(User::class, 'admin', function ($faker) use ($factory) {
     $user = $factory->raw(User::class);
 
     return array_merge($user, ['type' => 'admin']);
+});
+
+$factory->defineAs(User::class, 'admin_default', function ($faker) use ($factory) {
+    $user = $factory->raw(User::class);
+
+    return array_merge($user, ['type' => 'admin', 'username' => 'admin']);
 });
 
 $factory->defineAs(User::class, 'superadmin', function ($faker) use ($factory) {

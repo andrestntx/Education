@@ -9,6 +9,12 @@ class Checklist extends Model
 	public $timestamps = true;
 	public $increments = true;
     
+    public function getCreatedAtHummansAttribute()
+    {
+        Carbon::setLocale('es');
+        return ucfirst($this->created_at->diffForHumans());
+    }
+    
     public function getUpdatedAtHummansAttribute()
     {
         Carbon::setLocale('es');

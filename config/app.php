@@ -154,6 +154,7 @@ return [
         Styde\Html\HtmlServiceProvider::class,
         Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -207,6 +208,7 @@ return [
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         'Flash'     => Laracasts\Flash\Flash::class,
         'Access'    => Styde\Html\Facades\Access::class,
+        'PDF'       => Barryvdh\DomPDF\Facade::class,
 
     ],
 

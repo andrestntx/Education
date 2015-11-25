@@ -38,6 +38,7 @@ var ReadyLogin = function() {
                     }
                 },
                 messages: {
+                    required: 'mnmn',
                     'login-email': 'Please enter your account\'s email',
                     'login-password': {
                         required: 'Please provide your password',

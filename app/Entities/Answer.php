@@ -7,8 +7,8 @@ class Answer extends Model
 	protected $table = 'answers';
 	protected $fillable = ['text', 'correct'];
 	public $timestamps = true;
-	public $increments = true;
-	public $errors;
+	public $increments = true;	
+    public $errors;
 
     public function question()
     {

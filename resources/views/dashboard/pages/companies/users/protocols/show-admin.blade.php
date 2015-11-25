@@ -15,7 +15,7 @@
 								<a href="javascript:void(0)" class="btn btn-effect-ripple btn-primary dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" style="overflow: hidden; position: relative;" data-original-title="Opciones"><i class="fa fa-chevron-down"></i></a>
 								<ul class="dropdown-menu dropdown-menu-right">
 									<li>
-										<a href="javascript:void(0)">
+										<a href="{{ URL::to($protocol->doc) }}" target="_blank">
 											<i class="gi gi-cloud-download pull-right"></i>
 											Descargar
 										</a>
@@ -55,7 +55,11 @@
 		                        	<div class="row">
 		                            	<div class="col-xs-12">
 		                            		<a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" style="font-size:16px;">
-				                                <i class="fa fa-pencil"></i> {{$question->text}}
+		                            			@if($question->aviable)
+				                                	<i class="fa fa-pencil"></i> {{$question->text}}
+				                                @else
+				                                	<span class="text-danger"> <i class="fa fa-pencil"></i> {{$question->text}}</span>
+				                                @endif
 				                            </a>
 		                            	</div>
 		                        	</div>
@@ -78,13 +82,12 @@
 			                    @foreach($protocol->links as $link)
 		                            <li title="{{$link->description}}">
 		                            	<div class="row">
-			                            	<div class="col-xs-8">
-			                            		<h4 style="font-size:16px;"><a href="{{ $link->url }}" target="_blank">{{ $link->name }}</a></h4>
-			                            	</div>
-			                            	<div class="col-xs-4">
-					                            <a href="{!! route('protocols.links.edit', [$protocol->id, $link->id]) !!}" data-toggle="tooltip" title="Editar Enlace" class="btn btn-xs btn-effect-ripple btn-warning">
-					                                <i class="fa fa-pencil"></i>
+			                            	<div class="col-xs-10">
+			                            		<a href="{{ route('protocols.links.edit', [$protocol->id, $link->id]) }}" data-toggle="tooltip" title="Editar Enlace" style="font-size:16px;">
+					                                <i class="gi gi-link"></i> {{ $link->name }}
 					                            </a>
+			                            	</div>
+			                            	<div class="col-xs-2">
 					                            {!! Form::open(['route' => ['protocols.links.destroy', $protocol->id, $link->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
 						                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
 						                                <i class="fa fa-times"></i>
@@ -98,25 +101,37 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="block">
-						<div class="block-title">
-							<h2>Anexos</h2>
-						</div>
-						<div class="block-section">
-							<ul class="fa-ul">
-			                    @foreach($protocol->getAnnexes() as $annex)
-		                            <li>
-		                            	<h4>
-		                    				<i class="fa fa-check fa-li"></i>
-		                    				<a href="/storage/{{$annex}}" target="_blank">{{ explode('/', $annex)[3] }}</a>
-		                            	</h4>
-		                            </li>
-			                    @endforeach
-			                </ul>
+				@if($protocol->getAnnexes())
+					<div class="row">
+						<div class="block">
+							<div class="block-title">
+								<h2>Anexos</h2>
+							</div>
+							<div class="block-section">
+								<ul class="list-unstyled">
+				                    @foreach($protocol->getAnnexes() as $annex)
+				                    	<li>
+			                            	<div class="row">
+				                            	<div class="col-xs-10">
+				                            		<a href="/storage/{{$annex}}" data-toggle="tooltip" title="Descargar Anexo" style="font-size:16px;" target="_blank">
+						                                <i class="hi hi-cloud_upload"></i> {{ explode('/', $annex)[3] }}
+						                            </a>
+				                            	</div>
+				                            	<div class="col-xs-2">
+						                            {!! Form::open(['route' => ['protocols.annexes.destroy', $protocol->id, explode('/', $annex)[3]], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
+							                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
+							                                <i class="fa fa-times"></i>
+							                            </button>
+						                            {!! Form::close() !!}
+					                        	</div>
+				                        	</div>
+			                            </li>
+				                    @endforeach
+				                </ul>
+							</div>
 						</div>
 					</div>
-				</div>
+				@endif
 				<div class="row">
 					<div class="block">
 						<div class="block-title">

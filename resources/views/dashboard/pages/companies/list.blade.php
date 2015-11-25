@@ -26,11 +26,14 @@
 		            </div>
 		            <div class="widget-content">
 		                <div class="row text-center">
-		                    <div class="col-xs-6">
-		                        <h3 class="widget-heading"><small>USUARIOS</small><br><a href="javascript:void(0)" class="themed-color-system">{{ $company->users_count }}</a></h3>
+		                	<div class="col-xs-4">
+		                        <h3 class="widget-heading"><span class="h4">Admins</span><br><a href="{{ route('companies.users.index', $company->id) }}" class="themed-color-system">{{ $company->admin_users_count }}</a></h3>
 		                    </div>
-		                    <div class="col-xs-6">
-		                        <h3 class="widget-heading"><small>PROTOCOLOS</small><br><a href="javascript:void(0)" class="themed-color-system">{{ $company->protocols_count }}</a></h3>
+		                    <div class="col-xs-4">
+		                        <h3 class="widget-heading"><span class="h4">Usuarios</span><br><a href="javascript:void(0)" class="themed-color-system">{{ $company->registered_users_count }}</a></h3>
+		                    </div>
+		                    <div class="col-xs-4">
+		                        <h3 class="widget-heading"><span class="h4">Protocolos</span><br><a href="javascript:void(0)" class="themed-color-system">{{ $company->protocols_count }}</a></h3>
 		                    </div>
 		                </div>
 		            </div>

@@ -140,7 +140,7 @@ class ProtocolQuestionsController extends Controller {
 	 */
 	public function update(EditRequest $request, $protocol_id, $question_id)
 	{
-        $this->question->fill($request->all());
+        $this->question->fillAndClear($request->all());
         $this->question->save();
         $this->question->answers()->update(['correct' => 0]);
 
