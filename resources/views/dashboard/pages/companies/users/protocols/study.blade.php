@@ -9,7 +9,7 @@
 					<h2>{{$protocol->description}}</h2>
 				</div>
 				<div class="block-section">
-					<iframe src="https://drive.google.com/viewerng/viewer?url={{URL::to($protocol->pdf)}}&embedded=true" style="width:100%; height:550px;" frameborder="0"></iframe>
+					<iframe src="https://drive.google.com/viewerng/viewer?url={{URL::to($protocol->doc)}}&embedded=true" style="width:100%; height:550px;" frameborder="0"></iframe>
 				</div>
 			</div>
 		</div>
