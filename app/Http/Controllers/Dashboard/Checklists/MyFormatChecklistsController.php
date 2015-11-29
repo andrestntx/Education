@@ -18,7 +18,7 @@ class MyFormatChecklistsController extends Controller
 
 	public function __construct() 
 	{
-		$this->beforeFilter('@findFormat');	
+		$this->beforeFilter('@findFormat', ['except' => ['allMyFormats']]);	
 		$this->beforeFilter('@validateChecklist', ['only' => ['create']]);
 		$this->beforeFilter('@newChecklist', ['only' => ['create', 'store']]);
 		$this->beforeFilter('@findChecklist', ['only' => ['show', 'download']]);
@@ -69,6 +69,10 @@ class MyFormatChecklistsController extends Controller
 	 	$this->checklist->load('answers.question');
 	} 
 
+	public function allMyFormats()
+	{
+		return view(self::$prefixView . 'myformats');
+	}
 
 	public function index($format_id)
     {

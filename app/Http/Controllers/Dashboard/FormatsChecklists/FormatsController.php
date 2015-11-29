@@ -136,9 +136,5 @@ class FormatsController extends Controller
 
         return redirect()->route(self::$prefixRoute . 'show', $this->format);
     }
-
-    public function showFormatsUser()
-    {
-        return view(self::$prefixView . 'myformats');
-    }
+    
 }
