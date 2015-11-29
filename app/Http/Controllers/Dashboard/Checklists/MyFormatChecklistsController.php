@@ -21,7 +21,6 @@ class MyFormatChecklistsController extends Controller
 
     public function __construct()
     {
-        dd('construyendo prueba');
         $this->beforeFilter('@findFormat', ['except' => ['allMyFormats']]);
         $this->beforeFilter('@validateChecklist', ['only' => ['create']]);
         $this->beforeFilter('@newChecklist', ['only' => ['create', 'store']]);
@@ -33,6 +32,7 @@ class MyFormatChecklistsController extends Controller
      */
     public function findFormat(Route $route)
     {
+        dd('construyendo prueba');
         $this->format = Format::findOrFail($route->getParameter('myformats'));
     }
 
