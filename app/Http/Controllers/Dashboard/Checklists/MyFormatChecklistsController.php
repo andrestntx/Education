@@ -118,6 +118,6 @@ class MyFormatChecklistsController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
 
-        return $pdf->stream('checklist');
+        return $pdf->download('checklist');
     }
 }
