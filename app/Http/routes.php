@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function()
 		Route::resource('protocols.links', 'ProtocolLinksController');
 		Route::resource('protocols.annexes', 'ProtocolAnnexesController');
 
-        Route::group(['namespace' => 'Checklists'], function()
+        Route::group(['namespace' => 'FormatsChecklists'], function()
         {
             Route::resource('formats', 'FormatsController');
             Route::resource('formats.questions', 'FormatQuestionsController');

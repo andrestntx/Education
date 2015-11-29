@@ -1,6 +1,4 @@
-<?php
-
-namespace Education\Http\Controllers\Dashboard\Checklists;
+<?php namespace Education\Http\Controllers\Dashboard\FormatsChecklists;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
