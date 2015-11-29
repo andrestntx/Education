@@ -50,12 +50,12 @@ class Exam extends Model
 
     public function getCorrectAnswersAttribute()
     {
-        return $this->answers->where('correct', 1);
+        return $this->answers->where('correct', '1');
     }
 
     public function getIncorrectAnswersAttribute()
     {
-        return $this->answers->where('correct', 0);
+        return $this->answers->where('correct', '0');
     }
 
     public function getCountCorrectAnswersAttribute()
