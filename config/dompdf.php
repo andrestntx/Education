@@ -251,13 +251,13 @@ return array(
          * Allows people to disabled CSS float support
          * @var bool
          */
-        "DOMPDF_ENABLE_CSS_FLOAT" => false,
+        "DOMPDF_ENABLE_CSS_FLOAT" => true,
 
 
         /**
          * Use the more-than-experimental HTML5 Lib parser
          */
-        "DOMPDF_ENABLE_HTML5PARSER" => false,
+        "DOMPDF_ENABLE_HTML5PARSER" => true,
 
 
     ),

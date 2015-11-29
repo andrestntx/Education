@@ -134,6 +134,11 @@ table td.grand {
   font-size: 1.2em;
 }
 
+main {
+  margin-top:80px; 
+  display:block;
+}
+
 footer {
   color: #5D6975;
   width: 100%;
