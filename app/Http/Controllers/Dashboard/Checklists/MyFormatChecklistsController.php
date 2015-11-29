@@ -32,6 +32,8 @@ class MyFormatChecklistsController extends Controller
      */
     public function findFormat(Route $route)
     {
+        dd($route->getParameter('myformats'));
+
         $this->format = Format::findOrFail($route->getParameter('myformats'));
 
         dd($this->format);
