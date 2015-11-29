@@ -4,7 +4,7 @@ namespace Education\Http\Controllers\Dashboard\Checklists;
 
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
-use Education\Entities\format;
+use Education\Entities\Format;
 use Education\Entities\Checklist;
 use Education\Http\Requests\Checklists\CreateRequest;
 use Auth;
@@ -32,11 +32,7 @@ class MyFormatChecklistsController extends Controller
      */
     public function findFormat(Route $route)
     {
-        dd(Format::find($route->getParameter('myformats')));
-
         $this->format = Format::findOrFail($route->getParameter('myformats'));
-
-        dd($this->format);
     }
 
     /**
@@ -75,8 +71,6 @@ class MyFormatChecklistsController extends Controller
 
     public function index($format_id)
     {
-        dd('prueba');
-
         $checklists = $this->format->getUserChecklists(Auth::user());
 
         return view(self::$prefixView.'checklists.list')
