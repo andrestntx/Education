@@ -1,6 +1,9 @@
-/public/storage
 /vendor
 /node_modules
 .env
 .idea/
-/public/storage/protocols/
+/public/storage/checklists/*.pdf
+/public/storage/companies/*
+/public/storage/protocols/*
+/public/storage/users/*
+
