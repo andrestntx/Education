@@ -53,7 +53,7 @@ h1 {
   font-weight: normal;
   text-align: center;
   margin: 0 0 20px 0;
-  background-image: url(/images/dimension.png);
+  background-image: url(https://s3-eu-west-1.amazonaws.com/htmlpdfapi.production/free_html5_invoice_templates/example1/dimension.png);
 }
 
 #project {
