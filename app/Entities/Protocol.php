@@ -1,18 +1,22 @@
-<?php namespace Education\Entities; 
+<?php
+
+namespace Education\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use File, Storage;
+use File;
+use Storage;
 
 class Protocol extends Model
 {
-	protected $fillable = ['name', 'description', 'aviable', 'url_doc'];
-	public $timestamps = true;
-	public $increments = true;
-    
+    protected $fillable = ['name', 'description', 'aviable', 'url_doc'];
+    public $timestamps = true;
+    public $increments = true;
+
     public function getUpdatedAtHummansAttribute()
     {
         Carbon::setLocale('es');
+
         return ucfirst($this->updated_at->diffForHumans());
     }
 
@@ -23,8 +27,7 @@ class Protocol extends Model
 
     public function isAviable()
     {
-        if($this->aviable)
-        {
+        if ($this->aviable) {
             return true;
         }
 
@@ -33,8 +36,7 @@ class Protocol extends Model
 
     public function getStateAttribute()
     {
-        if($this->aviable)
-        {
+        if ($this->aviable) {
             return 'Disponible';
         }
 
@@ -62,18 +64,16 @@ class Protocol extends Model
     {
         $examScore = $this->examScores->sortByDesc('updated_at')->first();
 
-        if(!is_null($examScore))
-        {
+        if (!is_null($examScore)) {
             return $examScore;
         }
 
-        return null;
+        return;
     }
 
     public function isDocCorrect()
     {
-        if(!is_null($this->url_doc))
-        {
+        if (!is_null($this->url_doc)) {
             return true;
         }
 
@@ -82,8 +82,7 @@ class Protocol extends Model
 
     public function getDocAttribute()
     {
-        if($this->isDocCorrect())
-        {
+        if ($this->isDocCorrect()) {
             return $this->url_doc;
         }
 
@@ -104,7 +103,6 @@ class Protocol extends Model
     {
         return $this->links->count();
     }
-
 
     /* End Exams */
 
@@ -146,7 +144,7 @@ class Protocol extends Model
 
     public function getPathAnnexes()
     {
-        return 'protocols/' . $this->id . '/annexes/';
+        return 'protocols/'.$this->id.'/annexes/';
     }
 
     public function getAnnexes()
@@ -155,7 +153,7 @@ class Protocol extends Model
     }
 
     public function getUserExams($user)
-    {        
+    {
         return $this->exams->where('user_id', $user->id);
     }
 
@@ -173,15 +171,14 @@ class Protocol extends Model
     {
         $exam = $this->getUserExams($user)->sortByDesc('created_at')->first();
 
-        if($exam){
+        if ($exam) {
             return $exam;
         }
     }
 
     public function isExamPending($user)
     {
-        if( ! $this->getUserLastExam($user) || $this->getUserLastExam($user)->isPending())
-        {
+        if (!$this->getUserLastExam($user) || $this->getUserLastExam($user)->isPending()) {
             return true;
         }
 
@@ -190,8 +187,7 @@ class Protocol extends Model
 
     public function randomQuestions()
     {
-        if($this->questions->count() >= env('APP_MAX_QUESTION_EXAM'))
-        {
+        if ($this->questions->count() >= env('APP_MAX_QUESTION_EXAM')) {
             return $this->questions->random(env('APP_MAX_QUESTION_EXAM'));
         }
 
@@ -200,46 +196,38 @@ class Protocol extends Model
 
     /***** End Relations *****/
 
-
     public function fillAndClear($data)
     {
         $this->fill($data);
 
-        if(array_key_exists('aviable', $data))
-        {
+        if (array_key_exists('aviable', $data)) {
             $this->aviable = 1;
-        }
-        else
-        {
+        } else {
             $this->aviable = 0;
         }
     }
 
     public function syncRelations($data)
     {
-        if(array_key_exists('categories', $data))
-        {
+        if (array_key_exists('categories', $data)) {
             $this->categories()->sync($data['categories']);
         }
 
-        if(array_key_exists('areas', $data))
-        {
+        if (array_key_exists('areas', $data)) {
             $this->areas()->sync($data['areas']);
-        }          
+        }
 
-        if(array_key_exists('roles', $data))
-        {
+        if (array_key_exists('roles', $data)) {
             $this->roles()->sync($data['roles']);
         }
     }
 
     public function uploadDoc($file)
     {
-        if($file)
-        {
-            $path = 'protocols/' . $this->id . '/doc.pdf';   
-            Storage::disk('local')->put($path,  File::get($file));  
-            $this->url_doc = '/storage/' . $path;
+        if ($file) {
+            $path = 'protocols/'.$this->id.'/doc.pdf';
+            Storage::disk('local')->put($path,  File::get($file));
+            $this->url_doc = '/storage/'.$path;
 
             return true;
         }

@@ -1,26 +1,22 @@
-<?php namespace Education\Entities; 
+<?php
+
+namespace Education\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
-use File, Storage;
 
 class Question extends Model
 {
-	protected $fillable = ['text', 'aviable'];
-	public $timestamps = true;
-	public $increments = true;
-
+    protected $fillable = ['text', 'aviable'];
+    public $timestamps = true;
+    public $increments = true;
 
     public function fillAndClear($data)
     {
         $this->fill($data);
 
-        if(array_key_exists('aviable', $data))
-        {
+        if (array_key_exists('aviable', $data)) {
             $this->aviable = 1;
-        }
-        else
-        {
+        } else {
             $this->aviable = 0;
         }
     }

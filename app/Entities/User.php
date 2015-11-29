@@ -1,11 +1,15 @@
-<?php namespace Education\Entities;
+<?php
+
+namespace Education\Entities;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Hash, Storage, File;
+use Hash;
+use Storage;
+use File;
 use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
@@ -21,9 +25,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public $timestamp = true;
 
     /**
-     * The system types array
+     * The system types array.
      *
-     * @var array 
+     * @var array
      */
     private static $singularTypes = ['superadmin' => 'super administrador', 'admin' => 'administrador', 'registered' => 'registrado'];
     private static $pluralTypes = ['superadmin' => 'super administradores', 'admin' => 'administradores', 'registered' => 'registrados'];
@@ -48,12 +52,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return self::with('type')->orderBy('updated_at')->paginate($number_pages);
     }
-    
+
     /* Mutators */
-	public function setPasswordAttribute($value)
+    public function setPasswordAttribute($value)
     {
-        if( !empty($value) )
-        {
+        if (!empty($value)) {
             $this->attributes['password'] = Hash::make(trim($value));
         }
     }
@@ -85,8 +88,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function isType($type)
     {
-        if($this->type == $type)
-        {
+        if ($this->type == $type) {
             return true;
         }
 
@@ -95,19 +97,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getTypeNameAttribute()
     {
-        return self::$singularTypes[$this->type];    
+        return self::$singularTypes[$this->type];
     }
 
     public function getTypePluralNameAttribute()
     {
-        return self::$pluralTypes[$this->type];    
+        return self::$pluralTypes[$this->type];
     }
 
     public function getImageAttribute()
     {
-        if(Storage::disk('local')->exists('users/' . $this->id . '/profile.jpg'))
-        {
-            return '/storage/users/'. $this->id .'/profile.jpg';
+        if (Storage::disk('local')->exists('users/'.$this->id.'/profile.jpg')) {
+            return '/storage/users/'.$this->id.'/profile.jpg';
         }
 
         return env('URL_USER_PHOTO_DEMO').'?'.time();
@@ -116,6 +117,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getUpdatedAtHummansAttribute()
     {
         Carbon::setLocale('es');
+
         return ucfirst($this->updated_at->diffForHumans());
     }
 
@@ -178,14 +180,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->protocols->filter(function ($protocol) {
             return $protocol->isExamPending($this);
-        });    
+        });
     }
 
     public function getExamProtocolsOk()
     {
         return $this->protocols->filter(function ($protocol) {
-            return ! $protocol->isExamPending($this);
-        }); 
+            return !$protocol->isExamPending($this);
+        });
     }
 
     public function getAreaIdListsAttribute()
@@ -210,29 +212,24 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function syncRelations($data)
     {
-        if(array_key_exists('areas', $data))
-        {
+        if (array_key_exists('areas', $data)) {
             $this->areas()->sync($data['areas']);
         }
 
-        if(array_key_exists('roles', $data))
-        {
+        if (array_key_exists('roles', $data)) {
             $this->roles()->sync($data['roles']);
         }
     }
 
     public function uploadImage($file)
     {
-        if($file)
-        {
-            $path = 'users/' . $this->id . '/profile.jpg';   
-            Storage::disk('local')->put($path,  File::get($file));  
+        if ($file) {
+            $path = 'users/'.$this->id.'/profile.jpg';
+            Storage::disk('local')->put($path,  File::get($file));
 
             return true;
         }
 
         return false;
     }
-
-
 }

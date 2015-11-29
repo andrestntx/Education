@@ -1,22 +1,22 @@
-<?php namespace Education\Http\ViewComposers\Roles;
+<?php
 
-use Education\Entities\Role;
+namespace Education\Http\ViewComposers\Roles;
+
 use Illuminate\Contracts\View\View;
 
-class ListComposer {
+class ListComposer
+{
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
-     * @return void
+     * @param View $view
      */
     public function compose(View $view)
     {
         $roles = \Auth::user()->company->roles()->orderBy('updated_at', 'desc')->paginate(20);
 
         $view->with([
-            'roles' => $roles
+            'roles' => $roles,
         ]);
     }
- 
 }

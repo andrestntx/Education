@@ -1,18 +1,17 @@
-<?php namespace Education\Entities; 
-/**
-* 
-*/
+<?php
 
+namespace Education\Entities;
+
+/**
+ * 
+ */
 class ExamScores extends Model
 {
-	protected $table = 'exam_scores';
-	protected $primaryKey = 'id';
+    protected $table = 'exam_scores';
+    protected $primaryKey = 'id';
 
-	public function getFormatedScoreAttribute()
+    public function getFormatedScoreAttribute()
     {
         return number_format($this->score, 0);
     }
 }
-
-
-?>

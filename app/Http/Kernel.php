@@ -31,6 +31,6 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Education\Http\Middleware\RedirectIfAuthenticated::class,
         'logs' => \Education\Http\Middleware\AfterLogs::class,
-        'user_type' => \Education\Http\Middleware\UserType::class
+        'user_type' => \Education\Http\Middleware\UserType::class,
     ];
 }

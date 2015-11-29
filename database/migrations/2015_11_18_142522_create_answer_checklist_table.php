@@ -7,19 +7,16 @@ class CreateAnswerChecklistTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
-        Schema::create('answer_checklist', function (Blueprint $table) 
-        {
+        Schema::create('answer_checklist', function (Blueprint $table) {
             $table->integer('checklist_id')->unsigned();
             $table->foreign('checklist_id')
               ->references('id')->on('checklists')
               ->onUpdate('cascade');
-    
-            $table->integer('answer_id')->unsigned();       
+
+            $table->integer('answer_id')->unsigned();
             $table->foreign('answer_id')
               ->references('id')->on('answers')
               ->onUpdate('cascade');
@@ -30,8 +27,6 @@ class CreateAnswerChecklistTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

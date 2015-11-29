@@ -7,18 +7,15 @@ class CreateAllowedRolesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
-        Schema::create('allowed_roles', function (Blueprint $table) 
-        {
+        Schema::create('allowed_roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('allowed_roles_id')->unsigned();     
+            $table->integer('allowed_roles_id')->unsigned();
             $table->string('allowed_roles_type');
-    
-            $table->integer('role_id')->unsigned();       
+
+            $table->integer('role_id')->unsigned();
             $table->foreign('role_id')
               ->references('id')->on('roles')
               ->onUpdate('cascade');
@@ -29,8 +26,6 @@ class CreateAllowedRolesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

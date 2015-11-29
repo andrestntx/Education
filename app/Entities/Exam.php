@@ -1,14 +1,16 @@
-<?php namespace Education\Entities; 
+<?php
+
+namespace Education\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 class Exam extends Model
 {
-	protected $fillable = array('user_id', 'protocol_id');
-	public $timestamps = true;
-	public $increments = true;
-	public $errors;
+    protected $fillable = array('user_id', 'protocol_id');
+    public $timestamps = true;
+    public $increments = true;
+    public $errors;
 
     public function getNumberQuestionsAttribute()
     {
@@ -18,6 +20,7 @@ class Exam extends Model
     public function getCreatedAtHummansAttribute()
     {
         Carbon::setLocale('es');
+
         return ucfirst($this->created_at->diffForHumans());
     }
 
@@ -38,8 +41,7 @@ class Exam extends Model
 
     public function isUser($user)
     {
-        if($this->user_id == $user)
-        {
+        if ($this->user_id == $user) {
             return true;
         }
 
@@ -73,18 +75,16 @@ class Exam extends Model
 
     public function getScoreAttribute()
     {
-        if($this->count_answers > 0)
-        {
+        if ($this->count_answers > 0) {
             return ($this->count_correct_answers / $this->count_answers) * 100;
         }
-        
+
         return 'NA';
     }
 
     public function isScoreOk()
     {
-        if($this->score >= env('APP_MIN_EXAM_SCORE', 80) && $this->created_at->diffInDays(Carbon::now()) <= env('APP_MAX_DAY_EXAM', 30))
-        {
+        if ($this->score >= env('APP_MIN_EXAM_SCORE', 80) && $this->created_at->diffInDays(Carbon::now()) <= env('APP_MAX_DAY_EXAM', 30)) {
             return true;
         }
 
@@ -93,10 +93,6 @@ class Exam extends Model
 
     public function isPending()
     {
-        return ! $this->isScoreOk();
+        return !$this->isScoreOk();
     }
-
 }
-
-
-?>

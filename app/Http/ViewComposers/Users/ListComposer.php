@@ -1,21 +1,22 @@
-<?php namespace Education\Http\ViewComposers\Users;
+<?php
+
+namespace Education\Http\ViewComposers\Users;
 
 use Education\Entities\User;
 use Illuminate\Contracts\View\View;
 
-class ListComposer {
+class ListComposer
+{
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
-     * @return void
+     * @param View $view
      */
     public function compose(View $view)
     {
-        $users = \Auth::user()->company->users()->whereType('registered')->orderBy('updated_at','DESC')->paginate(20);
+        $users = \Auth::user()->company->users()->whereType('registered')->orderBy('updated_at', 'DESC')->paginate(20);
         $view->with([
-            'users' => $users
+            'users' => $users,
         ]);
     }
- 
 }

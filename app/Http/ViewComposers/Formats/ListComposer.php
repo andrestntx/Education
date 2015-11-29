@@ -1,23 +1,23 @@
-<?php namespace Education\Http\ViewComposers\Formats;
+<?php
+
+namespace Education\Http\ViewComposers\Formats;
 
 use Illuminate\Contracts\View\View;
-use Education\Entities\Category;
 use Auth;
 
-class ListComposer {
+class ListComposer
+{
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
-     * @return void
+     * @param View $view
      */
     public function compose(View $view)
-    {        
+    {
         $formats = Auth::user()->company->formats()->orderBy('updated_at', 'desc')->paginate(20);
 
         $view->with([
-            'formats' => $formats
+            'formats' => $formats,
         ]);
     }
- 
 }

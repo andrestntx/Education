@@ -1,13 +1,16 @@
-<?php namespace Education\Entities; 
+<?php
+
+namespace Education\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Storage, File;
+use Storage;
+use File;
 
 class Company extends Model
 {
-	protected $fillable = ['name'];
-	public $timestamps = true;
-	public $increments = true;
+    protected $fillable = ['name'];
+    public $timestamps = true;
+    public $increments = true;
 
     public static function allTypePaginate($type = 'customer', $paginate = 10)
     {
@@ -64,8 +67,9 @@ class Company extends Model
         return $this->users()->registereds()->get();
     }
 
-	/** 
-     * Relation
+    /** 
+     * Relation.
+     *
      * @return Education\Entities\User
      */
     public function users()
@@ -99,7 +103,8 @@ class Company extends Model
     }
 
     /** 
-     * Relation
+     * Relation.
+     *
      * @return Education\Entities\Exam
      */
     public function exams()
@@ -107,13 +112,11 @@ class Company extends Model
         return $this->hasManyThrough(Exam::class, User::class);
     }
 
+    /***** End Relations *****/
 
-	/***** End Relations *****/
-
-	public function surveysNotExam()
+    public function surveysNotExam()
     {
-        $checks = $this->surveys->filter(function($survey)
-        {
+        $checks = $this->surveys->filter(function ($survey) {
             return $survey->type->isNotExam();
         });
 
@@ -122,8 +125,7 @@ class Company extends Model
 
     public function surveysNotExamAndAviable()
     {
-        $checks = $this->surveys->filter(function($survey)
-        {
+        $checks = $this->surveys->filter(function ($survey) {
             return $survey->type->isNotExam() && $survey->isAviable();
         });
 
@@ -132,40 +134,36 @@ class Company extends Model
 
     public function getImageAttribute()
     {
-        
     }
 
-	public function getLogoAttribute()
-	{
-		if(Storage::disk('local')->exists('companies/' . $this->id . '/logo.jpg'))
-        {
-            return '/storage/companies/'. $this->id .'/logo.jpg';
+    public function getLogoAttribute()
+    {
+        if (Storage::disk('local')->exists('companies/'.$this->id.'/logo.jpg')) {
+            return '/storage/companies/'.$this->id.'/logo.jpg';
         }
 
         return env('URL_COMPANY_LOGO_DEMO').'?'.time();
-	}
+    }
 
     public function uploadLogo($file)
     {
-        if($file)
-        {
-            $path = 'companies/' . $this->id . '/logo.jpg';   
-            Storage::disk('local')->put($path,  File::get($file));  
-            $this->url_logo = '/storage/' . $path;
-            
+        if ($file) {
+            $path = 'companies/'.$this->id.'/logo.jpg';
+            Storage::disk('local')->put($path,  File::get($file));
+            $this->url_logo = '/storage/'.$path;
+
             return true;
         }
 
         return false;
     }
 
-
     public function createDefaultData()
     {
-    	Area::create(array('name' =>  'Todas las áreas', 'company_id' => $this->id));
-    	ProtocolCategory::create(array('name' =>  'Todas los Protocolos', 'company_id' => $this->id));
-    	UserRole::create(array('name' =>  'Perfil general', 'company_id' => $this->id));
+        Area::create(array('name' => 'Todas las áreas', 'company_id' => $this->id));
+        ProtocolCategory::create(array('name' => 'Todas los Protocolos', 'company_id' => $this->id));
+        UserRole::create(array('name' => 'Perfil general', 'company_id' => $this->id));
 
-    	return true;
+        return true;
     }
 }

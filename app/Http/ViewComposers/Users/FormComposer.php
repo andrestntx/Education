@@ -1,14 +1,16 @@
-<?php namespace Education\Http\ViewComposers\Users;
+<?php
+
+namespace Education\Http\ViewComposers\Users;
 
 use Illuminate\Contracts\View\View;
 use Education\Entities\User;
- 
-class FormComposer {
+
+class FormComposer
+{
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
-     * @return void
+     * @param View $view
      */
     public function compose(View $view)
     {
@@ -16,10 +18,7 @@ class FormComposer {
         $areas = \Auth::user()->company->areas->lists('name', 'id')->all();
         $view->with([
             'roles' => $roles,
-            'areas' => $areas
+            'areas' => $areas,
         ]);
     }
- 
 }
-
-

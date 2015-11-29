@@ -1,13 +1,15 @@
-<?php namespace Education\Entities; 
+<?php
+
+namespace Education\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
 {
-	protected $table = 'answers';
-	protected $fillable = ['text', 'correct'];
-	public $timestamps = true;
-	public $increments = true;	
+    protected $table = 'answers';
+    protected $fillable = ['text', 'correct'];
+    public $timestamps = true;
+    public $increments = true;
     public $errors;
 
     public function question()
@@ -29,6 +31,4 @@ class Answer extends Model
     {
         return $query->where('correct', '<>', 1);
     }
-
-        
 }

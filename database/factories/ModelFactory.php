@@ -20,7 +20,7 @@ use Education\Entities\Category;
 $factory->define(Company::class, function ($faker) {
     return [
         'name' => $faker->company,
-        'type' => 'customer'
+        'type' => 'customer',
     ];
 });
 
@@ -37,7 +37,7 @@ $factory->define(User::class, function ($faker) {
         'email' => $faker->email,
         'password' => 123,
         'remember_token' => str_random(10),
-        'type' => 'registered'
+        'type' => 'registered',
     ];
 });
 
@@ -68,21 +68,20 @@ $factory->defineAs(User::class, 'superadmin', function ($faker) use ($factory) {
 $factory->define(Role::class, function ($faker) {
     return [
         'name' => $faker->unique()->name(),
-        'description' => $faker->unique()->sentence(6)
+        'description' => $faker->unique()->sentence(6),
     ];
 });
 
 $factory->define(Area::class, function ($faker) {
     return [
         'name' => $faker->unique()->name(),
-        'description' => $faker->unique()->sentence(6)
+        'description' => $faker->unique()->sentence(6),
     ];
 });
 
 $factory->define(Category::class, function ($faker) {
     return [
         'name' => $faker->unique()->name(),
-        'description' => $faker->unique()->sentence(6)
+        'description' => $faker->unique()->sentence(6),
     ];
 });
-

@@ -1,12 +1,15 @@
-<?php namespace Education\Http\Controllers\Dashboard\FormatsChecklists;
+<?php
 
-use Illuminate\Http\Request;
+namespace Education\Http\Controllers\Dashboard\FormatsChecklists;
+
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Formats\CreateRequest;
 use Education\Http\Requests\Formats\EditRequest;
 use Education\Entities\Format;
-use Auth, Storage, File, Flash;
+use Auth;
+use Storage;
+use Flash;
 
 class FormatsController extends Controller
 {
@@ -14,7 +17,7 @@ class FormatsController extends Controller
     private $form_data;
 
     private static $prefixRoute = 'formats.';
-    private static $prefixView  = 'dashboard.pages.companies.users.formats.';
+    private static $prefixView = 'dashboard.pages.companies.users.formats.';
 
     public function __construct()
     {
@@ -23,19 +26,15 @@ class FormatsController extends Controller
     }
 
     /**
-     * Create a new Company
-     *
-     * @return void
+     * Create a new Company.
      */
     public function newFormat()
     {
-        $this->format = new Format;
+        $this->format = new Format();
     }
 
     /**
-     * Find the Company or App Abort 404
-     *
-     * @return void
+     * Find the Company or App Abort 404.
      */
     public function findFormat(Route $route)
     {
@@ -43,13 +42,11 @@ class FormatsController extends Controller
     }
 
     /**
-     * Return the default Form View for Companies
-     *
-     * @return void
+     * Return the default Form View for Companies.
      */
     public function getFormView($viewName = 'form')
     {
-        return view(self::$prefixView . $viewName)
+        return view(self::$prefixView.$viewName)
             ->with(['form_data' => $this->form_data, 'format' => $this->format]);
     }
 
@@ -58,10 +55,9 @@ class FormatsController extends Controller
      *
      * @return Response
      */
-
     public function index()
     {
-        return view(self::$prefixView . 'list');
+        return view(self::$prefixView.'list');
     }
 
     /**
@@ -71,10 +67,10 @@ class FormatsController extends Controller
      */
     public function create()
     {
-        $this->form_data = ['route' => self::$prefixRoute . 'store', 'method' => 'POST'];
+        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST'];
+
         return $this->getFormView();
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -89,41 +85,44 @@ class FormatsController extends Controller
         $this->format->syncRelations($request->all());
         $this->format->save();
 
-        Flash::info('Formato ' . $this->format->name . ' Guardado correctamente');
+        Flash::info('Formato '.$this->format->name.' Guardado correctamente');
 
-        return redirect()->route(self::$prefixRoute . 'show', $this->format);
+        return redirect()->route(self::$prefixRoute.'show', $this->format);
     }
-
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function show($id)
     {
         $this->format->load('questions');
-        return view(self::$prefixView . 'show')->with('format', $this->format);
+
+        return view(self::$prefixView.'show')->with('format', $this->format);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function edit($id)
     {
-        $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->format->id], 'method' => 'PUT'];
+        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->format->id], 'method' => 'PUT'];
+
         return $this->getFormView();
     }
-
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function update(EditRequest $request, $id)
@@ -134,7 +133,6 @@ class FormatsController extends Controller
 
         Flash::info('Formato '.$this->format->name.' Actualizado correctamente');
 
-        return redirect()->route(self::$prefixRoute . 'show', $this->format);
+        return redirect()->route(self::$prefixRoute.'show', $this->format);
     }
-    
 }

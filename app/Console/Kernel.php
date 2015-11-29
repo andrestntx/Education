@@ -15,14 +15,13 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \Education\Console\Commands\Inspire::class,
         \Education\Console\Commands\Birthday::class,
-        \Education\Console\Commands\UpdatePollingStations::class
+        \Education\Console\Commands\UpdatePollingStations::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      */
     protected function schedule(Schedule $schedule)
     {
@@ -34,6 +33,5 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('command:birthday')
             ->dailyAt('09:30');
-
     }
 }

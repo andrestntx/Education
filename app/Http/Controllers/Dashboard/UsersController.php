@@ -1,16 +1,18 @@
-<?php namespace Education\Http\Controllers\Dashboard;
+<?php
 
-use Illuminate\Http\Request;
+namespace Education\Http\Controllers\Dashboard;
+
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Users\CreateRequest;
 use Education\Http\Requests\Users\EditRequest;
 use Education\Http\Requests\Users\ProfileRequest;
 use Education\Entities\User;
-use Flash, Alert, Auth;
+use Flash;
+use Auth;
 
-class UsersController extends Controller {
-
+class UsersController extends Controller
+{
     private $user;
     private $form_data;
     private static $prefixRoute = 'users.';
@@ -18,66 +20,60 @@ class UsersController extends Controller {
 
     public function __construct()
     {
-        $this->beforeFilter('@newUser', ['only' => ['store','create']]);
+        $this->beforeFilter('@newUser', ['only' => ['store', 'create']]);
         $this->beforeFilter('@findUser', ['only' => ['show', 'edit', 'update', 'destroy', 'scores']]);
     }
 
     /**
-     * Find a specified resource
-     *
+     * Find a specified resource.
      */
     public function findUser(Route $route)
     {
         $this->user = User::findOrFail($route->getParameter('users'));
     }
     /**
-     * Create a new User instance
-     *
+     * Create a new User instance.
      */
     public function newUser()
     {
-        $this->user = new User;
+        $this->user = new User();
     }
 
     public function getViewForm($viewName = 'form')
     {
-        return view(self::$prefixView . $viewName)
+        return view(self::$prefixView.$viewName)
             ->with(['user' => $this->user, 'form_data' => $this->form_data]);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        return view(self::$prefixView.'list');
+    }
 
     /**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST', 'files' => true];
 
-	public function index()
-	{
-		return view(self::$prefixView . 'list');		
-	}
-
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-        $this->form_data = ['route' => self::$prefixRoute .'store', 'method' => 'POST', 'files' => true];
         return $this->getViewForm();
-	}
+    }
 
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-
-	public function store(CreateRequest $request)
-	{
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store(CreateRequest $request)
+    {
         $this->user->fill($request->all());
         \Auth::user()->company->users()->save($this->user);
         $this->user->syncRelations($request->all());
@@ -85,32 +81,32 @@ class UsersController extends Controller {
 
         Flash::info('Usuario '.$this->user->name.' Guardado correctamente');
 
-        return redirect()->route(self::$prefixRoute .'index');
-	}
+        return redirect()->route(self::$prefixRoute.'index');
+    }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function edit($id)
+    {
+        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->user->id], 'method' => 'PUT', 'files' => true];
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-        $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->user->id], 'method' => 'PUT', 'files' => true];
         return $this->getViewForm('form');
-	}
+    }
 
-
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update(EditRequest $request)
-	{
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function update(EditRequest $request)
+    {
         $this->user->fill($request->all());
         $this->user->save();
         $this->user->syncRelations($request->all());
@@ -118,16 +114,16 @@ class UsersController extends Controller {
 
         Flash::info('Usuario '.$this->user->name.' Actualizado correctamente');
 
-        return redirect()->route(self::$prefixRoute . 'index');
-	}
+        return redirect()->route(self::$prefixRoute.'index');
+    }
 
     public function scores($id)
     {
         return view()->make('dashboard.pages.companies.users.scores')->with('user', $this->user);
     }
 
-	public function profile(ProfileRequest $request)
-	{
+    public function profile(ProfileRequest $request)
+    {
         $this->user = Auth::user();
         $this->user->fill($request->all());
         $this->user->save();
@@ -135,7 +131,6 @@ class UsersController extends Controller {
 
         Flash::info('Pefil actualizado correctamente');
 
-        return redirect()->route(self::$prefixRoute . 'index');
-
-	}
+        return redirect()->route(self::$prefixRoute.'index');
+    }
 }

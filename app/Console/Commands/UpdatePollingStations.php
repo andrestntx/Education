@@ -24,8 +24,6 @@ class UpdatePollingStations extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -38,39 +36,32 @@ class UpdatePollingStations extends Command
      * @return mixed
      */
     public function handle()
-    {       
+    {
         $all = ($this->argument('all') === 'true');
 
-        if($all)
-        {
-            $voters = Voter::all();    
-        }
-        else
-        {
+        if ($all) {
+            $voters = Voter::all();
+        } else {
             $voters = Voter::whereNull('polling_station_id')
                 ->take($this->argument('take'))
-                ->get();    
-        }   
-            
+                ->get();
+        }
+
         $this->output->progressStart(count($voters));
-        
+
         Log::info('Inicio de Actualización de puestos de votación');
 
         foreach ($voters as $voter) {
-            
             $result = $voter->hasPollingStation($all);
-            if($result['status'])
-            {
+            if ($result['status']) {
                 $pollingStation = $result['polling_station'];
                 $voter->polling_station_id = $pollingStation->id;
                 $voter->table_number = $result['table_number'];
                 $voter->save();
 
-                Log::info("Votante CC: " . $voter->doc . ' - ' . $voter->name . ' actualizado puesto de votación ' . $pollingStation->name);
-            }
-            else
-            {
-                Log::info("Votante CC: " . $voter->doc . ' - ' . $voter->name . ' ' . $result['message']);
+                Log::info('Votante CC: '.$voter->doc.' - '.$voter->name.' actualizado puesto de votación '.$pollingStation->name);
+            } else {
+                Log::info('Votante CC: '.$voter->doc.' - '.$voter->name.' '.$result['message']);
             }
 
             $this->output->progressAdvance();

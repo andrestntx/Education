@@ -1,4 +1,6 @@
-<?php namespace Education\Http\Controllers\Dashboard\FormatsChecklists;
+<?php
+
+namespace Education\Http\Controllers\Dashboard\FormatsChecklists;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -17,7 +19,7 @@ class FormatQuestionsController extends Controller
     private $form_data;
 
     private static $prefixRoute = 'formats.questions.';
-    private static $prefixView  = 'dashboard.pages.companies.users.formats.questions.';
+    private static $prefixView = 'dashboard.pages.companies.users.formats.questions.';
 
     public function __construct()
     {
@@ -27,19 +29,15 @@ class FormatQuestionsController extends Controller
     }
 
     /**
-     * Create a new Format
-     *
-     * @return void
+     * Create a new Format.
      */
     public function newQuestion()
     {
-        $this->question = new Question;
+        $this->question = new Question();
     }
 
     /**
-     * Find the Format or App Abort 404
-     *
-     * @return void
+     * Find the Format or App Abort 404.
      */
     public function findFormat(Route $route)
     {
@@ -47,9 +45,7 @@ class FormatQuestionsController extends Controller
     }
 
     /**
-     * Find the Question of Format or App Abort 404
-     *
-     * @return void
+     * Find the Question of Format or App Abort 404.
      */
     public function findQuestion(Route $route)
     {
@@ -57,15 +53,13 @@ class FormatQuestionsController extends Controller
     }
 
     /**
-     * Return the default Form View for Companies
-     *
-     * @return void
+     * Return the default Form View for Companies.
      */
     public function getFormView($number_answers = 2, $viewName = 'form')
     {
-        return view(self::$prefixView . $viewName)
+        return view(self::$prefixView.$viewName)
             ->with(['form_data' => $this->form_data, 'format' => $this->format, 'question' => $this->question,
-                'number_answers' => $number_answers
+                'number_answers' => $number_answers,
             ]);
     }
 
@@ -74,12 +68,10 @@ class FormatQuestionsController extends Controller
      *
      * @return Response
      */
-
     public function index($format_id)
     {
         return redirect()->route('formats.show', $format_id);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -88,11 +80,10 @@ class FormatQuestionsController extends Controller
      */
     public function create(Request $request, $format_id)
     {
-        $this->form_data = ['route' => [self::$prefixRoute . 'store', $this->format->id], 'method' => 'POST'];
+        $this->form_data = ['route' => [self::$prefixRoute.'store', $this->format->id], 'method' => 'POST'];
+
         return $this->getFormView($request->get('answers'));
-
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -107,13 +98,12 @@ class FormatQuestionsController extends Controller
         $answers = $request->get('answers');
         $newAnswers = [];
 
-        foreach($answers as $answer)
-        {
+        foreach ($answers as $answer) {
             array_push($newAnswers, new Answer($answer));
         }
 
         $this->question->answers()->saveMany($newAnswers);
-        
+
         Flash::info('Pregunta  Guardada correctamente');
 
         return redirect()->route('formats.show', $this->format->id);
@@ -122,20 +112,22 @@ class FormatQuestionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function edit($format_id, $question_id)
     {
-        $this->form_data = ['route' => [self::$prefixRoute . 'update', $this->format->id, $this->question->id], 'method' => 'PUT'];
+        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->format->id, $this->question->id], 'method' => 'PUT'];
+
         return $this->getFormView();
     }
-
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function update(EditRequest $request, $format_id, $question_id)
@@ -145,8 +137,7 @@ class FormatQuestionsController extends Controller
 
         $answers = $request->get('answers');
 
-        foreach ($answers as $id => $answer)
-        {
+        foreach ($answers as $id => $answer) {
             Answer::findOrFail($id)->fill($answer)->save();
         }
 

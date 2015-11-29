@@ -1,25 +1,20 @@
 <?php
 
 use \Illuminate\Database\Seeder;
-use Laravel\Libraries\Campaing;
 
-class DatabaseSeeder extends Seeder {
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run()
+    {
+        Eloquent::unguard();
 
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
-	public function run()
-	{
-		Eloquent::unguard();
-
-		$this->call('CompaniesTableSeeder'); // Static
-		
-	}
-
+        $this->call('CompaniesTableSeeder'); // Static
+    }
 }
 
-/**
+/*
 * 
 */

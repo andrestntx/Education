@@ -1,22 +1,22 @@
-<?php namespace Education\Http\ViewComposers\Areas;
+<?php
 
-use Education\Entities\Area;
+namespace Education\Http\ViewComposers\Areas;
+
 use Illuminate\Contracts\View\View;
 
-class ListComposer {
+class ListComposer
+{
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
-     * @return void
+     * @param View $view
      */
     public function compose(View $view)
-    {        
+    {
         $areas = \Auth::user()->company->areas()->orderBy('updated_at', 'desc')->paginate(20);
 
         $view->with([
-            'areas' => $areas
+            'areas' => $areas,
         ]);
     }
- 
 }
