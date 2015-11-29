@@ -21,6 +21,7 @@ class MyFormatChecklistsController extends Controller
 
     public function __construct()
     {
+        dd('construyendo prueba');
         $this->beforeFilter('@findFormat', ['except' => ['allMyFormats']]);
         $this->beforeFilter('@validateChecklist', ['only' => ['create']]);
         $this->beforeFilter('@newChecklist', ['only' => ['create', 'store']]);
