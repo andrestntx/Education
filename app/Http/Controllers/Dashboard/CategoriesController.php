@@ -4,6 +4,7 @@ namespace Education\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Database\QueryException;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Categories\CreateRequest;
 use Education\Http\Requests\Categories\EditRequest;
@@ -21,7 +22,7 @@ class CategoriesController extends Controller
     public function __construct()
     {
         $this->beforeFilter('@newCategory', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findCategory', ['only' => ['show', 'edit', 'update']]);
+        $this->beforeFilter('@findCategory', ['only' => ['show', 'edit', 'update', 'destroy']]);
     }
 
     /**
@@ -138,16 +139,18 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        $this->category->delete();
+        $data = [
+            'success' => true,
+            'message' => 'Categoria eliminada correctamente'
+        ];   
 
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'msg' => 'Categoría "'.$this->category->name.'" eliminada',
-                'id' => $this->category->id,
-            ]);
-        } else {
-            return redirect()->route(self::$prefixRoute.'index');
+        try {
+            $this->category->delete(); 
+        } catch (QueryException $e) {
+            $data['success'] = false;
+            $data['message'] = 'La Categoria no se puede eliminar, ya que contiene almenos un Protocolo';
         }
+
+        return response()->json($data);
     }
 }

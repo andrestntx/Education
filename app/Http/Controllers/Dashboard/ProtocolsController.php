@@ -4,6 +4,7 @@ namespace Education\Http\Controllers\Dashboard;
 
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
 use Education\Http\Requests\Protocols\CreateRequest;
 use Education\Http\Requests\Protocols\EditRequest;
 use Education\Entities\Protocol;
@@ -23,7 +24,7 @@ class ProtocolsController extends Controller
     public function __construct()
     {
         $this->beforeFilter('@newProtocol', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findProtocol', ['only' => ['show', 'edit', 'update']]);
+        $this->beforeFilter('@findProtocol', ['only' => ['show', 'edit', 'update', 'destroy']]);
     }
 
     /**
@@ -146,5 +147,35 @@ class ProtocolsController extends Controller
         Flash::info('Protocolo '.$this->protocol->name.' Actualizado correctamente');
 
         return redirect()->route(self::$prefixRoute.'show', $this->protocol);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        $data = [
+            'success' => true,
+            'message' => 'Protocolo eliminado correctamente'
+        ];   
+
+        if($this->protocol->exams()->count() == 0){
+            try {
+                $this->protocol->detachAndDelete();
+            } catch (QueryException $e) {
+                $data['success'] = false;
+                $data['message'] = 'El Protocolo no se puede eliminar';
+            }    
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = 'El Protocolo no se puede eliminar, ya que tiene examenes asociados';
+        }
+
+        return response()->json($data);
     }
 }

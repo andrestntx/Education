@@ -45,7 +45,7 @@ var FormsValidation = function() {
                         minlength: 2
                     },
                     'password_confirmation': {
-                        equalTo: '#password'
+                        //equalTo: '#password'
                     },
                     'roles[]': {
                         required: true,

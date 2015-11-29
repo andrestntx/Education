@@ -17,7 +17,7 @@ class UserType
      */
     public function handle($request, Closure $next, $type)
     {
-        if (Auth::user()->type != $type) {
+        if (Auth::user()->type != $type && ! Auth::user()->isSuperadmin()) {
             return redirect()->to('/');
         }
 

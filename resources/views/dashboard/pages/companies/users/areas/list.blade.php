@@ -17,18 +17,21 @@
                         <th title="Nombre del Area">Nombre</th>
                         <th title="Descripción del Area">Descripción</th>
                         <th title="Ultima actulaización del Area">Actualización</th>
-                        <th class="text-center" style="width: 75px;"><i class="fa fa-flash"></i></th>
+                        <th class="text-center" style="width: 100px;"><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($areas as $area)
-                        <tr>
+                        <tr id="{{ $area->id }}">
                             <td><strong>{{$area->name}}</strong></td>
                             <td>{{$area->description}}</td>
                             <td>{{ $area->updated_at_hummans }}</td>
                             <td class="text-center">
-                                <a href="{{route('areas.edit', $area->id)}}" data-toggle="tooltip" title="Editar Area" class="btn btn-effect-ripple btn-warning">
+                                <a href="{{route('areas.edit', $area->id)}}" data-toggle="tooltip" title="Editar Area" class="btn btn-sm btn-effect-ripple btn-warning">
                                     <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="#" onclick="AppServices.postDeleteArea(this)" data-entity-id="{{ $area->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar Área" class="btn btn-sm btn-effect-ripple btn-danger">
+                                    <i class="gi gi-remove_2"></i>
                                 </a>
                             </td>
                         </tr>

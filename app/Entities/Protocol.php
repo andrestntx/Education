@@ -234,4 +234,12 @@ class Protocol extends Model
 
         return false;
     }
+
+    public function detachAndDelete()
+    {
+        $this->areas()->detach();
+        $this->categories()->detach();
+        $this->roles()->detach();
+        $this->delete(); 
+    }
 }

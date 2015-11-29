@@ -15,18 +15,21 @@
                         <th title="Nombre del Perfil">Nombre</th>
                         <th title="Descripción del Perfil">Descripción</th>
                         <th title="Ultima actulaización del Perfil">Actualización</th>
-                        <th class="text-center" style="width: 75px;"><i class="fa fa-flash"></i></th>
+                        <th class="text-center" style="min-width: 100px;"><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($roles as $role)
-                        <tr>
+                        <tr id="{{ $role->id }}">
                             <td><strong>{{$role->name}}</strong></td>
                             <td>{{$role->description}}</td>
                             <td>{{ $role->updated_at_hummans }}</td>
                             <td class="text-center">
-                                <a href="{{route('roles.edit', $role->id)}}" data-toggle="tooltip" title="Editar Perfil" class="btn btn-effect-ripple btn-warning">
+                                <a href="{{route('roles.edit', $role->id)}}" data-toggle="tooltip" title="Editar Perfil" class="btn btn-sm btn-effect-ripple btn-warning">
                                     <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="#" onclick="AppServices.postDeleteRole(this)" data-entity-id="{{ $role->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar Perfil" class="btn btn-sm btn-effect-ripple btn-danger">
+                                    <i class="gi gi-remove_2"></i>
                                 </a>
                             </td>
                         </tr>
@@ -38,6 +41,7 @@
     </div>
 
 @stop
-@section('js_aditional')
 
+@section('js_aditional')
+    
 @stop

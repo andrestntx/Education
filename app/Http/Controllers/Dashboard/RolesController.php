@@ -4,11 +4,13 @@ namespace Education\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Database\QueryException;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Roles\CreateRequest;
 use Education\Http\Requests\Roles\EditRequest;
 use Education\Entities\Role;
 use Flash;
+
 
 class RolesController extends Controller
 {
@@ -134,16 +136,19 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
-        $this->role->delete();
+        $data = [
+            'success' => true,
+            'message' => 'Perfil eliminado correctamente'
+        ];   
 
-        if (Request::ajax()) {
-            return Response::json(array(
-                'success' => true,
-                'msg' => 'Perfil "'.$this->role->name.'" eliminado',
-                'id' => $this->role->id,
-            ));
-        } else {
-            return redirect()->route(self::$prefixRoute.'index');
+        try {
+            $this->role->delete(); 
+        } catch (QueryException $e) {
+            $data['success'] = false;
+            $data['message'] = 'El Perfil no se puede eliminar, ya que está asociado a almenos a un Usuario o Protocolo';
         }
+
+        return response()->json($data);
+        
     }
 }

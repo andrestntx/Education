@@ -4,6 +4,7 @@ namespace Education\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Database\QueryException;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Areas\CreateRequest;
 use Education\Http\Requests\Areas\EditRequest;
@@ -134,16 +135,18 @@ class AreasController extends Controller
      */
     public function destroy($id)
     {
-        $this->area->delete();
+        $data = [
+            'success' => true,
+            'message' => 'Área eliminada correctamente'
+        ];   
 
-        if (Request::ajax()) {
-            return Response::json(array(
-                'success' => true,
-                'msg' => 'Área "'.$this->area->name.'" eliminada',
-                'id' => $this->area->id,
-            ));
-        } else {
-            return Redirect::route('areas.index');
+        try {
+            $this->area->delete(); 
+        } catch (QueryException $e) {
+            $data['success'] = false;
+            $data['message'] = 'El Área no se puede eliminar, ya que está asociado a almenos a un Usuario o Protocolo';
         }
+
+        return response()->json($data);
     }
 }

@@ -3,6 +3,7 @@
 namespace Education\Http\Controllers\Dashboard;
 
 use Illuminate\Routing\Route;
+use Illuminate\Database\QueryException;
 use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Users\CreateRequest;
 use Education\Http\Requests\Users\EditRequest;
@@ -115,6 +116,36 @@ class UsersController extends Controller
         Flash::info('Usuario '.$this->user->name.' Actualizado correctamente');
 
         return redirect()->route(self::$prefixRoute.'index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        $data = [
+            'success' => true,
+            'message' => 'Usuario eliminado correctamente'
+        ];   
+
+        if($this->user->canDestroy()){
+            try {
+                $this->user->detachAndDelete();
+            } catch (QueryException $e) {
+                $data['success'] = false;
+                $data['message'] = 'El Usuario no se puede eliminar';
+            }    
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = 'El Usuario no se puede eliminar, ya que tiene examenes asociados';
+        }
+
+        return response()->json($data);
     }
 
     public function scores($id)

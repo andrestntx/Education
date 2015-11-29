@@ -33,6 +33,7 @@
 @stop
 
 @section('js_aditional')
+  {{-- 
   <script type="text/javascript">
     $('.file').fileinput({
       initialPreview: "<img src='{!!url($user->image)!!}' class='file-preview-image' alt='Foto de Perfil' title='Foto de Perfil' >",
@@ -42,8 +43,9 @@
       maxFileCount: 1, 
     }); 
   </script>
-
-  {!! Html::script('assets/js/plugins/forms/file-validator.js') !!}
+   
+  Html::script('assets/js/plugins/forms/file-validator.js') 
+  --}}
 
   <!-- Load and execute javascript code used only in this page -->
   {!! Html::script('assets/js/validations/users.js') !!}

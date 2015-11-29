@@ -76,6 +76,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $query->whereType('registered');
     }
 
+    public function canDestroy()
+    {
+        if($this->protocolsCreated()->count() + $this->formatsCreated()->count() + 
+            $this->categoriesCreated()->count() + $this->exams()->count() == 0){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isSuperadmin()
+    {
+        return $this->isType('superadmin');
+    }
+
     public function isAdmin()
     {
         return $this->isType('admin');
@@ -231,5 +246,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         return false;
+    }
+
+    public function detachAndDelete()
+    {
+        $this->areas()->detach();
+        $this->roles()->detach();
+        $this->delete(); 
     }
 }

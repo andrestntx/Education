@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                     @foreach($users as $user)
-                        <tr>
+                        <tr id="{{ $user->id }}">
                             <td class="text-center">{!! Html::image($user->image, 'a picture', array('class' => 'thumb', 'style' => 'width:50px;')) !!}</td>
                             <td>{{ $user->username }}</td>
                             <td><strong>{{ $user->name }}</strong></td>
@@ -32,6 +32,9 @@
                             <td class="text-center">
                                 <a href="{{route('companies.users.edit', array($company->id, $user->id))}}" data-toggle="tooltip" title="Editar Administrador" class="btn btn-effect-ripple btn-warning btn-sm">
                                     <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="#" onclick="AppServices.postDeleteUser(this)" data-entity-id="{{ $user->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar Admin" class="btn btn-sm btn-effect-ripple btn-danger">
+                                    <i class="gi gi-remove_2"></i>
                                 </a>
                             </td>
                         </tr>
