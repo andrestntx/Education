@@ -71,6 +71,8 @@ class MyFormatChecklistsController extends Controller
 
     public function index($format_id)
     {
+        dd('prueba');
+
         $checklists = $this->format->getUserChecklists(Auth::user());
 
         return view(self::$prefixView.'checklists.list')
