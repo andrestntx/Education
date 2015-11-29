@@ -117,7 +117,7 @@ class MyFormatChecklistsController extends Controller
 
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
-        
-        return $pdf->download('invoice.pdf');
+
+        dd($pdf->download('invoice.pdf'));
     }
 }
