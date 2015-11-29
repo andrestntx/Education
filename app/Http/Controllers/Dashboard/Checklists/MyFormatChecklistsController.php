@@ -109,13 +109,13 @@ class MyFormatChecklistsController extends Controller
 
     public function download($format_id, $checklist_id)
     {
-        dd('prueba descarga');
-        
         $this->format->load('questions');
 
         $view = view()->make(self::$prefixView.'checklists.download')
             ->with(['format' => $this->format, 'checklist' => $this->checklist])
             ->render();
+
+        dd('prueba descarga');
 
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
