@@ -116,10 +116,10 @@ class MyFormatChecklistsController extends Controller
             ->render();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
+        $pdf->loadHTML($view)->save('storage/checklists/' . $this->checklist->id . '.pdf');
 
-        dd($pdf->save('storage/checklists/' . $this->checklist->id . '.pdf'));
-
+        return 'respuesta';
+        
         //->stream('download.pdf');
         //dd($pdf->download('invoice.pdf'));
     }
