@@ -109,6 +109,8 @@ class MyFormatChecklistsController extends Controller
 
     public function download($format_id, $checklist_id)
     {
+        dd('prueba descarga');
+        
         $this->format->load('questions');
 
         $view = view()->make(self::$prefixView.'checklists.download')
