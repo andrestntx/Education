@@ -1,13 +1,13 @@
 @extends('layout')
 
 @section('meta')
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 @endsection
 
 @section('css_files')
-	<style type="text/css">
-	
-	.clearfix:after {
+  <style type="text/css">
+  
+  .clearfix:after {
   content: "";
   display: table;
   clear: both;
@@ -53,7 +53,7 @@ h1 {
   font-weight: normal;
   text-align: center;
   margin: 0 0 20px 0;
-  
+  background-image: url(/images/dimension.png);
 }
 
 #project {
@@ -150,13 +150,12 @@ footer {
   text-align: center;
 }
 
-	</style>
+  </style>
 
 @endsection
 
 @section('content_body')
-	
-	<header class="clearfix">
+  <header class="clearfix">
       <div id="logo">
         <img src="{{ URL::to($checklist->user->company->logo) }}">
       </div>
@@ -179,19 +178,19 @@ footer {
       <table>
         <thead>
           <tr>
-          	<th class="service">#</th>
+            <th class="service">#</th>
             <th class="service">PREGUNTA</th>
             <th class="desc">RESPUESTA</th>
           </tr>
         </thead>
         <tbody>
-        	@foreach($checklist->answers as $key => $answer)
-				<tr>
-					<td class="service"> {{ $key + 1 }} </td>
-					<td class="service">{{ $answer->question->text }}</td>
-					<td class="desc">{{ $answer->text }}</td>
-				</tr>
-			@endforeach
+          @foreach($checklist->answers as $key => $answer)
+        <tr>
+          <td class="service"> {{ $key + 1 }} </td>
+          <td class="service">{{ $answer->question->text }}</td>
+          <td class="desc">{{ $answer->text }}</td>
+        </tr>
+      @endforeach
         </tbody>
       </table>
       <div id="notices">
