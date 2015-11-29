@@ -115,10 +115,10 @@ class MyFormatChecklistsController extends Controller
             ->with(['format' => $this->format, 'checklist' => $this->checklist])
             ->render();
 
-        dd('prueba descarga');
-
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
+
+        dd('prueba descarga 2');
 
         return $pdf->stream('checklist');
     }
