@@ -99,7 +99,9 @@ class FormatsController extends Controller
      */
     public function show($id)
     {
-        $this->format->load('questions');
+        $this->format->load(['questions' => function ($query) {
+            $query->orderBy('order', 'asc');
+        }]);
 
         return view(self::$prefixView.'show')->with('format', $this->format);
     }

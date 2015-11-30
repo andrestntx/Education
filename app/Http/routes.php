@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
         Route::group(['namespace' => 'FormatsChecklists'], function () {
             Route::resource('formats', 'FormatsController');
             Route::resource('formats.questions', 'FormatQuestionsController');
-
+            Route::post('formats/{formats}/order', ['as' => 'formats.order', 'uses' => 'FormatQuestionsController@order']);
         });
 
         /*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));*/

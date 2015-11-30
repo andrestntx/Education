@@ -105,4 +105,9 @@ class Format extends Model
             $this->roles()->sync($data['roles']);
         }
     }
+
+    public function orderNewQuestion()
+    {
+        return $this->questions()->count() + 1;
+    }
 }

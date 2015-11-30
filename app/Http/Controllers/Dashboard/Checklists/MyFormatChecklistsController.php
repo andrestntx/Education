@@ -25,6 +25,7 @@ class MyFormatChecklistsController extends Controller
         $this->beforeFilter('@validateChecklist', ['only' => ['create']]);
         $this->beforeFilter('@newChecklist', ['only' => ['create', 'store']]);
         $this->beforeFilter('@findChecklist', ['only' => ['show', 'download']]);
+        $this->beforeFilter('@loadQuestions', ['only' => ['create']]);
     }
 
     /**
@@ -33,6 +34,13 @@ class MyFormatChecklistsController extends Controller
     public function findFormat(Route $route)
     {
         $this->format = Format::findOrFail($route->getParameter('myformats'));
+    }
+
+    public function loadQuestions()
+    {
+        $this->format->load(['questions' => function ($query) {
+            $query->orderBy('order', 'asc');
+        }]);
     }
 
     /**
@@ -62,6 +70,10 @@ class MyFormatChecklistsController extends Controller
     {
         $this->checklist = Checklist::findOrFail($route->getParameter('checklists'));
         $this->checklist->load('answers.question');
+
+        $this->checklist->answers = $this->checklist->answers->sortBy(function ($answer, $key) {
+            return $answer->question->order;
+        });
     }
 
     public function allMyFormats()
@@ -79,7 +91,7 @@ class MyFormatChecklistsController extends Controller
 
     public function create($format_id)
     {
-        $this->format->load('questions');
+
         $form_data = ['route' => ['myformats.checklists.store', $this->format], 'method' => 'POST'];
 
         return view(self::$prefixView.'checklists.form', compact('form_data'))
@@ -101,16 +113,12 @@ class MyFormatChecklistsController extends Controller
 
     public function show($format_id, $checklist_id)
     {
-        $this->format->load('questions');
-
         return view(self::$prefixView.'checklists.show')
             ->with(['checklist' => $this->checklist, 'format' => $this->format]);
     }
 
     public function download($format_id, $checklist_id)
     {
-        $this->format->load('questions');
-
         $view = view()->make(self::$prefixView.'checklists.download')
             ->with(['format' => $this->format, 'checklist' => $this->checklist])
             ->render();

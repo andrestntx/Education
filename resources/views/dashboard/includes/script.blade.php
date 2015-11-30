@@ -2,6 +2,8 @@
 
 {!! Html::script('assets/js/vendor/jquery-2.1.3.min.js') !!}
 <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+{!! Html::script('//code.jquery.com/ui/1.11.4/jquery-ui.js') !!}
+
 
 {!! Html::script('assets/js/vendor/bootstrap.min.js') !!}
 {!! Html::script('assets/js/app.min.js') !!}

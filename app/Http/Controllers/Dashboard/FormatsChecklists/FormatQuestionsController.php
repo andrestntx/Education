@@ -93,6 +93,7 @@ class FormatQuestionsController extends Controller
     public function store(CreateRequest $request, $format_id)
     {
         $this->question->fill($request->all());
+        $this->question->order = $this->format->orderNewQuestion();
         $this->format->questions()->save($this->question);
 
         $answers = $request->get('answers');
@@ -144,5 +145,18 @@ class FormatQuestionsController extends Controller
         Flash::info('Pregunta  Actualizada correctamente');
 
         return redirect()->route('formats.show', $this->format->id);
+    }
+
+    public function order(Request $request)
+    {
+        $questions = $request->get('questions');
+
+        foreach ($questions as $order => $question_id) {
+            $question = $this->format->questions()->findOrFail($question_id);
+            $question->order = $order + 1;
+            $question->save();
+        }
+
+        return ['success' => true];
     }
 }

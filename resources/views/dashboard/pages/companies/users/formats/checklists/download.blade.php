@@ -183,9 +183,9 @@ footer {
           </tr>
         </thead>
         <tbody>
-          @foreach($checklist->answers as $key => $answer)
+          @foreach($checklist->answers as $answer)
         <tr>
-          <td class="service"> {{ $key + 1 }} </td>
+          <td class="service"> {{ $answer->question->order }} </td>
           <td class="service">{{ $answer->question->text }}</td>
           <td class="desc">{{ $answer->text }}</td>
         </tr>
