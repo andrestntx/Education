@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class Area extends Model
 {
-    protected $fillable = array('name', 'description');
+    protected $fillable = ['name', 'description'];
     public $timestamps = true;
     public $increments = true;
 

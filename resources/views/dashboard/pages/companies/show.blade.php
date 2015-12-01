@@ -65,6 +65,16 @@
             ])
         </div>
 
+        <div class="col-sm-6 col-lg-3">
+            @include('dashboard.extends.widget',[
+                'widget_url'    => '/protocol-generator', 
+                'widget_title'  => 'Generador de Protocolos', 
+                'widget_count'  => 1, 
+                'widget_icon'   => 'hi hi-edit',
+                'widget_themed' => 'themed-background-success'
+            ])
+        </div>
+
     </div>
 @stop
 

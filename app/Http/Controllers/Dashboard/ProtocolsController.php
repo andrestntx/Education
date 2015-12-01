@@ -178,4 +178,5 @@ class ProtocolsController extends Controller
 
         return response()->json($data);
     }
+
 }

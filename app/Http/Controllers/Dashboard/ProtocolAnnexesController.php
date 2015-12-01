@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Education\Entities\Protocol;
-use Storage;
-use File;
-use Flash;
+use Storage, File, Flash;
 
 class ProtocolAnnexesController extends Controller
 {

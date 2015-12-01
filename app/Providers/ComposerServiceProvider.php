@@ -26,6 +26,10 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\Formats\ListComposer' => 'dashboard.pages.companies.users.formats.list',
             'Education\Http\ViewComposers\Formats\FormComposer' => 'dashboard.pages.companies.users.formats.form',
             'Education\Http\ViewComposers\Formats\MyFormatsComposer' => 'dashboard.pages.companies.users.formats.myformats',
+            'Education\Http\ViewComposers\Protocols\Generator\ListComposer' => 'dashboard.pages.companies.users.protocols.generator.config',
+            'Education\Http\ViewComposers\GeneratedProtocols\ListComposer' => 'dashboard.pages.companies.users.protocols.generator.list',
+            'Education\Http\ViewComposers\GeneratedProtocols\FormComposer' => 'dashboard.pages.companies.users.protocols.generator.form'
+
 
         ]);
     }

@@ -102,6 +102,11 @@ class Company extends Model
         return $this->hasManyThrough(Format::class, User::class);
     }
 
+    public function protocolGeneratorQuestions ()
+    {
+        return $this->morphMany(Question::class, 'document');
+    }
+
     /** 
      * Relation.
      *
@@ -165,5 +170,10 @@ class Company extends Model
         UserRole::create(array('name' => 'Perfil general', 'company_id' => $this->id));
 
         return true;
+    }
+
+    public function orderNewQuestion()
+    {
+        return $this->protocolGeneratorQuestions()->count() + 1;
     }
 }

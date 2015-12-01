@@ -5,8 +5,11 @@ namespace Education\Http\Controllers\Auth;
 use Education\Entities\User;
 use Validator;
 use Education\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -22,9 +25,11 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers;
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     public $redirectPath = '/';
+    private $maxLoginAttempts = 1;
+    private $lockoutTime = 10;
 
     /**
      * Create a new authentication controller instance.

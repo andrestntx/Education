@@ -37,6 +37,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
         Route::resource('protocols.links', 'ProtocolLinksController');
         Route::resource('protocols.annexes', 'ProtocolAnnexesController');
 
+        Route::resource('protocol-generator', 'ProtocolGeneratorQuestionsController');
+        Route::post('protocol-generator/order', ['as' => 'protocol-generator.order', 'uses' => 'ProtocolGeneratorQuestionsController@order']);
+
         Route::group(['namespace' => 'FormatsChecklists'], function () {
             Route::resource('formats', 'FormatsController');
             Route::resource('formats.questions', 'FormatQuestionsController');
@@ -60,4 +63,5 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
 
     Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);
     Route::put('profile', ['as' => 'profile', 'uses' => 'UsersController@profile']);
+    Route::resource('generated-protocols', 'GeneratedProtocolsController');
 });

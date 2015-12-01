@@ -217,3 +217,22 @@ Breadcrumbs::register('myformats.checklists.apply', function ($breadcrumbs, $for
     $breadcrumbs->parent('myformats.checklists', $format);
     $breadcrumbs->push('Aplicar', route('myformats.checklists.create', $format));
 });
+
+// Home > My Generated Protocols 
+Breadcrumbs::register('generated-protocols', function ($breadcrumbs) {
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push('Protocolos Generados', route('generated-protocols.index'));
+});
+
+// Home > My Generated Protocols > Protocol
+Breadcrumbs::register('generated-protocols.protocol', function ($breadcrumbs, $protocol) {
+    $breadcrumbs->parent('generated-protocols');
+
+    if ($protocol->exists) {
+        $breadcrumbs->push('Editar Protocolo', route('generated-protocols.edit', $protocol->id));
+    } else {
+        $breadcrumbs->push('Generar Protocolo', route('generated-protocols.create'));
+    }
+});
+
+

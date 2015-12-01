@@ -28,7 +28,19 @@
 
 <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
 
-<link rel="stylesheet" href="{{url('assets/css/themes.css')}}">
+<link rel="stylesheet" href="/assets/css/themes.css">
 
 <link rel="stylesheet" href="/assets/css/themes/system.css">
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
 <!-- END Stylesheets -->
+
+<style type="text/css">
+	.editable-container.editable-inline {
+	    display: inline-block;
+	    vertical-align: middle;
+	    width: 100% !important;
+	    zoom: 1;
+	}
+</style>
+

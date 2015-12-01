@@ -165,7 +165,8 @@ return array(
     'roles'         => 'perfiles',
     'url_photo'     => 'foto de perfil',
     'applied'       => 'Aplicado',
-    'observation'   => 'Observaciones'
+    'observation'   => 'Observaciones',
+    'title'         => 'titulo'
 ),
 
 'translate' => array(
