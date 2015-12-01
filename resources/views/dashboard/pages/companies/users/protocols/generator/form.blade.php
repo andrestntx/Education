@@ -14,7 +14,7 @@
         <div class="col-md-12">
           @foreach($questions as $question)
             <fieldset>
-              <legend><i class="fa fa-angle-right"></i> Default Setup</legend>
+              <legend><i class="fa fa-angle-right"></i> {{ $question->text }}</legend>
               <div class="form-group">
                   <div class="col-xs-12">
                     {!! Form::textarea('questions['.$question->id.'][answer]', $generatedProtocol->getAnswerQuestion($question->id), 
