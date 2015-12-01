@@ -40,10 +40,22 @@
 
         <div class="col-sm-7">
           <div class="block">
-              <div class="block-title">
-                  <h2>Protocolos Generados</h2>
-              </div>
-
+                <div class="block-title">
+                    <h2>Protocolos Generados</h2>
+                </div>
+                <div class="row">
+                    @foreach($company->generatedProtocols as $generatedProtocol)
+                        <div class="col-xs-6 col-sm-12 col-md-6">
+                            <a href="{{ route('generated-protocols.show', $generatedProtocol->id) }}" class="widget">
+                                <div class="widget-content text-right clearfix themed-background-info">
+                                    <img src="{{ $generatedProtocol->user->image }}" alt="avatar" class="img-circle img-thumbnail img-thumbnail-avatar pull-left">
+                                    <h2 class="widget-heading h4 text-light"><strong>{{ $generatedProtocol->title }}</strong></h2>
+                                    <span class="text-light-op">{{ $generatedProtocol->user->name }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
           </div>
         </div>
     </div>

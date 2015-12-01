@@ -97,6 +97,11 @@ class Company extends Model
         return $this->hasManyThrough(Protocol::class, User::class);
     }
 
+    public function generatedProtocols()
+    {
+        return $this->hasManyThrough(GeneratedProtocol::class, User::class);
+    }
+
     public function formats()
     {
         return $this->hasManyThrough(Format::class, User::class);

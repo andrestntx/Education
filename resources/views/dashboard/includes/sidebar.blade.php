@@ -16,6 +16,12 @@
             <ul class="sidebar-nav">                
                 @if(Auth::user()->isAdmin())
                 <li>
+                    <a href="/protocol-generator">
+                        <i class="hi hi-edit sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Generador de Protocolos</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{url('areas')}}">
                         <i class="fa fa-sitemap sidebar-nav-icon"></i>
                         <span class="sidebar-nav-mini-hide">Areas</span>
