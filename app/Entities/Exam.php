@@ -76,7 +76,7 @@ class Exam extends Model
     public function getScoreAttribute()
     {
         if ($this->count_answers > 0) {
-            return ($this->count_correct_answers / $this->count_answers) * 100;
+            return number_format(($this->count_correct_answers / $this->count_answers) * 100, 2);
         }
 
         return 'NA';
