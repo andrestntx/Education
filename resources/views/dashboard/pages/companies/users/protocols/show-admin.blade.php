@@ -35,10 +35,11 @@
 				</div>
 			</div>
 			<div class="col-lg-4">
+				
 				<div class="row">
-					<div class="block">
-						<div class="block-title">
-							<div class="block-options pull-right">
+	                <div id="questions" class="panel-group">
+	                    <div class="panel panel-info">
+	                    	<div class="block-options pull-right">
 								{!! Form::open(['route' => ['protocols.questions.create', $protocol->id], 'method' => 'GET', 'class' => 'form-inline']) !!}
 									{!! Form::text('answers', null, array('class' => 'form-control', 'required', 'style' => 'max-width:120px;', 'title' => 'Número de Respuestas', 'placeholder' => 'Respuestas')) !!}
 									<button type="submit" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" data-original-title="Nueva Pregunta">
@@ -46,92 +47,116 @@
 									</button>
 								{!! Form::close() !!}
 							</div>
-							<h2>{{ $protocol->number_questions }} Preguntas </h2>
-						</div>
-						<div class="block-section">
-							<ul class="list-unstyled">
-		                    @foreach($protocol->questions as $question)
-		                        <li title="Pregunta">
-		                        	<div class="row">
-		                            	<div class="col-xs-12">
-		                            		<a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" style="font-size:16px;">
-		                            			@if($question->aviable)
-				                                	<i class="fa fa-pencil"></i> {{$question->text}}
-				                                @else
-				                                	<span class="text-danger"> <i class="fa fa-pencil"></i> {{$question->text}}</span>
-				                                @endif
-				                            </a>
-		                            	</div>
-		                        	</div>
-		                        </li>
-		                    @endforeach
-		                    </ul>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="block">
-						<div class="block-title">
-							<div class="block-options pull-right">
+	                        <div class="panel-heading" style="padding:10px;">
+	                            <div class="panel-title">
+	                                <i class="fa fa-angle-right"></i> <a class="accordion-toggle h4" data-toggle="collapse" data-parent="#questions" href="#questions_1"><strong>Preguntas</strong></a>
+	                            </div>
+	                        </div>
+	                        <div id="questions_1" class="panel-collapse collapse">
+	                            <div class="panel-body">
+	                                <ul class="list-unstyled">
+					                    @foreach($protocol->questions as $question)
+					                        <li title="Pregunta">
+					                        	<div class="row">
+					                            	<div class="col-xs-12">
+					                            		<a href="{{ route('protocols.questions.edit', [$protocol->id, $question->id]) }}" data-toggle="tooltip" title="Editar Pregunta" style="font-size:16px;">
+					                            			@if($question->aviable)
+							                                	<i class="fa fa-pencil"></i> {{$question->text}}
+							                                @else
+							                                	<span class="text-danger"> <i class="fa fa-pencil"></i> {{$question->text}}</span>
+							                                @endif
+							                            </a>
+					                            	</div>
+					                        	</div>
+					                        </li>
+					                    @endforeach
+					                </ul>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+                </div>
+
+                @if($protocol->getAnnexes())
+	                <div class="row">
+		                <div id="annexes" class="panel-group">
+		                    <div class="panel panel-success">
+		                    	<div class="block-options pull-right">
+									<a href="{{ route('protocols.links.create', $protocol->id) }}" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" title="Nuevo Anexo"><i class="fa fa-plus"></i></a>
+								</div>
+		                        <div class="panel-heading" style="padding:10px;">
+		                            <div class="panel-title">
+		                                <i class="fa fa-angle-right"></i> <a class="accordion-toggle h4" data-toggle="collapse" data-parent="#annexes" href="#annexes_1"><strong>Anexos</strong></a>
+		                            </div>
+		                        </div>
+		                        <div id="annexes_1" class="panel-collapse collapse">
+		                            <div class="panel-body">
+		                                <ul class="list-unstyled">
+						                    @foreach($protocol->getAnnexes() as $annex)
+						                    	<li>
+					                            	<div class="row">
+						                            	<div class="col-xs-10">
+						                            		<a href="/storage/{{$annex}}" data-toggle="tooltip" title="Descargar Anexo" style="font-size:16px;" target="_blank">
+								                                <i class="hi hi-cloud_upload"></i> {{ explode('/', $annex)[3] }}
+								                            </a>
+						                            	</div>
+						                            	<div class="col-xs-2">
+								                            {!! Form::open(['route' => ['protocols.annexes.destroy', $protocol->id, explode('/', $annex)[3]], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
+									                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
+									                                <i class="fa fa-times"></i>
+									                            </button>
+								                            {!! Form::close() !!}
+							                        	</div>
+						                        	</div>
+					                            </li>
+						                    @endforeach
+						                </ul>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+	                </div>
+	            @endif
+
+	            <div class="row">
+	                <div id="links" class="panel-group">
+	                    <div class="panel panel-warning">
+	                    	<div class="block-options pull-right">
 								<a href="{{ route('protocols.links.create', $protocol->id) }}" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" title="Nuevo Enlace"><i class="fa fa-plus"></i></a>
 							</div>
-							<h2>Enlaces</h2>
-						</div>
-						<div class="block-section">
-							<ul class="list-unstyled">
-			                    @foreach($protocol->links as $link)
-		                            <li title="{{$link->description}}">
-		                            	<div class="row">
-			                            	<div class="col-xs-10">
-			                            		<a href="{{ route('protocols.links.edit', [$protocol->id, $link->id]) }}" data-toggle="tooltip" title="Editar Enlace" style="font-size:16px;">
-					                                <i class="gi gi-link"></i> {{ $link->name }}
-					                            </a>
-			                            	</div>
-			                            	<div class="col-xs-2">
-					                            {!! Form::open(['route' => ['protocols.links.destroy', $protocol->id, $link->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
-						                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
-						                                <i class="fa fa-times"></i>
-						                            </button>
-					                            {!! Form::close() !!}
-				                        	</div>
-			                        	</div>
-		                            </li>
-			                    @endforeach
-			                </ul>
-						</div>
-					</div>
-				</div>
-				@if($protocol->getAnnexes())
-					<div class="row">
-						<div class="block">
-							<div class="block-title">
-								<h2>Anexos</h2>
-							</div>
-							<div class="block-section">
-								<ul class="list-unstyled">
-				                    @foreach($protocol->getAnnexes() as $annex)
-				                    	<li>
-			                            	<div class="row">
-				                            	<div class="col-xs-10">
-				                            		<a href="/storage/{{$annex}}" data-toggle="tooltip" title="Descargar Anexo" style="font-size:16px;" target="_blank">
-						                                <i class="hi hi-cloud_upload"></i> {{ explode('/', $annex)[3] }}
-						                            </a>
-				                            	</div>
-				                            	<div class="col-xs-2">
-						                            {!! Form::open(['route' => ['protocols.annexes.destroy', $protocol->id, explode('/', $annex)[3]], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
-							                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
-							                                <i class="fa fa-times"></i>
-							                            </button>
-						                            {!! Form::close() !!}
+	                        <div class="panel-heading" style="padding:10px;">
+	                            <div class="panel-title">
+	                                <i class="fa fa-angle-right"></i> <a class="accordion-toggle h4" data-toggle="collapse" data-parent="#links" href="#links_1"><strong>Enlaces</strong></a>
+	                            </div>
+	                        </div>
+	                        <div id="links_1" class="panel-collapse collapse">
+	                            <div class="panel-body">
+	                                <ul class="list-unstyled">
+					                    @foreach($protocol->links as $link)
+				                            <li title="{{$link->description}}">
+				                            	<div class="row">
+					                            	<div class="col-xs-10">
+					                            		<a href="{{ route('protocols.links.edit', [$protocol->id, $link->id]) }}" data-toggle="tooltip" title="Editar Enlace" style="font-size:16px;">
+							                                <i class="gi gi-link"></i> {{ $link->name }}
+							                            </a>
+					                            	</div>
+					                            	<div class="col-xs-2">
+							                            {!! Form::open(['route' => ['protocols.links.destroy', $protocol->id, $link->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
+								                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
+								                                <i class="fa fa-times"></i>
+								                            </button>
+							                            {!! Form::close() !!}
+						                        	</div>
 					                        	</div>
-				                        	</div>
-			                            </li>
-				                    @endforeach
-				                </ul>
-							</div>
-						</div>
-					</div>
-				@endif
+				                            </li>
+					                    @endforeach
+					                </ul>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+                </div>
+
 				<div class="row">
 					<div class="block">
 						<div class="block-title">
@@ -149,8 +174,20 @@
 						</div>
 					</div>
 				</div>
+
+
 			</div>
 		</div>
 	</div>
 @stop
+
+@section('js_aditional')
+	<script>
+		$(".dropzone").dropzone({ 
+			dictDefaultMessage: 'Suelte aquí los anexos que desea agregar',
+			maxFilesize: 2, // MB,
+			dictFileTooBig: 'El anexo es demasiado grande. No puede superar las 2MB'
+		});
+	</script>
+@endsection
 

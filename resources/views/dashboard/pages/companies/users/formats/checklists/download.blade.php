@@ -36,7 +36,7 @@ header {
 }
 
 #logo {
-  text-align: center;
+  text-align: left;
   margin-bottom: 10px;
 }
 
@@ -158,7 +158,7 @@ footer {
       <div id="logo">
         <img src="{{ URL::to($checklist->user->company->logo) }}">
       </div>
-      <h1>Lista de Chequeo - {{ $format->name }}</h1>
+      <h1>{{ $format->name }}</h1>
       <div id="company" class="clearfix">
         <div>{{ $checklist->user->company->name }}</div>
         <div>455 Foggy Heights,<br /> AZ 85004, US</div>
@@ -166,9 +166,6 @@ footer {
         <div><a href="mailto:company@example.com">company@example.com</a></div>
       </div>
       <div id="project">
-        <div><span>USUARIO</span> {{ $checklist->user->name }}</div>
-        <div><span>EMAIL</span> <a href="mailto:{{ $checklist->user->email }}">{{ $checklist->user->email }}</a></div>
-        <div><span>TELEFONO</span> {{ $checklist->user->tel }}</div>
         <div><span>APLICADA</span> {{ $checklist->applied }} </div>
         <div><span>FECHA</span> {{ $checklist->created_at }}</div>
       </div>
@@ -194,8 +191,15 @@ footer {
       </table>
       <div id="notices">
         <div>OBSERVACIÓN:</div>
-        <div class="notice"> {{ $checklist->observation }} </div>
+        <div class="notice"> {{ $checklist->observation }} </div><br><br>
       </div>
+
+      <div id="project">
+        <div><span>USUARIO</span> {{ $checklist->user->name }}</div>
+        <div><span>EMAIL</span> <a href="mailto:{{ $checklist->user->email }}">{{ $checklist->user->email }}</a></div>
+        <div><span>TELEFONO</span> {{ $checklist->user->tel }}</div>
+      </div>
+
     </main>
     <footer>
       Lista de chequeo creada por HistoWeb Calidad

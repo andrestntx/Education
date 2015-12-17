@@ -4,7 +4,7 @@
 @section('content_body_page')
     <div class="row">
         @foreach($formats as $format)
-            <div class="col-sm-6 col-lg-3">
+            <div class="col-sm-6 col-lg-4">
                 @include('dashboard.extends.widget',[
                 'widget_url'    => route('myformats.checklists.index', $format->id),
                 'widget_title'  => $format->name,

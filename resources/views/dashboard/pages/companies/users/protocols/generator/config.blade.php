@@ -1,6 +1,7 @@
 @extends('dashboard.pages.layout')
 @section('title_page') 
     <i class="fa fa-file-text"></i> Generador de Protocolos 
+    <a href="{{route('generated-protocols.create')}}" class="btn btn-primary" title="Generar nuevo Protocolo"><i class="fa fa-plus"></i> </a>
 @stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('protocols') !!} @stop
@@ -46,13 +47,18 @@
                 <div class="row">
                     @foreach($company->generatedProtocols as $generatedProtocol)
                         <div class="col-xs-6 col-sm-12 col-md-6">
-                            <a href="{{ route('generated-protocols.show', $generatedProtocol->id) }}" class="widget">
-                                <div class="widget-content text-right clearfix themed-background-info">
-                                    <img src="{{ $generatedProtocol->user->image }}" alt="avatar" class="img-circle img-thumbnail img-thumbnail-avatar pull-left">
+                            <div class="widget">
+                                <a href="{{ route('generated-protocols.edit', $generatedProtocol->id) }}" class="widget-content text-right clearfix themed-background-info">
+                                    <img src="/images/placeholders/icons/file-protocol.png" alt="avatar" class="img-circle img-thumbnail img-thumbnail-avatar pull-left">
                                     <h2 class="widget-heading h4 text-light"><strong>{{ $generatedProtocol->title }}</strong></h2>
                                     <span class="text-light-op">{{ $generatedProtocol->user->name }}</span>
+                                </a>
+                                <div class="widget-content themed-background-muted text-dark text-right" style="padding: 5px 15px;">
+                                    <a href="{{ route('generated-protocols.show', $generatedProtocol->id) }}" target="_blank">
+                                        <i class="fa fa-2x fa-cloud-download text-primary"></i>
+                                    </a>
                                 </div>
-                            </a>
+                            </div>
                         </div>
                     @endforeach
                 </div>

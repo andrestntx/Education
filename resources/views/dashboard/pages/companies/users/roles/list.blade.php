@@ -28,7 +28,7 @@
                                 <a href="{{route('roles.edit', $role->id)}}" data-toggle="tooltip" title="Editar Perfil" class="btn btn-sm btn-effect-ripple btn-warning">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="#" onclick="AppServices.postDeleteRole(this)" data-entity-id="{{ $role->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar Perfil" class="btn btn-sm btn-effect-ripple btn-danger">
+                                <a href="#" onclick="AppServices.postDeleteRole(this)" data-entity-id="{{ $role->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar" class="btn btn-sm btn-effect-ripple btn-danger">
                                     <i class="gi gi-remove_2"></i>
                                 </a>
                             </td>

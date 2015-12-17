@@ -22,7 +22,7 @@ class FormatsController extends Controller
     public function __construct()
     {
         $this->beforeFilter('@newFormat', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findFormat', ['only' => ['show', 'edit', 'update', 'showChecklistsUser']]);
+        $this->beforeFilter('@findFormat', ['only' => ['show', 'edit', 'update', 'showChecklistsUser', 'destroy']]);
     }
 
     /**
@@ -136,5 +136,35 @@ class FormatsController extends Controller
         Flash::info('Formato '.$this->format->name.' Actualizado correctamente');
 
         return redirect()->route(self::$prefixRoute.'show', $this->format);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        $data = [
+            'success' => true,
+            'message' => 'Formato eliminado correctamente'
+        ];   
+
+        if($this->format->checklists()->count() == 0){
+            try {
+                $this->format->detachAndDelete();
+            } catch (QueryException $e) {
+                $data['success'] = false;
+                $data['message'] = 'El Formato no se puede eliminar';
+            }    
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = 'El Formato no se puede eliminar, ya que algún usuario lo ha diligenciado';
+        }
+
+        return response()->json($data);
     }
 }

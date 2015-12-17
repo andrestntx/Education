@@ -70,6 +70,12 @@ var AppServices = function() {
 
 			postDelete(entityElement, entityId, url);
 		},
+		postDeleteFormat: function (entityElement) {
+			var entityId 	= $(entityElement).data('entity-id');
+			var url 		= '/formats/' +  entityId;
+
+			postDelete(entityElement, entityId, url);
+		},
 		postDeleteUser: function (entityElement) {
 			var entityId 	= $(entityElement).data('entity-id');
 			var url 		= '/users/' +  entityId;

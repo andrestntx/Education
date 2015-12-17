@@ -29,8 +29,8 @@
       </label>
       <div class="col-md-2">
         <div class="input-group">
-            <label class="switch switch-info" 
-            title="Active esta casilla si desea subir el archivo Pdf a la Aplicación">
+            <label class="switch switch-info" data-toggle="tooltip" data-placement="top"
+            title="Active esta opción para subir el Protocolo en PDF o desactivela y escriba la dirección URL">
               <input type="checkbox" name="is_upload" id="is_upload" value="true"><span></span>
             </label>
         </div>
@@ -39,11 +39,10 @@
         <div class="input-group" id="div_file_pdf">
           <input id="file_pdf" name="file_doc" type="file" class="file"></input>
         </div>
-        <div class="input-group" id="div_link_pdf">
+        <div class="input-group" id="div_link_pdf" style="width:100%;">
           {!! Form::text('url_doc', null, array('class' => 'form-control', 
             'placeholder' => 'http://pagina-externa/archivo.pdf', 'id' => 'link_pdf'))
           !!}
-          <span class="input-group-addon"><i class="fa fa-file-text-o"></i></span>
         </div>
       </div>
     </div>   

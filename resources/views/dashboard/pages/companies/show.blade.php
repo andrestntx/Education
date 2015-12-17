@@ -59,7 +59,7 @@
             @include('dashboard.extends.widget',[
                 'widget_url'    => '/formats', 
                 'widget_title'  => 'Formatos de Chequeo', 
-                'widget_count'  => $user->company->protocols->count(), 
+                'widget_count'  => $user->company->formats->count(), 
                 'widget_icon'   => 'fa fa-check-square-o',
                 'widget_themed' => 'themed-background'
             ])

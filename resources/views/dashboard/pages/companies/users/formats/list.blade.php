@@ -7,29 +7,22 @@
 @section('breadcrumbs') {!! Breadcrumbs::render('formats') !!} @stop
 
 @section('content_body_page')
-
-    <div class="block full">
-        <div class="table-responsive">
-            <table id="datatable" class="table table-striped table-bordered table-vcenter">
-                <thead>
-                    <tr>
-                        <th title="Titulo"><i class="fa fa-file-text"></i> Nombre</th>
-                        <th title="Descripción del Formato">Descripción</th>
-                        <th class="text-center" title="Número de Preguntas"><i class="fa fa-sort-numeric-desc"></i></th>
-                        <th title="Ultima actulaización del Formato"><i class="gi gi-clock"></i> Actualización</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($formats as $format)
-                        <tr>
-                            <td><a href="{{route('formats.show', $format->id)}}" title="Ver Formato"><i class="fa fa-file-text"></i> {{$format->name}}</a></td>
-                            <td>{{ $format->description }}</td>
-                            <td class="text-center"> {{ $format->number_questions }} </td>
-                            <td>{{ $format->updated_at_hummans }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    @foreach($formats as $format)
+        <div class="col-sm-4 col-lg-3" id="{{ $format->id }}" data-toggle="tooltip" data-original-title="{{ $format->description }}" data-placement="bottom">
+            <div class="media-items animation-fadeInQuick2" data-category="pdf">
+                <div class="media-items-options text-right">
+                    <a href="{{ route('formats.show', $format->id) }}" class="btn btn-xs btn-info">Ver</a>
+                    <a href="{{ route('formats.edit', $format->id) }}" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i></a>
+                    <a href="#" onclick="AppServices.postDeleteFormat(this)" data-entity-id="{{ $format->id }}" data-token="{{ csrf_token() }}" class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="media-items-content">
+                    <i class="fa fa-file-text-o fa-5x text-info"></i>
+                </div>
+                <h4>
+                    <strong>{{ $format->name }}</strong><br>
+                    <small>{{ $format->updated_at_hummans }}, <strong>{{ $format->number_questions }} <i class="gi gi-check"></i></strong></small>
+                </h4>
+            </div>
         </div>
-    </div>
+    @endforeach
 @stop

@@ -57,7 +57,7 @@ class GeneratedProtocolsController extends Controller
      */
     public function index()
     {
-        return view()->make(self::$prefixView.'list');
+        return redirect()->to('protocol-generator');
     }
 
     /**
@@ -82,10 +82,13 @@ class GeneratedProtocolsController extends Controller
     {
         $this->generatedProtocol->fill($request->all());
         Auth::user()->generatedProtocols()->save($this->generatedProtocol);
-        $this->generatedProtocol->questions()->sync($request->get('questions'));
 
+        if($request->get('questions')) {
+            $this->generatedProtocol->questions()->sync($request->get('questions'));    
+        }
+        
         Flash::info('Protocolo generado correctamente');
-        return redirect()->route(self::$prefixRoute.'index');
+        return redirect()->route('protocol-generator.index');
     }
 
     /**
@@ -134,10 +137,12 @@ class GeneratedProtocolsController extends Controller
     {
         $this->generatedProtocol->fill($request->all());
         $this->generatedProtocol->save();
-        $this->generatedProtocol->questions()->sync($request->get('questions'));
+        if($request->get('questions')) {
+            $this->generatedProtocol->questions()->sync($request->get('questions'));
+        }
 
         Flash::info('Protocolo generado correctamente');
-        return redirect()->route(self::$prefixRoute.'index');
+        return redirect()->route('protocol-generator.index');
     }
 
     /**

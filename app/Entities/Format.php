@@ -110,4 +110,11 @@ class Format extends Model
     {
         return $this->questions()->count() + 1;
     }
+
+    public function detachAndDelete()
+    {
+        $this->areas()->detach();
+        $this->roles()->detach();
+        $this->delete(); 
+    }
 }

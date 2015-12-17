@@ -30,7 +30,7 @@
                                 <a href="{{ route('categories.edit', $category->id) }}" data-toggle="tooltip" title="Editar Categoría" class="btn btn-sm btn-effect-ripple btn-warning">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="#" onclick="AppServices.postDeleteCategory(this)" data-entity-id="{{ $category->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar Perfil" class="btn btn-sm btn-effect-ripple btn-danger">
+                                <a href="#" onclick="AppServices.postDeleteCategory(this)" data-entity-id="{{ $category->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar" class="btn btn-sm btn-effect-ripple btn-danger">
                                     <i class="gi gi-remove_2"></i>
                                 </a>
                             </td>

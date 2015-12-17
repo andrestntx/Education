@@ -11,7 +11,7 @@
 @section('breadcrumbs') {!! Breadcrumbs::render('scores') !!} @stop
 @section('content_body_page')
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			<div class="block">
 				<div class="block-title">
 					<h2><i class="gi gi-thumbs_down text-danger"></i> Protocolos pendientes</h2>
@@ -64,7 +64,7 @@
 				</div>
 			</div>
 		</div>
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div class="block">
                 <div class="block-title">
                     <h2><i class="gi gi-thumbs_up text-info"></i> Protocolos al día</h2>
