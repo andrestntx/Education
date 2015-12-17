@@ -75,12 +75,6 @@
                 </li>               
                 @elseif(Auth::user()->isRegistered())
                 <li>
-                    <a href="/generated-protocols">
-                        <i class="gi gi-show_thumbnails_with_lines sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Generador de Protocolos</span>
-                    </a>
-                </li>
-                <li>
                     <a href="{{url('myformats')}}">
                         <i class="fa fa-check-square-o sidebar-nav-icon"></i>
                         <span class="sidebar-nav-mini-hide">Mis Formatos de Chequeo</span>

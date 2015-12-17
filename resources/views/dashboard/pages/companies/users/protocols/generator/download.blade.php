@@ -36,7 +36,7 @@ header {
 }
 
 #logo {
-  text-align: center;
+  text-align: right;
   margin-bottom: 10px;
 }
 
