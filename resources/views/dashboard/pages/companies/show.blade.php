@@ -69,7 +69,7 @@
             @include('dashboard.extends.widget',[
                 'widget_url'    => '/protocol-generator', 
                 'widget_title'  => 'Generador de Protocolos', 
-                'widget_count'  => 1, 
+                'widget_count'  => $user->company->generatedProtocols->count(), 
                 'widget_icon'   => 'hi hi-edit',
                 'widget_themed' => 'themed-background-success'
             ])
