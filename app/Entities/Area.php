@@ -2,20 +2,23 @@
 
 namespace Education\Entities;
 
-use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
-
-class Area extends Model
+class Area extends MyModel
 {
     protected $fillable = ['name', 'description'];
     public $timestamps = true;
     public $increments = true;
 
-    public function getUpdatedAtHummansAttribute()
+    /**
+    * Relations
+    */
+    public function company()
     {
-        Carbon::setLocale('es');
+        return $this->belongsTo(Company::class);
+    }
 
-        return ucfirst($this->updated_at->diffForHumans());
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 
     public function protocols()
@@ -25,16 +28,12 @@ class Area extends Model
 
     public function formats()
     {
-        return $this->morphedByMany(Protocol::class, 'allowed_areas');
+        return $this->morphedByMany(Format::class, 'allowed_areas');
     }
 
-    public function users()
+    public function observationFormats()
     {
-        return $this->belongsToMany(User::class);
+        return $this->morphedByMany(ObservationFormat::class, 'allowed_areas');
     }
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
+    
 }

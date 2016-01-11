@@ -2,11 +2,11 @@
 @section('title_page')
   <i class="fa fa-check-square-o"></i> 
   {{ $format->name }}: Aplicado 
-  <a href="{{ route('myformats.checklists.donwload', [$format->id, $checklist->id]) }}" target="_blank" title="Descargar PDF">
+  <a href="{{ route('myformats.checklists.doit.donwload', [$format->id, $checklist->id]) }}" target="_blank" title="Descargar PDF">
     <i class="gi gi-cloud-download"></i>
   </a>
 @stop
-@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists.apply', $format) !!} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists.doit.apply', $format) !!} @stop
 @section('title_form') Lista de chequeo aplicada @stop
 @section('form')
     <div class="row">

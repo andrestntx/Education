@@ -2,60 +2,22 @@
 
 namespace Education\Entities;
 
-use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
-use File;
-use Storage;
+use File, Storage;
 
-class Protocol extends Model
+class Protocol extends MyDocument
 {
     protected $fillable = ['name', 'description', 'aviable', 'url_doc'];
     public $timestamps = true;
     public $increments = true;
-
-    public function getUpdatedAtHummansAttribute()
-    {
-        Carbon::setLocale('es');
-
-        return ucfirst($this->updated_at->diffForHumans());
-    }
 
     public function getUserValueAttribute()
     {
         return $this->user->name;
     }
 
-    public function isAviable()
-    {
-        if ($this->aviable) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function getStateAttribute()
-    {
-        if ($this->aviable) {
-            return 'Disponible';
-        }
-
-        return 'No Disponible';
-    }
-
     public function getCategoryIdListsAttribute()
     {
         return $this->categories->lists('id')->all();
-    }
-
-    public function getAreaIdListsAttribute()
-    {
-        return $this->areas->lists('id')->all();
-    }
-
-    public function getRoleIdListsAttribute()
-    {
-        return $this->roles->lists('id')->all();
     }
 
     /* Exams */
@@ -89,10 +51,6 @@ class Protocol extends Model
         return '#';
     }
 
-    public function getNumberQuestionsAttribute()
-    {
-        return $this->questions->count();
-    }
 
     public function getNumberAnnexesAttribute()
     {
@@ -117,24 +75,9 @@ class Protocol extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function roles()
-    {
-        return $this->morphToMany(Role::class, 'allowed_roles');
-    }
-
-    public function areas()
-    {
-        return $this->morphToMany(Area::class, 'allowed_areas');
-    }
-
     public function links()
     {
         return $this->hasMany(Link::class);
-    }
-
-    public function questions()
-    {
-        return $this->morphMany(Question::class, 'document');
     }
 
     public function exams()
@@ -196,30 +139,13 @@ class Protocol extends Model
 
     /***** End Relations *****/
 
-    public function fillAndClear($data)
-    {
-        $this->fill($data);
-
-        if (array_key_exists('aviable', $data)) {
-            $this->aviable = 1;
-        } else {
-            $this->aviable = 0;
-        }
-    }
-
-    public function syncRelations($data)
+    public function syncRelations(array $data = array())
     {
         if (array_key_exists('categories', $data)) {
             $this->categories()->sync($data['categories']);
         }
 
-        if (array_key_exists('areas', $data)) {
-            $this->areas()->sync($data['areas']);
-        }
-
-        if (array_key_exists('roles', $data)) {
-            $this->roles()->sync($data['roles']);
-        }
+        $this->syncDefaultRelations($data);
     }
 
     public function uploadDoc($file)

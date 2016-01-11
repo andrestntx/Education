@@ -5,6 +5,10 @@
 @section('content_body_page')
 	<div class="row">
         
+        <div class="col-sm-12 border-bottom">
+            <h4>Configuración</h4>
+        </div>
+
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
                 'widget_url'    => '/users', 
@@ -45,6 +49,20 @@
             ])
         </div>
 
+        <div class="col-sm-12 border-bottom">
+            <h4>Protocolos</h4>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            @include('dashboard.extends.widget',[
+                'widget_url'    => '/protocol-generator', 
+                'widget_title'  => 'Generador de Protocolos', 
+                'widget_count'  => $user->company->generatedProtocols->count(), 
+                'widget_icon'   => 'hi hi-edit',
+                'widget_themed' => 'themed-background-success'
+            ])
+        </div>
+
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
                 'widget_url'    => '/protocols', 
@@ -55,10 +73,14 @@
             ])
         </div>
 
+        <div class="col-sm-12 border-bottom">
+            <h4>Formatos</h4>
+        </div>
+
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
-                'widget_url'    => '/formats', 
-                'widget_title'  => 'Formatos de Chequeo', 
+                'widget_url'    => '/formats/checklists', 
+                'widget_title'  => 'Listas de Chequeo', 
                 'widget_count'  => $user->company->formats->count(), 
                 'widget_icon'   => 'fa fa-check-square-o',
                 'widget_themed' => 'themed-background'
@@ -67,11 +89,11 @@
 
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
-                'widget_url'    => '/protocol-generator', 
-                'widget_title'  => 'Generador de Protocolos', 
-                'widget_count'  => $user->company->generatedProtocols->count(), 
-                'widget_icon'   => 'hi hi-edit',
-                'widget_themed' => 'themed-background-success'
+                'widget_url'    => '/formats/observations', 
+                'widget_title'  => 'Observaciones', 
+                'widget_count'  => $user->company->observationFormats->count(), 
+                'widget_icon'   => 'fa fa-check-square-o',
+                'widget_themed' => 'themed-background-danger'
             ])
         </div>
 

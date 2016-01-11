@@ -77,7 +77,7 @@ class CompaniesController extends Controller
      */
     public function store(CreateRequest $request)
     {
-        $this->company->fill($request->all());
+        $this->company->fillAndClear($request->all());
         $this->company->save();
         $this->company->uploadLogo($request->file('url_logo'));
         Flash::info('Institución '.$this->company->name.' Guardada correctamente');
@@ -120,7 +120,7 @@ class CompaniesController extends Controller
      */
     public function update(EditRequest $request, $id)
     {
-        $this->company->fill($request->all());
+        $this->company->fillAndClear($request->all());
         $this->company->save();
         $this->company->uploadLogo($request->file('url_logo'));
         Flash::info('Institución '.$this->company->name.' Actualizado correctamente');

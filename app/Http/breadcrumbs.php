@@ -175,47 +175,105 @@ Breadcrumbs::register('scores', function ($breadcrumbs) {
 // Home > formats
 Breadcrumbs::register('formats', function ($breadcrumbs) {
     $breadcrumbs->parent('home');
-    $breadcrumbs->push('Formatos de Chequeo', route('formats.index'));
+    $breadcrumbs->push('Formatos', url('/formats'));
 });
 
-// Home > formats > format
-Breadcrumbs::register('formats.format', function ($breadcrumbs, $protocol) {
+// Home > formats > Checklists
+Breadcrumbs::register('formats.checklists', function ($breadcrumbs) {
     $breadcrumbs->parent('formats');
+    $breadcrumbs->push('Formatos de Chequeo', route('formats.checklists.index'));
+});
 
-    if ($protocol->exists) {
-        $breadcrumbs->push($protocol->name, route('formats.show', $protocol->id));
+// Home > formats > Checklists > format
+Breadcrumbs::register('formats.checklists.format', function ($breadcrumbs, $checklistFormat) {
+    $breadcrumbs->parent('formats.checklists');
+
+    if ($checklistFormat->exists) {
+        $breadcrumbs->push($checklistFormat->name, route('formats.checklists.show', $checklistFormat->id));
     } else {
-        $breadcrumbs->push('Nuevo', route('formats.create'));
+        $breadcrumbs->push('Nuevo', route('formats.checklists.create'));
     }
 });
 
-// Home > Protocols > Protocol > Question
-Breadcrumbs::register('formats.format.question', function ($breadcrumbs, $format, $question) {
-    $breadcrumbs->parent('formats.format', $format);
+// Home > Formats > Checklists > Format > Question
+Breadcrumbs::register('formats.checklists.format.question', function ($breadcrumbs, $format, $question) {
+    $breadcrumbs->parent('formats.checklists.format', $format);
 
     if ($question->exists) {
-        $breadcrumbs->push('Editar Pregunta', route('formats.questions.show', [$format->id, $question->id]));
+        $breadcrumbs->push('Editar Pregunta', route('formats.checklists.questions.show', [$format->id, $question->id]));
     } else {
-        $breadcrumbs->push('Nueva Pregunta', route('formats.questions.create', $format->id));
+        $breadcrumbs->push('Nueva Pregunta', route('formats.checklists.questions.create', $format->id));
+    }
+});
+
+// Home > formats > Observations
+Breadcrumbs::register('formats.observations', function ($breadcrumbs) {
+    $breadcrumbs->parent('formats');
+    $breadcrumbs->push('Observaciones', route('formats.observations.index'));
+});
+
+// Home > formats > Observations > format
+Breadcrumbs::register('formats.observations.format', function ($breadcrumbs, $observationFormat) {
+    $breadcrumbs->parent('formats.observations');
+
+    if ($observationFormat->exists) {
+        $breadcrumbs->push($observationFormat->name, route('formats.observations.show', $observationFormat->id));
+    } else {
+        $breadcrumbs->push('Nuevo', route('formats.observations.create'));
+    }
+});
+
+// Home > Formats > Observations > Format > Question
+Breadcrumbs::register('formats.observations.format.question', function ($breadcrumbs, $format, $question) {
+    $breadcrumbs->parent('formats.observations.format', $format);
+
+    if ($question->exists) {
+        $breadcrumbs->push('Editar Pregunta', route('formats.observations.questions.show', [$format->id, $question->id]));
+    } else {
+        $breadcrumbs->push('Nueva Pregunta', route('formats.observations.questions.create', $format->id));
     }
 });
 
 // Home > My Formats 
 Breadcrumbs::register('myformats', function ($breadcrumbs) {
     $breadcrumbs->parent('home');
-    $breadcrumbs->push('Mis formatos de Chequeo', route('myformats'));
+    $breadcrumbs->push('Mis formatos', '/myformats');
 });
 
 // Home > My Formats > Checklists
-Breadcrumbs::register('myformats.checklists', function ($breadcrumbs, $format) {
+Breadcrumbs::register('myformats.checklists', function ($breadcrumbs) {
     $breadcrumbs->parent('myformats');
-    $breadcrumbs->push($format->name, route('myformats.checklists.index', $format));
+    $breadcrumbs->push('Listas de chequeo', route('myformats.checklists'));
 });
 
-// Home > My Formats > Checklists > Apply
-Breadcrumbs::register('myformats.checklists.apply', function ($breadcrumbs, $format) {
-    $breadcrumbs->parent('myformats.checklists', $format);
-    $breadcrumbs->push('Aplicar', route('myformats.checklists.create', $format));
+// Home > My Formats > Checklists > Doit
+Breadcrumbs::register('myformats.checklists.doit', function ($breadcrumbs, $format) {
+    $breadcrumbs->parent('myformats.checklists');
+    $breadcrumbs->push($format->name, route('myformats.checklists.doit.index', $format));
+});
+
+// Home > My Formats > Checklists > Doit > Apply
+Breadcrumbs::register('myformats.checklists.doit.apply', function ($breadcrumbs, $format) {
+    $breadcrumbs->parent('myformats.checklists.doit', $format);
+    $breadcrumbs->push('Aplicar', route('myformats.checklists.doit.create', $format));
+});
+
+// Home > My Formats > Observations
+Breadcrumbs::register('myformats.observations', function ($breadcrumbs) {
+    $breadcrumbs->parent('myformats');
+    $breadcrumbs->push('Observaciones', route('myformats.observations'));
+});
+
+// Home > My Formats > Observations > Doit
+Breadcrumbs::register('myformats.observations.doit', function ($breadcrumbs, $format) {
+    $breadcrumbs->parent('myformats.observations');
+    $breadcrumbs->push($format->name, route('myformats.observations.doit.index', $format));
+});
+
+// Home > My Formats > Observations > Doit > Apply
+Breadcrumbs::register('myformats.observations.doit.apply', function ($breadcrumbs, $format) {
+    $breadcrumbs->parent('myformats.observations.doit', $format);
+    $breadcrumbs->push('Aplicar', route('myformats.observations.doit.create', $format));
 });
 
 // Home > My Generated Protocols 

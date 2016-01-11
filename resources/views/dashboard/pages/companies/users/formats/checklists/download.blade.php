@@ -161,9 +161,9 @@ footer {
       <h1>{{ $format->name }}</h1>
       <div id="company" class="clearfix">
         <div>{{ $checklist->user->company->name }}</div>
-        <div>455 Foggy Heights,<br /> AZ 85004, US</div>
-        <div>(602) 519-0450</div>
-        <div><a href="mailto:company@example.com">company@example.com</a></div>
+        <div>{{ $checklist->user->company->address }}</div>
+        <div>{{ $checklist->user->company->tel }}</div>
+        <div><a href="mailto:{{ $checklist->user->company->email }}">{{ $checklist->user->company->email }}</a></div>
       </div>
       <div id="project">
         <div><span>APLICADA</span> {{ $checklist->applied }} </div>

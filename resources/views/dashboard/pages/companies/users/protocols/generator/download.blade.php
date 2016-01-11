@@ -177,9 +177,9 @@ footer {
       <h1>Protocolo - {{ $generatedProtocol->title }}</h1>
       <div id="company" class="clearfix">
         <div>{{ $generatedProtocol->user->company->name }}</div>
-        <div>455 Foggy Heights,<br /> AZ 85004, US</div>
-        <div>(602) 519-0450</div>
-        <div><a href="mailto:company@example.com">company@example.com</a></div>
+        <div>{{ $generatedProtocol->user->company->address }}</div>
+        <div>{{ $generatedProtocol->user->company->tel }}</div>
+        <div><a href="mailto:{{ $generatedProtocol->user->company->email }}">{{ $generatedProtocol->user->company->email }}</a></div>
       </div>
       <div id="project">
         <div><span>USUARIO</span> {{ $generatedProtocol->user->name }}</div>

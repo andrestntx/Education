@@ -7,38 +7,23 @@
 @section('breadcrumbs') {!! Breadcrumbs::render('roles') !!} @stop
 
 @section('content_body_page')
-    <div class="block full">
-        <div class="table-responsive">
-            <table id="datatable" class="table table-striped table-bordered table-vcenter">
-                <thead>
-                    <tr>
-                        <th title="Nombre del Perfil">Nombre</th>
-                        <th title="Descripción del Perfil">Descripción</th>
-                        <th title="Ultima actulaización del Perfil">Actualización</th>
-                        <th class="text-center" style="min-width: 100px;"><i class="fa fa-flash"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($roles as $role)
-                        <tr id="{{ $role->id }}">
-                            <td><strong>{{$role->name}}</strong></td>
-                            <td>{{$role->description}}</td>
-                            <td>{{ $role->updated_at_hummans }}</td>
-                            <td class="text-center">
-                                <a href="{{route('roles.edit', $role->id)}}" data-toggle="tooltip" title="Editar Perfil" class="btn btn-sm btn-effect-ripple btn-warning">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a href="#" onclick="AppServices.postDeleteRole(this)" data-entity-id="{{ $role->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar" class="btn btn-sm btn-effect-ripple btn-danger">
-                                    <i class="gi gi-remove_2"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            {!! $roles->render() !!}
+    @foreach($roles as $role)
+        <div class="col-sm-4 col-lg-3" id="{{ $role->id }}" data-toggle="tooltip" data-original-title="{{ $role->description }}" data-placement="bottom">
+            <div class="media-items animation-fadeInQuick2" data-role="pdf">
+                <div class="media-items-options text-right">
+                    <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i></a>
+                    <a href="#" onclick="AppServices.postDeleteRole(this)" data-entity-id="{{ $role->id }}" data-token="{{ csrf_token() }}" class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="media-items-content">
+                    <i class="gi gi-old_man fa-5x text-success"></i>
+                </div>
+                <h4>
+                    <strong>{{ $role->name }}</strong><br>
+                    <small>{{ $role->updated_at_hummans }}</small>
+                </h4>
+            </div>
         </div>
-    </div>
+    @endforeach
 
 @stop
 

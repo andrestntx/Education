@@ -1,4 +1,13 @@
 @extends('dashboard.pages.layout')
+
+@section('css_aditional')
+    <style type="text/css">
+        .question-option{
+            margin: 0 3px;
+        }
+    </style>
+@endsection
+
 @section('title_page') 
     <i class="fa fa-file-text"></i> Generador de Protocolos 
     <a href="{{route('generated-protocols.create')}}" class="btn btn-primary" title="Generar nuevo Protocolo"><i class="fa fa-plus"></i> </a>
@@ -16,10 +25,10 @@
     
     <div class="row">
 
-        <div class="col-sm-5">
+        <div class="col-sm-4">
             <div class="block full">
-                <div class="block-title">
-                    <h2>Preguntas del Generador</h2>
+                <div class="block-title themed-background-info text-light-op">
+                    <h2>Preguntas</h2>
                 </div>
                 
                 <h4><i class="fa fa-question"></i> Nueva Pregunta</h4>
@@ -29,7 +38,14 @@
                 <ul class="list-unstyled sortable" style="margin-top:20px;">
                     @foreach($company->protocolGeneratorQuestions as $question)
                         <li class="well well-sm" id="{{ $question->id }}" style="cursor:pointer;">
-                            <a href="#"><i class="gi gi-bin pull-right text-danger" onclick="AppProtocolGenerator.postDeleteQuestion(this)" data-entity-id="{{ $question->id }}"></i></a>
+                            <a href="#" title="Borrar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-danger"><i class="gi gi-bin" onclick="AppProtocolGenerator.postDeleteQuestion(this)" data-entity-id="{{ $question->id }}"></i></a>
+                            
+                            @if($question->aviable)
+                                <a href="javascript:void(0)" title="Desactivar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-warning"><i class="gi gi-thumbs_down" onclick="AppProtocolGenerator.postDeactivateQuestion(this)" data-entity-id="{{ $question->id }}"></i></a>
+                            @else
+                                <a href="javascript:void(0)" title="Activar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-success"><i class="gi gi-thumbs_up" onclick="AppProtocolGenerator.postDeactivateQuestion(this)" data-entity-id="{{ $question->id }}"></i></a>
+                            @endif
+
                             <a href="#" class="editable h4" data-url="/protocol-generator/{{ $question->id }}" data-pk="{{ $question->id }}">
                                 {{ $question->text }}
                             </a>
@@ -39,9 +55,10 @@
             </div>
         </div>
 
-        <div class="col-sm-7">
+
+        <div class="col-sm-8">
           <div class="block">
-                <div class="block-title">
+                <div class="block-title themed-background text-light-op">
                     <h2>Protocolos Generados</h2>
                 </div>
                 <div class="row">

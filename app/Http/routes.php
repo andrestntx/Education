@@ -26,25 +26,44 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
     });
 
     Route::group(['middleware' => 'user_type:admin'], function () {
-        Route::resource('areas', 'AreasController');
-        Route::resource('roles', 'RolesController');
-        Route::resource('categories', 'CategoriesController');
-        Route::resource('users', 'UsersController');
-        Route::get('users/{users}/scores', ['as' => 'users.scores', 'uses' => 'UsersController@scores']);
-
-        Route::resource('protocols', 'ProtocolsController');
-        Route::resource('protocols.questions', 'ProtocolQuestionsController');
-        Route::resource('protocols.links', 'ProtocolLinksController');
-        Route::resource('protocols.annexes', 'ProtocolAnnexesController');
-
-        Route::resource('protocol-generator', 'ProtocolGeneratorQuestionsController');
-        Route::post('protocol-generator/order', ['as' => 'protocol-generator.order', 'uses' => 'ProtocolGeneratorQuestionsController@order']);
-        Route::resource('generated-protocols', 'GeneratedProtocolsController');
         
-        Route::group(['namespace' => 'FormatsChecklists'], function () {
-            Route::resource('formats', 'FormatsController');
-            Route::resource('formats.questions', 'FormatQuestionsController');
-            Route::post('formats/{formats}/order', ['as' => 'formats.order', 'uses' => 'FormatQuestionsController@order']);
+        Route::group(['namespace' => 'Config'], function () {
+            Route::resource('areas', 'AreasController');
+            Route::resource('roles', 'RolesController');
+            Route::resource('categories', 'CategoriesController');
+            Route::resource('users', 'UsersController');
+            Route::get('users/{users}/scores', ['as' => 'users.scores', 'uses' => 'UsersController@scores']);
+        });
+
+        Route::group(['namespace' => 'Protocols'], function () {
+            Route::resource('protocols', 'ProtocolsController');
+            Route::resource('protocols.questions', 'ProtocolQuestionsController');
+            Route::resource('protocols.links', 'ProtocolLinksController');
+            Route::resource('protocols.annexes', 'ProtocolAnnexesController');
+
+            Route::group(['namespace' => 'Generator'], function () {
+                Route::resource('protocol-generator', 'ProtocolGeneratorQuestionsController');
+                Route::post('protocol-generator/order', ['as' => 'protocol-generator.order', 'uses' => 'ProtocolGeneratorQuestionsController@order']);
+                Route::post('protocol-generator/change/{protocol_generator}', ['as' => 'protocol-generator.change', 'uses' => 'ProtocolGeneratorQuestionsController@changeAviable']);
+                Route::resource('generated-protocols', 'GeneratedProtocolsController');
+            });
+
+        });
+        
+        Route::group(['prefix' => 'formats'], function () {
+
+            Route::group(['namespace' => 'Checklists'], function () {
+                Route::resource('checklists', 'FormatsController');
+                Route::resource('checklists.questions', 'FormatQuestionsController');
+                Route::post('checklists/{checklists}/order', ['as' => 'formats.order', 'uses' => 'FormatQuestionsController@order']);
+            });
+
+            Route::group(['namespace' => 'Observations'], function () {
+                Route::resource('observations', 'FormatsController');
+                Route::resource('observations.questions', 'FormatQuestionsController');
+                Route::post('observations/{observations}/order', ['as' => 'formats.order', 'uses' => 'FormatQuestionsController@order']);
+            });
+
         });
 
         /*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));*/
@@ -55,13 +74,23 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
         Route::get('exams/doit/{protocols}', ['as' => 'exams.create', 'uses' => 'ExamsController@create']);
         Route::post('exams/doit/{protocols}', ['as' => 'exams.store', 'uses' => 'ExamsController@store']);
 
-        Route::group(['namespace' => 'Checklists'], function () {
-            Route::get('myformats', ['as' => 'myformats', 'uses' => 'MyFormatChecklistsController@allMyFormats']);
-            Route::resource('myformats.checklists', 'MyFormatChecklistsController', ['only' => ['index', 'create', 'store', 'show']]);
-            Route::get('myformats/{myformats}/checklists/{checklists}/donwload', ['as' => 'myformats.checklists.donwload', 'uses' => 'MyFormatChecklistsController@download']);
+        Route::group(['prefix' => 'myformats'], function () {
+           
+            Route::group(['namespace' => 'Checklists'], function () {
+                Route::get('checklists', ['as' => 'myformats.checklists', 'uses' => 'ChecklistsController@allMyFormats']);
+                Route::resource('checklists.doit', 'ChecklistsController', ['only' => ['index', 'create', 'store', 'show']]);
+                Route::get('checklists/{checklists}/doit/{doit}/donwload', ['as' => 'myformats.checklists.doit.donwload', 'uses' => 'ChecklistsController@download']);
+            });
+
+            Route::group(['namespace' => 'Observations'], function () {
+                Route::get('observations', ['as' => 'myformats.observations', 'uses' => 'ObservationsController@allMyFormats']);
+                Route::resource('observations.doit', 'ObservationsController', ['only' => ['index', 'create', 'store', 'show']]);
+                Route::get('observations/{observations}/doit/{doit}/donwload', ['as' => 'myformats.observations.doit.donwload', 'uses' => 'ObservationsController@download']);
+            });
+
         });
     });
 
     Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);
-    Route::put('profile', ['as' => 'profile', 'uses' => 'UsersController@profile']);
+    Route::put('profile', ['as' => 'profile', 'uses' => 'Config\UsersController@profile']);
 });

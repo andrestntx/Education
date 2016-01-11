@@ -2,42 +2,26 @@
 @section('title_page')
     <i class="fa fa-folder-open"></i> Categorías de Protocolos
     <a href="{{route('categories.create')}}" class="btn btn-primary" title="Nueva categoría"><i class="fa fa-plus"></i> </a>
-@stop
+@endsection
 
-@section('breadcrumbs') {!! Breadcrumbs::render('categories') !!} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('categories') !!} @endsection
 
 @section('content_body_page')
-    <div class="block full">
-        <div class="table-responsive">
-            <table id="datatable" class="table table-striped table-bordered table-vcenter">
-                <thead>
-                    <tr>
-                        <th title="Nombre del Categoría">Nombre</th>
-                        <th title="Descripción del Categoría">Descripción</th>
-                        <th title="Número de Protocolos"># Protocolos</th>
-                        <th title="Ultima actulaización del Categoría"><i class="gi gi-clock"></i> Actualización</th>
-                        <th class="text-center" style="min-width: 100px;"><i class="fa fa-flash"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($categories as $category)
-                        <tr id="{{ $category->id }}">
-                            <td><strong>{{$category->name}}</strong></td>
-                            <td>{{$category->description}}</td>
-                            <td class="text-center">{{$category->protocols->count()}}</td>
-                            <td>{{ $category->updated_at_hummans }}</td>
-                            <td class="text-center">
-                                <a href="{{ route('categories.edit', $category->id) }}" data-toggle="tooltip" title="Editar Categoría" class="btn btn-sm btn-effect-ripple btn-warning">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a href="#" onclick="AppServices.postDeleteCategory(this)" data-entity-id="{{ $category->id }}" data-token="{{ csrf_token() }}" data-toggle="tooltip" title="Borrar" class="btn btn-sm btn-effect-ripple btn-danger">
-                                    <i class="gi gi-remove_2"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    @foreach($categories as $category)
+        <div class="col-sm-4 col-lg-3" id="{{ $category->id }}" data-toggle="tooltip" data-original-title="{{ $category->description }}" data-placement="bottom">
+            <div class="media-items animation-fadeInQuick2" data-category="pdf">
+                <div class="media-items-options text-right">
+                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i></a>
+                    <a href="#" onclick="AppServices.postDeleteCategory(this)" data-entity-id="{{ $category->id }}" data-token="{{ csrf_token() }}" class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="media-items-content">
+                    <i class="fa fa-folder-open fa-5x text-warning"></i>
+                </div>
+                <h4>
+                    <strong>{{ $category->name }}</strong><br>
+                    <small>{{ $category->updated_at_hummans }}</small>
+                </h4>
+            </div>
         </div>
-    </div>
-@stop
+    @endforeach
+@endsection

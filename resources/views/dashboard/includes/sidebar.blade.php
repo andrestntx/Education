@@ -15,14 +15,9 @@
             <!-- Sidebar Navigation -->
             <ul class="sidebar-nav">                
                 @if(Auth::user()->isAdmin())
+                
                 <li>
-                    <a href="/protocol-generator">
-                        <i class="hi hi-edit sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Generador de Protocolos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{url('areas')}}">
+                    <a href="/areas">
                         <i class="fa fa-sitemap sidebar-nav-icon"></i>
                         <span class="sidebar-nav-mini-hide">Areas</span>
                     </a>
@@ -34,13 +29,13 @@
                     </a>
                     <ul>
                         <li>
-                            <a href="{{url('users')}}">
+                            <a href="/users">
                                 <i class="fa fa-users sidebar-nav-icon"></i>
                                 <span class="sidebar-nav-mini-hide">Ver Usuarios</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('roles')}}">
+                            <a href="/roles">
                                 <i class="gi gi-old_man sidebar-nav-icon"></i>
                                 <span class="sidebar-nav-mini-hide">Perfiles</span>
                             </a>
@@ -54,13 +49,19 @@
                     </a>
                     <ul>
                         <li>
-                            <a href="{{url('protocols')}}">
+                            <a href="/protocol-generator">
+                                <i class="hi hi-edit sidebar-nav-icon"></i>
+                                <span class="sidebar-nav-mini-hide">Generador</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/protocols">
                                 <i class="fa fa-file-text sidebar-nav-icon"></i>
                                 <span class="sidebar-nav-mini-hide">Ver Protocolos</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('categories')}}">
+                            <a href="/categories">
                                 <i class="fa fa-folder-open sidebar-nav-icon"></i>
                                 <span class="sidebar-nav-mini-hide">Categorias</span>
                             </a>
@@ -68,24 +69,56 @@
                     </ul>
                 </li> 
                 <li>
-                    <a href="/formats">
-                        <i class="fa fa-check-square-o sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Formatos de Chequeo</span>
+                    <a href="#" class="sidebar-nav-menu">
+                        <i class="fa fa-chevron-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Formatos</span>
                     </a>
-                </li>               
+                    <ul>
+                        <li>
+                            <a href="/formats/checklists">
+                                <i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                                <span class="sidebar-nav-mini-hide">Listas de Chequeo</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/formats/observations">
+                                <i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                                <span class="sidebar-nav-mini-hide">Observaciones</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li> 
+                  
                 @elseif(Auth::user()->isRegistered())
+
                 <li>
-                    <a href="{{url('myformats')}}">
-                        <i class="fa fa-check-square-o sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Mis Formatos de Chequeo</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{url('/')}}">
+                    <a href="/">
                         <i class="fa fa-bar-chart-o sidebar-nav-icon"></i>
                         <span class="sidebar-nav-mini-hide">Mis Notas</span>
                     </a>
-                </li>               
+                </li>  
+
+                <li>
+                    <a href="#" class="sidebar-nav-menu">
+                        <i class="fa fa-chevron-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Mis Formatos</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="/myformats/checklists">
+                                <i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                                <span class="sidebar-nav-mini-hide">Listas de Chequeo</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/myformats/observations">
+                                <i class="fa fa-check-square-o sidebar-nav-icon"></i>
+                                <span class="sidebar-nav-mini-hide">Observaciones</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+             
                 <li>
                     <a href="#" class="sidebar-nav-menu">
                         <i class="fa fa-chevron-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="fa fa-book sidebar-nav-icon"></i>

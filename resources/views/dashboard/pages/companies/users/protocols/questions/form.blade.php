@@ -26,7 +26,13 @@
       </div>
 
       <div class="form-group"> 
-        <h4 style="margin-left:10%;">Respuestas</h4>
+        <h4 style="margin-left:10%;">
+          Respuestas
+          <a href="javascript:void(0)" class="btn btn-sm btn-effect-ripple btn-info" data-toggle="tooltip" data-original-title="Nueva Respuesta">
+            <i class="fa fa-plus"></i>
+          </a>
+        </h4>
+            
       </div>
       @if(!$question->exists)
         @for($i=1; $i <= $number_answers; $i++ )

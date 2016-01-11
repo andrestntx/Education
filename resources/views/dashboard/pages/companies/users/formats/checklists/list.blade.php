@@ -2,12 +2,12 @@
 
 @section('title_page') 
     <i class="fa fa-check-square-o fa-fw"></i> {{ $format->name }}: Listas de chequeo
-    <a href="{{ route('myformats.checklists.create', $format) }}" class="btn btn-primary @if(! $format->isAviable()) disabled @endif " title="Apicar lista de chequeo">
+    <a href="{{ route('myformats.checklists.doit.create', $format) }}" class="btn btn-primary @if(! $format->isAviable()) disabled @endif " title="Apicar lista de chequeo">
         <i class="fa fa-plus"></i> 
     </a>
 @stop
 
-@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists', $format) !!} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists.doit', $format) !!} @stop
 
 @section('content_body_page')
 
@@ -25,7 +25,7 @@
                     @foreach($checklists as $checklist)
                         <tr>
                             <td>
-                                <a href="{{ route('myformats.checklists.show', [$format, $checklist]) }}" title="Ver Formato">
+                                <a href="{{ route('myformats.checklists.doit.show', [$format, $checklist]) }}" title="Ver Formato">
                                     <i class="fa fa-file-text"></i> 
                                     {{ $checklist->applied }}
                                 </a>

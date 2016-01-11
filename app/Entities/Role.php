@@ -2,20 +2,19 @@
 
 namespace Education\Entities;
 
-use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
-class Role extends Model
+class Role extends MyModel
 {
     protected $fillable = ['name', 'description'];
     public $timestamps = true;
     public $increments = true;
 
-    public function getUpdatedAtHummansAttribute()
+    /**
+    * Relations
+    */
+    public function companies()
     {
-        Carbon::setLocale('es');
-
-        return ucfirst($this->updated_at->diffForHumans());
+        return $this->belongsTo(Company::class);
     }
 
     public function users()
@@ -30,11 +29,11 @@ class Role extends Model
 
     public function formats()
     {
-        return $this->morphedByMany(Protocol::class, 'allowed_roles');
+        return $this->morphedByMany(Format::class, 'allowed_roles');
     }
 
-    public function companies()
+    public function observationFormats()
     {
-        return $this->belongsTo(Company::class);
+        return $this->morphedByMany(ObservationFormat::class, 'allowed_roles');
     }
 }

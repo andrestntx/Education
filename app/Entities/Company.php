@@ -8,13 +8,13 @@ use File;
 
 class Company extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'tel', 'address', 'email'];
     public $timestamps = true;
     public $increments = true;
 
     public static function allTypePaginate($type = 'customer', $paginate = 10)
     {
-        return self::with(['users', 'protocols'])->whereType('customer')->paginate(10);
+        return self::with(['users', 'protocols'])->whereType('customer')->orderBy('active', 'desc')->paginate($paginate);
     }
 
     public function getAreasCountAttribute()
@@ -68,9 +68,7 @@ class Company extends Model
     }
 
     /** 
-     * Relation.
-     *
-     * @return Education\Entities\User
+     * Relations
      */
     public function users()
     {
@@ -107,16 +105,16 @@ class Company extends Model
         return $this->hasManyThrough(Format::class, User::class);
     }
 
+    public function observationFormats()
+    {
+        return $this->hasManyThrough(ObservationFormat::class, User::class);
+    }
+
     public function protocolGeneratorQuestions ()
     {
         return $this->morphMany(Question::class, 'document');
     }
 
-    /** 
-     * Relation.
-     *
-     * @return Education\Entities\Exam
-     */
     public function exams()
     {
         return $this->hasManyThrough(Exam::class, User::class);
@@ -180,5 +178,16 @@ class Company extends Model
     public function orderNewQuestion()
     {
         return $this->protocolGeneratorQuestions()->count() + 1;
+    }
+
+    public function fillAndClear($data)
+    {
+        $this->fill($data);
+
+        if (array_key_exists('active', $data)) {
+            $this->active = 1;
+        } else {
+            $this->active = 0;
+        }
     }
 }

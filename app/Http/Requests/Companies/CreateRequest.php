@@ -24,6 +24,7 @@ class CreateRequest extends Request
     {
         return [
             'name' => 'max:50|required|unique:companies',
+            'email' => 'email',
             'url_logo' => 'max:249',
         ];
     }

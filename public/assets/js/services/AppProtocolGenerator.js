@@ -19,10 +19,11 @@ var AppProtocolGenerator = function() {
 	var newItemQuestionSortable = function (question) {
 		return $(
 			'<li class="well well-sm" id="' + question.id + '" style="cursor:pointer">' +
-				'<a href="#"><i class="gi gi-bin pull-right text-danger" onclick="AppProtocolGenerator.postDeleteQuestion(this)" data-entity-id="' + question.id + '"></i></a>' +
-				'<a href="#" class="editable h4" data-url="/protocol-generator/' + question.id + '" data-pk="' + question.id + '" >' + 
-					question.text + 
-				'</a>' + 
+				'<a href="#" title="Borrar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-danger"><i class="gi gi-bin" onclick="AppProtocolGenerator.postDeleteQuestion(this)" data-entity-id="' + question.id + '"></i></a>' +
+                '<a href="#" title="Desactivar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-warning"><i class="gi gi-thumbs_down" onclick="AppProtocolGenerator.postDeactivateQuestion(this)" data-entity-id="' + question.id + '"></i></a>' +
+                '<a href="#" class="editable h4" data-url="/protocol-generator/' + question.id + '" data-pk="' + question.id + '"> ' +
+                    question.text +
+                '</a>' +
 			'</li>'
 		);
 	};
@@ -93,10 +94,52 @@ var AppProtocolGenerator = function() {
 	    });
 	};
 
+	var postDeactivate = function (questionElement, questionId, url) {
+
+		$.ajax({
+	        url: url,
+	        data: {'_token': token},
+	        dataType:'json',
+	        method:'POST',
+	        success:function(data) {
+	            if(data['success']) {
+	                dactivateQuestion(questionElement, data['state']);
+	            }
+	            else{
+	            	notification('danger', data['message']);
+	            }
+	        },
+	        error:function(){
+	            alert('fallo la conexion');
+	        }
+	    });
+	};
+
 	var deleteQuestion = function (questionId, entityName) {
 		$("#" + questionId).fadeOut(400, function() {
 	        $("#" + questionId).remove();
 	    });
+	};
+
+	var dactivateQuestion = function (questionElement, state) {
+		if(state){
+			$(questionElement).removeClass('gi-thumbs_up').addClass('gi-thumbs_down');
+			$(questionElement)
+				.parent()
+					.removeClass('btn-success')
+					.addClass('btn-warning')
+					.attr('title', 'Desactivar Pregunta')
+					.attr('data-original-title', 'Desactivar Pregunta');
+		}
+		else{
+			$(questionElement).removeClass('gi-thumbs_down').addClass('gi-thumbs_up');
+			$(questionElement)
+				.parent()
+					.removeClass('btn-warning')
+					.addClass('btn-success')
+					.attr('title', 'Activar Pregunta')
+					.attr('data-original-title', 'Activar Pregunta');
+		}
 	};
 
 	var initSortable = function(){
@@ -178,6 +221,12 @@ var AppProtocolGenerator = function() {
 			var url 		= '/protocol-generator/' +  questionId;
 
 			postDelete(questionElement, questionId, url);
+		},
+		postDeactivateQuestion: function (questionElement) {
+			var questionId 	= $(questionElement).data('entity-id');
+			var url 		= '/protocol-generator/change/' +  questionId;
+
+			postDeactivate(questionElement, questionId, url);
 		}
 	}
 }();

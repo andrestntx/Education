@@ -2,7 +2,7 @@
 @section('title_page')
   <i class="fa fa-check-square-o"></i> {{ $format->name }}: Aplicar 
 @stop
-@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists.apply', $format) !!} @stop
+@section('breadcrumbs') {!! Breadcrumbs::render('myformats.checklists.doit.apply', $format) !!} @stop
 @section('title_form') Llena la seguiente lista de chequeo @stop
 @section('form')
   {!! Form::model($checklist, $form_data) !!}

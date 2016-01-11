@@ -17,6 +17,10 @@
 		                    <img src="{{$company->logo}}" alt="{{$company->name}}" class="img-circle img-thumbnail img-thumbnail-avatar-2x">
 		                </a>
 		                <h3 class="widget-heading text-light">{{ $company->name }}</h3>
+		                <h5 class="widget-heading text-light">{{ $company->tel }}</h5>
+		                <h5 class="widget-heading text-light">{{ $company->address }}</h5>
+		                <h5 class="widget-heading text-light">{{ $company->email }}</h5>
+		                @if(! $company->active)<span class="label label-danger" style="font-size: 18px;">Inactiva</span> @endif
 		            </div>
 		            <div class="widget-content themed-background-muted text-center">
 		                <div class="btn-group">

@@ -13,7 +13,7 @@ class FormComposer
      */
     public function compose(View $view)
     {
-        $questions = \Auth::user()->company->protocolGeneratorQuestions()->orderBy('order', 'asc')->get();
+        $questions = \Auth::user()->company->protocolGeneratorQuestions()->whereAviable(1)->orderBy('order', 'asc')->get();
 
         $view->with([
             'questions' => $questions,

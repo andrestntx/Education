@@ -156,6 +156,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->morphedByMany(Format::class, 'allowed_users');
     }
 
+    public function observationFormats()
+    {
+        return $this->morphedByMany(ObservationFormat::class, 'allowed_users');
+    }
+
     public function protocols()
     {
         return $this->morphedByMany(Protocol::class, 'allowed_users');
