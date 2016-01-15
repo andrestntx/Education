@@ -81,6 +81,12 @@ var AppServices = function() {
 			var url 		= '/users/' +  entityId;
 
 			postDelete(entityElement, entityId, url);
+		},
+		postDeleteMath: function (entityElement) {
+			var entityId 	= $(entityElement).data('entity-id');
+			var url 		= '/maths/' +  entityId;
+
+			postDelete(entityElement, entityId, url);
 		}
 
 	};

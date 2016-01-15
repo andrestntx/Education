@@ -12,7 +12,7 @@
             <div class="media-items animation-fadeInQuick2" data-math="pdf">
                 <div class="media-items-options text-right">
                     <a href="{{ route('maths.edit', $math->id) }}" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i></a>
-                    <a href="#" onclick="AppServices.postDeleteRole(this)" data-entity-id="{{ $math->id }}" data-token="{{ csrf_token() }}" class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
+                    <a href="#" onclick="AppServices.postDeleteMath(this)" data-entity-id="{{ $math->id }}" data-token="{{ csrf_token() }}" class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
                 </div>
                 <div class="media-items-content">
                     <i class="fa fa-line-chart fa-5x text-success"></i>
