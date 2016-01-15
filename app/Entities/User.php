@@ -110,6 +110,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return false;
     }
 
+    public function getCompanyMaths()
+    {
+        return $this->company->maths;
+    }
+
     public function getTypeNameAttribute()
     {
         return self::$singularTypes[$this->type];
@@ -169,6 +174,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function exams()
     {
         return $this->hasMany(Exam::class);
+    }
+
+    public function mathsCreated()
+    {
+        return $this->hasMany(Math::class);
     }
 
     public function protocolsCreated()

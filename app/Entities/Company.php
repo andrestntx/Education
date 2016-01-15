@@ -120,6 +120,11 @@ class Company extends Model
         return $this->hasManyThrough(Exam::class, User::class);
     }
 
+    public function maths()
+    {
+        return $this->hasManyThrough(Math::class, User::class);
+    }
+
     /***** End Relations *****/
 
     public function surveysNotExam()

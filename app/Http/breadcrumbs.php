@@ -58,6 +58,23 @@ Breadcrumbs::register('areas.area', function ($breadcrumbs, $area) {
     }
 });
 
+// Home > Maths
+Breadcrumbs::register('maths', function ($breadcrumbs) {
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push('Fórmulas', route('maths.index'));
+});
+
+// Home > Maths > Math
+Breadcrumbs::register('maths.math', function ($breadcrumbs, $math) {
+    $breadcrumbs->parent('maths');
+
+    if ($math->exists) {
+        $breadcrumbs->push($math->name, route('maths.show', $math->id));
+    } else {
+        $breadcrumbs->push('Nuevo', route('maths.create'));
+    }
+});
+
 // Home > Roles
 Breadcrumbs::register('roles', function ($breadcrumbs) {
     $breadcrumbs->parent('home');

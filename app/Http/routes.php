@@ -66,6 +66,10 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
 
         });
 
+        Route::group(['namespace' => 'Maths'], function () {
+            Route::resource('maths', 'MathsController');
+        });
+
         /*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));*/
     });
 

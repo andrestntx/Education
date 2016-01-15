@@ -88,6 +88,12 @@
                         </li>
                     </ul>
                 </li> 
+                <li>
+                    <a href="/maths">
+                        <i class="fa fa-line-chart sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Fórmulas</span>
+                    </a>
+                </li>
                   
                 @elseif(Auth::user()->isRegistered())
 
@@ -151,9 +157,25 @@
                         @endforeach
                     </ul>
                 </li>
+                <li>
+                    <a href="#" class="sidebar-nav-menu">
+                        <i class="fa fa-chevron-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="fa fa-line-chart sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Fórmulas</span>
+                    </a>
+                    <ul>
+                        @foreach(Auth::user()->getCompanyMaths() as $math)
+                        <li>
+                            <a href="{{ $math->url }}" target="_blank">
+                                <i class="fa fa-line-chart sidebar-nav-icon"></i>
+                                <span class="sidebar-nav-mini-hide">{{ $math->title }}</span>
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                </li>
                 @else                
                 <li>
-                    <a href="{{url('companies')}}">
+                    <a href="/companies">
                         <i class="fa fa-laptop sidebar-nav-icon"></i> <span class="sidebar-nav-mini-hide">Instituciones</span>
                     </a>
                 </li>
