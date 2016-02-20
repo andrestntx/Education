@@ -36,11 +36,34 @@
 
             <div class="block">
                 <div class="block-title">
+                    <h2>Videos</h2>
+                </div>
+                <div class="block-section">
+                    <ul class="list-unstyled">
+                        @foreach($protocol->getVideos() as $video)
+                        <li title="{{ $video->description }}">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h4 style="font-size:16px;">
+                                        <a href="#modal-fade" data-video="{{ $video }}" data-toggle="modal" class="widget" title="{{ $video->description }}">
+                                            <i class="fa fa-play fa-fw"></i>
+                                            {{ $video->name }}
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-title">
                     <h2>Enlaces</h2>
                 </div>
                 <div class="block-section">
                     <ul class="list-unstyled">
-                        @foreach($protocol->links as $link)
+                        @foreach($protocol->getLinks() as $link)
                         <li title="{{$link->description}}">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -73,8 +96,18 @@
                     </ul>
                 </div>
             </div>
+
+            @include('dashboard.pages.companies.users.protocols.videos.modal')
+
 		</div>
 	</div>
-@stop
+@endsection
+
+@section('js_aditional')
+    
+    {!! Html::script('assets/js/services/AppEmbedVimeo.js') !!}
+    <script type="text/javascript"> AppEmbedVimeo.init(); </script>
+    
+@endsection
 
 

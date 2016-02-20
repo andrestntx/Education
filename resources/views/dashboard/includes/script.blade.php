@@ -15,5 +15,9 @@
 {!! Html::script('assets/js/admin.js') !!}
 {!! Html::script('/assets/js/services/AppServices.js') !!}
 
+<script type="text/javascript">
+	AppServices.init();
+</script>
+
 
 

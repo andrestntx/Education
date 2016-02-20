@@ -1,5 +1,7 @@
 <?php
 
+use Vinkla\Vimeo\Facades\Vimeo;
+use Education\Entities\Protocol;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +41,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
             Route::resource('protocols', 'ProtocolsController');
             Route::resource('protocols.questions', 'ProtocolQuestionsController');
             Route::resource('protocols.links', 'ProtocolLinksController');
+            Route::resource('protocols.videos', 'ProtocolVideosController');
             Route::resource('protocols.annexes', 'ProtocolAnnexesController');
 
             Route::group(['namespace' => 'Generator'], function () {
@@ -97,4 +100,8 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
 
     Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);
     Route::put('profile', ['as' => 'profile', 'uses' => 'Config\UsersController@profile']);
+
+    Route::get('videos', function(){
+        return Protocol::find(1)->getVideos();
+    });
 });

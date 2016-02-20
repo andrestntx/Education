@@ -6,6 +6,7 @@
         <meta name="robots" content="noindex, nofollow">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
         <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         @yield('meta_extra')
 	@endsection
 	@section('css_files')

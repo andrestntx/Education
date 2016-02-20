@@ -155,6 +155,8 @@ return [
         Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Vinkla\Vimeo\VimeoServiceProvider::class
+
     ],
 
     /*
@@ -209,6 +211,7 @@ return [
         'Flash'     => Laracasts\Flash\Flash::class,
         'Access'    => Styde\Html\Facades\Access::class,
         'PDF'       => Barryvdh\DomPDF\Facade::class,
+        'Vimeo'     => Vinkla\Vimeo\Facades\Vimeo::class
 
     ],
 

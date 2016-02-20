@@ -3,6 +3,7 @@
 namespace Education\Entities;
 
 use File, Storage;
+use Vinkla\Vimeo\Facades\Vimeo;
 
 class Protocol extends MyDocument
 {
@@ -88,6 +89,20 @@ class Protocol extends MyDocument
     public function getPathAnnexes()
     {
         return 'protocols/'.$this->id.'/annexes/';
+    }
+
+    public function getVideos()
+    {
+        return $this->links->filter(function ($link) {
+            return $link->isVimeo();
+        });
+    }
+
+    public function getLinks()
+    {
+        return $this->links->filter(function ($link) {
+            return $link->isLink();
+        });
     }
 
     public function getAnnexes()

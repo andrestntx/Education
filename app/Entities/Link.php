@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Link extends Model
 {
-    protected $fillable = ['url','name', 'description', 'protocol_id'];
+    protected $fillable = ['url','name', 'type', 'description', 'protocol_id'];
     public $timestamps = true;
     public $increments = true;
     public $errors;
@@ -31,52 +31,6 @@ class Link extends Model
         }
 
         return true;
-    }
-
-    public function isValid($data)
-    {
-        $rules = array(
-            'name' => 'required|max:100|unique:annex',
-            'protocol_id' => 'required',
-            'url' => 'mimes:jpeg,bmp,png,mp4,pdf|max:1500',
-        );
-
-        if ($this->exists) {
-            $rules['name'] .= ',name,'.$this->id.',id';
-        }
-
-        $validator = Validator::make($data, $rules);
-
-        if ($validator->passes()) {
-            return true;
-        }
-
-        $this->errors = $validator->errors();
-
-        return false;
-    }
-
-    public function isValidLink($data)
-    {
-        $rules = array(
-            'name' => 'required|max:100|unique:annex',
-            'protocol_id' => 'required',
-            'url' => 'required',
-        );
-
-        if ($this->exists) {
-            $rules['name'] .= ',name,'.$this->id.',id';
-        }
-
-        $validator = Validator::make($data, $rules);
-
-        if ($validator->passes()) {
-            return true;
-        }
-
-        $this->errors = $validator->errors();
-
-        return false;
     }
 
     public function validAndSave($data, $file)
@@ -117,7 +71,7 @@ class Link extends Model
         }
     }
 
-    public function getTypeAttribute()
+    public function getFileTypeAttribute()
     {
         $extension = File::extension($this->url);
         if ($extension == 'png' || $extension == 'jpg' || $extension == 'bmp') {
@@ -151,9 +105,9 @@ class Link extends Model
         return false;
     }
 
-    public function isVideo()
+    public function isType($type)
     {
-        if ($this->type == 'video') {
+        if ($this->type == $type) {
             return true;
         }
 
@@ -162,12 +116,24 @@ class Link extends Model
 
     public function isLink()
     {
-        if ($this->type == 'link') {
-            return true;
+        return $this->isType('default');
+    }
+
+    public function isVimeo()
+    {
+        return $this->isType('vimeo');
+    }
+
+    public function getVimeoId()
+    {
+        if($this->exists && $this->isVimeo()) {
+            $arrayUrl = explode('/', $this->url);
+            return end($arrayUrl);
         }
 
-        return false;
+        return null;
     }
+
 
     public function isLinkYoutube()
     {

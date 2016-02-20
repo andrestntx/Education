@@ -2,7 +2,13 @@
 @section('title_page')<i class="fa fa-file-text"></i> Protocolo: {{$protocol->name}} @stop
 
 @section('breadcrumbs') {!! Breadcrumbs::render('protocols.protocol', $protocol) !!} @stop
-
+@section('css_aditional')
+	<style type="text/css">
+		#embed iframe{
+			width: 100%;
+		}
+	</style>
+@endsection
 @section('content_body_page')
 	<div class="row">
 		<div class="col-xs-12">
@@ -77,12 +83,93 @@
 	                </div>
                 </div>
 
+	            <div class="row">
+	                <div id="links" class="panel-group">
+	                    <div class="panel panel-warning">
+	                    	<div class="block-options pull-right">
+								<a href="{{ route('protocols.links.create', $protocol->id) }}" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" title="Nuevo Enlace"><i class="fa fa-plus"></i></a>
+							</div>
+	                        <div class="panel-heading" style="padding:10px;">
+	                            <div class="panel-title">
+	                                <i class="fa fa-angle-right"></i> <a class="accordion-toggle h4" data-toggle="collapse" data-parent="#links" href="#links_1"><strong>Enlaces</strong></a>
+	                            </div>
+	                        </div>
+	                        <div id="links_1" class="panel-collapse collapse">
+	                            <div class="panel-body">
+	                                <ul class="list-unstyled">
+					                    @foreach($protocol->getLinks() as $link)
+				                            <li title="{{$link->description}}">
+				                            	<div class="row">
+					                            	<div class="col-xs-10">
+					                            		<a href="{{ route('protocols.links.edit', [$protocol->id, $link->id]) }}" data-toggle="tooltip" title="Editar Enlace" style="font-size:16px;">
+							                                <i class="gi gi-link"></i> {{ $link->name }}
+							                            </a>
+					                            	</div>
+					                            	<div class="col-xs-2">
+							                            {!! Form::open(['route' => ['protocols.links.destroy', $protocol->id, $link->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
+								                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
+								                                <i class="fa fa-times"></i>
+								                            </button>
+							                            {!! Form::close() !!}
+						                        	</div>
+					                        	</div>
+				                            </li>
+					                    @endforeach
+					                </ul>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+                </div>
+
+                <div class="row">
+	                <div id="videos" class="panel-group">
+	                    <div class="panel panel-danger">
+	                    	<div class="block-options pull-right">
+	                    		<a href="{{ route('protocols.videos.create', $protocol->id) }}" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" title="Nuevo Video"><i class="fa fa-plus"></i></a>
+							</div>
+	                        <div class="panel-heading" style="padding:10px;">
+	                            <div class="panel-title">
+	                                <i class="fa fa-angle-right"></i> <a class="accordion-toggle h4" data-toggle="collapse" data-parent="#videos" href="#videos_1"><strong>Videos</strong></a>
+	                            </div>
+	                        </div>
+	                        <div id="videos_1" class="panel-collapse collapse">
+	                            <div class="panel-body">
+	                                <ul class="list-unstyled">
+					                    @foreach($protocol->getVideos() as $video)
+					                    	<li>
+				                            	<div class="row">
+					                            	<div class="col-xs-9">
+					                            		<a href="#modal-fade" data-video="{{ $video }}" data-toggle="modal" class="widget" title="{{ $video->description }}">
+							                                <i class="hi hi-cloud_upload"></i> {{ $video->name }}
+							                            </a>
+					                            	</div>
+					                            	<div class="col-xs-3">
+					                            		<a href="{{ route('protocols.videos.edit', [$protocol, $video]) }}" class="btn btn-xs btn-effect-ripple btn-warning">
+					                            			<i class="fa fa-pencil"></i>
+					                            		</a>
+							                            {!! Form::open(['route' => ['protocols.videos.destroy', $protocol, $video], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
+								                            <button type="submit" title="Borrar Video" class="btn btn-xs btn-effect-ripple btn-danger">
+								                                <i class="fa fa-times"></i>
+								                            </button>
+							                            {!! Form::close() !!}
+						                        	</div>
+					                        	</div>
+				                            </li>
+					                    @endforeach
+					                </ul>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+                </div>
+
                 @if($protocol->getAnnexes())
 	                <div class="row">
 		                <div id="annexes" class="panel-group">
 		                    <div class="panel panel-success">
 		                    	<div class="block-options pull-right">
-									<a href="{{ route('protocols.links.create', $protocol->id) }}" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" title="Nuevo Anexo"><i class="fa fa-plus"></i></a>
+
 								</div>
 		                        <div class="panel-heading" style="padding:10px;">
 		                            <div class="panel-title">
@@ -118,45 +205,6 @@
 	                </div>
 	            @endif
 
-	            <div class="row">
-	                <div id="links" class="panel-group">
-	                    <div class="panel panel-warning">
-	                    	<div class="block-options pull-right">
-								<a href="{{ route('protocols.links.create', $protocol->id) }}" class="btn btn-effect-ripple btn-info" data-toggle="tooltip" title="Nuevo Enlace"><i class="fa fa-plus"></i></a>
-							</div>
-	                        <div class="panel-heading" style="padding:10px;">
-	                            <div class="panel-title">
-	                                <i class="fa fa-angle-right"></i> <a class="accordion-toggle h4" data-toggle="collapse" data-parent="#links" href="#links_1"><strong>Enlaces</strong></a>
-	                            </div>
-	                        </div>
-	                        <div id="links_1" class="panel-collapse collapse">
-	                            <div class="panel-body">
-	                                <ul class="list-unstyled">
-					                    @foreach($protocol->links as $link)
-				                            <li title="{{$link->description}}">
-				                            	<div class="row">
-					                            	<div class="col-xs-10">
-					                            		<a href="{{ route('protocols.links.edit', [$protocol->id, $link->id]) }}" data-toggle="tooltip" title="Editar Enlace" style="font-size:16px;">
-							                                <i class="gi gi-link"></i> {{ $link->name }}
-							                            </a>
-					                            	</div>
-					                            	<div class="col-xs-2">
-							                            {!! Form::open(['route' => ['protocols.links.destroy', $protocol->id, $link->id], 'method' => 'DELETE', 'style' => 'display:inline-block;']) !!}
-								                            <button type="submit" title="Borrar Enlace" class="btn btn-xs btn-effect-ripple btn-danger">
-								                                <i class="fa fa-times"></i>
-								                            </button>
-							                            {!! Form::close() !!}
-						                        	</div>
-					                        	</div>
-				                            </li>
-					                    @endforeach
-					                </ul>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-                </div>
-
 				<div class="row">
 					<div class="block">
 						<div class="block-title">
@@ -176,12 +224,20 @@
 				</div>
 
 
+
 			</div>
 		</div>
 	</div>
-@stop
+
+	@include('dashboard.pages.companies.users.protocols.videos.modal')
+	
+@endsection
 
 @section('js_aditional')
+	
+	{!! Html::script('assets/js/services/AppEmbedVimeo.js') !!}
+	<script type="text/javascript"> AppEmbedVimeo.init(); </script>
+	
 	<script>
 		$(".dropzone").dropzone({ 
 			dictDefaultMessage: 'Suelte aquí los anexos que desea agregar',
@@ -189,5 +245,7 @@
 			dictFileTooBig: 'El anexo es demasiado grande. No puede superar las 2MB'
 		});
 	</script>
+
+
 @endsection
 

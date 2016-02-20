@@ -46,6 +46,21 @@ var AppServices = function() {
 
     return {
 
+    	init: function() {
+			$.ajaxSetup({
+		        headers: {
+		            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		        }
+			});
+		},
+		notification: function (type, message) {
+			$.bootstrapGrowl("<h4><strong>Atención</strong></h4> <p style='font-size:16px;'>" + message + "</p>", {
+		        type: type,
+		        delay: 7000,
+		        allow_dismiss: true,
+		        offset: {from: 'top', amount: 20}
+		    });
+		},
 		postDeleteRole: function (entityElement) {
 			var entityId 	= $(entityElement).data('entity-id');
 			var url 		= '/roles/' +  entityId;
