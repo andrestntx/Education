@@ -33,8 +33,11 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
             Route::resource('areas', 'AreasController');
             Route::resource('roles', 'RolesController');
             Route::resource('categories', 'CategoriesController');
-            Route::resource('users', 'UsersController');
+
+            Route::get('users/inactive', ['as' => 'users.inactive', 'uses' => 'UsersController@inactive']);
+            Route::post('users/{users}/activate', ['as' => 'users.activate', 'uses' => 'UsersController@activate']);
             Route::get('users/{users}/scores', ['as' => 'users.scores', 'uses' => 'UsersController@scores']);
+            Route::resource('users', 'UsersController');
         });
 
         Route::group(['namespace' => 'Protocols'], function () {
@@ -72,8 +75,6 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
         Route::group(['namespace' => 'Maths'], function () {
             Route::resource('maths', 'MathsController');
         });
-
-        /*Route::get('protocols/{protocol}/stats', array('as' => 'protocols.stats', 'uses' => 'ProtocolsController@stats'));*/
     });
 
     Route::group(['middleware' => 'user_type:registered'], function () {
@@ -101,7 +102,4 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
     Route::get('/', ['as' => 'home', 'uses' => 'DashboardController@index']);
     Route::put('profile', ['as' => 'profile', 'uses' => 'Config\UsersController@profile']);
 
-    Route::get('videos', function(){
-        return Protocol::find(1)->getVideos();
-    });
 });

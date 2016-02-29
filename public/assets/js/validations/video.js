@@ -1,10 +1,10 @@
 /*
- *  Document   : formsValidation.js
+ *  Document   : videoValidation.js
  *  Author     : pixelcave
  *  Description: Custom javascript code used in Forms Validation page
  */
 
-var FormsValidation = function() {
+var videoValidation = function() {
     
     var rules = 
     {

@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
             $table->string('email', 100)->nullable();
             $table->string('tel', 30)->nullable();
             $table->string('password', 255);
+            $table->boolean('active')->default(true);
 
             $table->string('url_photo', 255)->nullable();
 
@@ -25,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies');
 
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

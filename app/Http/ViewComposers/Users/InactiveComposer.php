@@ -5,7 +5,7 @@ namespace Education\Http\ViewComposers\Users;
 use Education\Entities\User;
 use Illuminate\Contracts\View\View;
 
-class ListComposer
+class InactiveComposer
 {
     /**
      * Bind data to the view.
@@ -16,7 +16,7 @@ class ListComposer
     {
         $users = \Auth::user()->company->users()
             ->whereType('registered')
-            ->whereActive(true)
+            ->whereActive(false)
             ->orderBy('updated_at', 'DESC')
             ->paginate(20);
         

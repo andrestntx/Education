@@ -2,7 +2,7 @@
 
 namespace Education\Http\Middleware;
 
-use Closure;
+use Closure, Auth;
 use Illuminate\Contracts\Auth\Guard;
 
 class Authenticate
@@ -39,6 +39,19 @@ class Authenticate
                 return response('Unauthorized.', 401);
             } else {
                 return redirect()->guest('auth/login');
+            }
+        }
+        else if( ! $this->auth->user()->active){
+            Auth::logout();
+
+            if ($request->ajax()) {
+                return response('Unauthorized.', 401);
+            } 
+            else {
+                return redirect()->guest('auth/login')
+                    ->withErrors([
+                        'username' => 'El Usuario se encuentra deshabilitado',
+                    ]);
             }
         }
 

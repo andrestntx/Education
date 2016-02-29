@@ -6,18 +6,27 @@
 
 var AppServices = function() {
 
-	var postDelete = function (entityElement, entityId, url) {
+	var postDelete = function (entityElement, entityId, url, method) {
 		var token = $(entityElement).data('token');
+
+		if(! method){
+			method = 'DELETE';
+		}
 
 		$.ajax({
 	        url: url,
 	        data: {'_token': token},
 	        dataType:'json',
-	        method:'DELETE',
+	        method: method,
 	        success:function(data){
 	            if(data['success']){
 	                deleteEntity(entityId);
-	                notification('info', data['message']);
+	                if(data['status']) {
+	                	notification(data['status'], data['message']);	
+	                }
+	                else {
+	                	notification('info', data['message']);	
+	                }
 	            }
 	            else{
 	            	notification('danger', data['message']);
@@ -96,6 +105,12 @@ var AppServices = function() {
 			var url 		= '/users/' +  entityId;
 
 			postDelete(entityElement, entityId, url);
+		},
+		postActivateUser: function (entityElement) {
+			var entityId 	= $(entityElement).data('entity-id');
+			var url 		= '/users/' +  entityId + '/activate';
+
+			postDelete(entityElement, entityId, url, 'POST');
 		},
 		postDeleteMath: function (entityElement) {
 			var entityId 	= $(entityElement).data('entity-id');

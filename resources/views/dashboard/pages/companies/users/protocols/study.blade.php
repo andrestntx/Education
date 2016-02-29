@@ -67,7 +67,17 @@
                         <li title="{{$link->description}}">
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <h4 style="font-size:16px;"><i class="fa fa-external-link fa-fw"></i><a href="{{ $link->url }}" target="_blank">{{ $link->name }}</a></h4>
+                                    <h4 style="font-size:16px;">
+                                        @if($link->isLinkYoutube())
+                                            <a href="#modal-fade-youtube" data-video="{{ $link }}" data-youtube="{{ $link->id_link_youtube }}" data-toggle="modal" title="{{ $link->description }}">
+                                                <i class="fa fa-fw fa fa-youtube-play"></i>
+                                                {{ $link->name }}
+                                            </a>
+                                        @else
+                                            <i class='fa fa-fw fa-external-link'></i>
+                                            <a href="{{ $link->url }}" target="_blank">{{ $link->name }}</a>
+                                        @endif
+                                    </h4>
                                 </div>
                             </div>
                         </li>
@@ -98,6 +108,7 @@
             </div>
 
             @include('dashboard.pages.companies.users.protocols.videos.modal')
+            @include('dashboard.pages.companies.users.protocols.videos.modal-youtube')
 
 		</div>
 	</div>
@@ -107,6 +118,10 @@
     
     {!! Html::script('assets/js/services/AppEmbedVimeo.js') !!}
     <script type="text/javascript"> AppEmbedVimeo.init(); </script>
+
+    {!! Html::script('assets/js/services/AppEmbedYoutube.js') !!}
+    <script type="text/javascript"> AppEmbedYoutube.init(); </script>
+
     
 @endsection
 

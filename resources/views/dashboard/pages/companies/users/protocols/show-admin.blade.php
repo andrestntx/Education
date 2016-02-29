@@ -102,7 +102,7 @@
 				                            	<div class="row">
 					                            	<div class="col-xs-10">
 					                            		<a href="{{ route('protocols.links.edit', [$protocol->id, $link->id]) }}" data-toggle="tooltip" title="Editar Enlace" style="font-size:16px;">
-							                                <i class="gi gi-link"></i> {{ $link->name }}
+							                                <i {!! Html::classes(['gi gi-link' => ! $link->isLinkYoutube(), 'fa fa-youtube-play' => $link->isLinkYoutube()]) !!}"></i> {{ $link->name }}
 							                            </a>
 					                            	</div>
 					                            	<div class="col-xs-2">

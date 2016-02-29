@@ -22,7 +22,7 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->beforeFilter('@newUser', ['only' => ['store', 'create']]);
-        $this->beforeFilter('@findUser', ['only' => ['show', 'edit', 'update', 'destroy', 'scores']]);
+        $this->beforeFilter('@findUser', ['only' => ['show', 'edit', 'update', 'destroy', 'activate', 'scores']]);
     }
 
     /**
@@ -54,6 +54,16 @@ class UsersController extends Controller
     public function index()
     {
         return view(self::$prefixView.'list');
+    }
+
+    /**
+     * Display a listing of the inactive resource.
+     *
+     * @return Response
+     */
+    public function inactive()
+    {
+        return view(self::$prefixView.'inactive');
     }
 
     /**
@@ -129,21 +139,31 @@ class UsersController extends Controller
     {
         $data = [
             'success' => true,
-            'message' => 'Usuario eliminado correctamente'
+            'message' => 'Usuario deshabilitado',
+            'status'  => 'info'
         ];   
 
-        if($this->user->canDestroy()){
-            try {
-                $this->user->detachAndDelete();
-            } catch (QueryException $e) {
-                $data['success'] = false;
-                $data['message'] = 'El Usuario no se puede eliminar';
-            }    
-        }
-        else{
-            $data['success'] = false;
-            $data['message'] = 'El Usuario no se puede eliminar, ya que tiene examenes asociados';
-        }
+        $this->user->inactivate();
+
+        return response()->json($data);
+    }
+
+    /**
+     * Activate the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function activate($id)
+    {
+        $data = [
+            'success' => true,
+            'message' => 'Usuario habilitado',
+            'status'  => 'info'
+        ];   
+
+        $this->user->activate();
 
         return response()->json($data);
     }

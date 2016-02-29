@@ -5,6 +5,7 @@ namespace Education\Entities;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Hash;
@@ -14,7 +15,14 @@ use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword;
+    use Authenticatable, CanResetPassword, SoftDeletes;
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     /**
      * The database table used by the model.
@@ -86,6 +94,22 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return false;
     }
 
+    public function changeActive($value)
+    {
+        $this->active = $value;
+        $this->save();
+    }
+
+    public function activate()
+    {
+        $this->changeActive(1);
+    }
+
+    public function inactivate()
+    {
+        $this->changeActive(0);
+    }
+        
     public function isSuperadmin()
     {
         return $this->isType('superadmin');
@@ -266,12 +290,5 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         return false;
-    }
-
-    public function detachAndDelete()
-    {
-        $this->areas()->detach();
-        $this->roles()->detach();
-        $this->delete(); 
     }
 }

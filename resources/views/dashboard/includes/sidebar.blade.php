@@ -40,6 +40,12 @@
                                 <span class="sidebar-nav-mini-hide">Perfiles</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="/users/inactive">
+                                <i class="fa fa-hand-o-down sidebar-nav-icon"></i>
+                                <span class="sidebar-nav-mini-hide">Deshabilitados</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li>

@@ -119,6 +119,20 @@ class Link extends Model
         return $this->isType('default');
     }
 
+    public function isLinkOfWebsite($website)
+    {
+        if ($this->isLink() &&  strpos($this->url, $website)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isLinkYoutube()
+    {
+        return $this->isLinkOfWebsite('www.youtube.com');
+    }
+
     public function isVimeo()
     {
         return $this->isType('vimeo');
@@ -132,16 +146,6 @@ class Link extends Model
         }
 
         return null;
-    }
-
-
-    public function isLinkYoutube()
-    {
-        if ($this->type == 'link' &&  strpos($this->url, 'www.youtube.com')) {
-            return true;
-        }
-
-        return false;
     }
 
     public function getIdLinkYoutubeAttribute()

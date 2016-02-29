@@ -37,10 +37,10 @@
       </div>
       <div class="col-md-6">
         <div class="input-group" id="div_file_pdf">
-          <input id="file_pdf" name="file_doc" type="file" class="file"></input>
+          <input id="file_pdf" name="file_doc" type="file" class="file" accept="application/pdf"></input>
         </div>
         <div class="input-group" id="div_link_pdf" style="width:100%;">
-          {!! Form::text('url_doc', null, array('class' => 'form-control', 
+          {!! Form::text('url_doc', null, array('class' => 'form-control',
             'placeholder' => 'http://pagina-externa/archivo.pdf', 'id' => 'link_pdf'))
           !!}
         </div>

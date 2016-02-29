@@ -12,9 +12,6 @@ class CompaniesTableSeeder extends Seeder
 {
     public function run()
     {
-        $company = factory(Company::class, 'developer')->create()
-            ->users()->save(factory(User::class, 'superadmin')->make());
-
         $company = factory(Company::class)->create();
 
         $company->users()->save(factory(User::class, 'admin_default')->make());

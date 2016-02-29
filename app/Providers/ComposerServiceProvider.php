@@ -23,6 +23,7 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\Protocols\ListComposer' => 'dashboard.pages.companies.users.protocols.list',
             'Education\Http\ViewComposers\Protocols\FormComposer' => 'dashboard.pages.companies.users.protocols.form',
             'Education\Http\ViewComposers\Users\ListComposer' => 'dashboard.pages.companies.users.admin.list',
+            'Education\Http\ViewComposers\Users\InactiveComposer' => 'dashboard.pages.companies.users.admin.inactive',
             'Education\Http\ViewComposers\Users\FormComposer' => 'dashboard.pages.companies.users.admin.form',
             'Education\Http\ViewComposers\Formats\Checklists\ListComposer' => 'dashboard.pages.companies.users.formats.checklists.format.list',
             'Education\Http\ViewComposers\Formats\Observations\ListComposer' => 'dashboard.pages.companies.users.formats.observations.format.list',
@@ -32,8 +33,6 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\Protocols\Generator\ListComposer' => 'dashboard.pages.companies.users.protocols.generator.config',
             'Education\Http\ViewComposers\GeneratedProtocols\ListComposer' => 'dashboard.pages.companies.users.protocols.generator.list',
             'Education\Http\ViewComposers\GeneratedProtocols\FormComposer' => 'dashboard.pages.companies.users.protocols.generator.form'
-
-
         ]);
     }
 
