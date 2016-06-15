@@ -31,6 +31,6 @@ class CreateAllowedUsersView extends Migration
      */
     public function down()
     {
-        DB::select('DROP VIEW allowed_users');
+        DB::statement('DROP VIEW allowed_users');
     }
 }
