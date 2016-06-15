@@ -9,7 +9,7 @@ class CreateAllowedUsersView extends Migration
      */
     public function up()
     {
-        DB::select(
+        DB::statement(
             'CREATE VIEW allowed_users AS ('.
                 'SELECT DISTINCT area_user.user_id, allowed_roles.allowed_roles_id as allowed_users_id, allowed_roles.allowed_roles_type as allowed_users_type '.
                 'FROM users '.
