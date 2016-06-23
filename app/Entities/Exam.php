@@ -2,6 +2,8 @@
 
 namespace Education\Entities;
 
+use Carbon\Carbon;
+
 class Exam extends MyModel
 {
     protected $fillable = array('user_id', 'protocol_id');
