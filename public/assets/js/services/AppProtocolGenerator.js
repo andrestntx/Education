@@ -165,6 +165,13 @@ var AppProtocolGenerator = function() {
 				}				
 			}
 		});
+
+		$('#addNewQuestion').click(function (e) {
+			var newQuestion = $("#newQuestion").val();
+			if(newQuestion.trim()) {
+				postNewQuestion(newQuestion);	
+			}				
+		});
 	};
 
 	var initEditable = function() { 
