@@ -127,6 +127,13 @@ class Company extends Model
 
     /***** End Relations *****/
 
+    public function firstProtocolGeneratorQuestions()
+    {
+        return $this->protocolGeneratorQuestions()
+            ->with(['questions.questions.questions.questions.questions'])
+            ->whereNull('superior_id')->orderBy('order', 'asc')->get();
+    }
+
     public function surveysNotExam()
     {
         $checks = $this->surveys->filter(function ($survey) {
@@ -193,6 +200,59 @@ class Company extends Model
             $this->active = 1;
         } else {
             $this->active = 0;
+        }
+    }
+
+    /**
+     * @param $question_id
+     * @return mixed
+     */
+    protected function findQuestion($question_id)
+    {
+        return $this->protocolGeneratorQuestions()->findOrFail($question_id);
+    }
+
+    /**
+     * @param $question_id
+     * @param $order
+     * @param null $superior_id
+     * @return mixed
+     */
+    protected function setOrderQuestion($question_id, $order, $superior_id = null)
+    {
+        $question = $this->findQuestion($question_id);
+        return $question->setOrder($order + 1, $superior_id);
+    }
+
+    /**
+     * @param $superior_id
+     * @param array $questions
+     */
+    protected function reorderChildrenQuestion($superior_id, array $questions)
+    {
+        foreach ($questions as $order => $questionJson) {
+            $this->setOrderQuestionChildren($questionJson, $order, $superior_id);
+        }
+    }
+
+    /**
+     * @param $questionJson
+     * @param $order
+     * @param null $superior_id
+     */
+    protected function setOrderQuestionChildren($questionJson, $order, $superior_id = null)
+    {
+        $question = $this->setOrderQuestion($questionJson->id, $order, $superior_id);
+        $this->reorderChildrenQuestion($question->id, $questionJson->children[0]);
+    }
+
+    /**
+     * @param array $questions
+     */
+    public function reorderQuestions(array $questions)
+    {
+        foreach ($questions as $order => $questionJson) {
+            $this->setOrderQuestionChildren($questionJson, $order);
         }
     }
 }

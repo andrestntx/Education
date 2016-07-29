@@ -6,24 +6,28 @@
 
 var AppProtocolGenerator = function() {
 	
-	var ulSortable = '.sortable';
+	var ulSortable = 'ul.questions';
 
 	var token = function () {
 		return $('#newQuestion').data('token');
 	};
 
 	var questionsArray = function () {
-		return $(ulSortable).sortable('toArray');
+		var questions = $(ulSortable).sortable("serialize").get()[0];
+		console.log(questions);
+    	return JSON.stringify(questions, null, ' ');
+		//return $(ulSortable).sortable('toArray');
 	};
 
 	var newItemQuestionSortable = function (question) {
 		return $(
-			'<li class="well well-sm" id="' + question.id + '" style="cursor:pointer">' +
+			'<li class="well well-sm" data-id="' + question.id + '" data-name="' + question.text + '" id="' + question.id + '" style="cursor:pointer">' +
 				'<a href="#" title="Borrar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-danger"><i class="gi gi-bin" onclick="AppProtocolGenerator.postDeleteQuestion(this)" data-entity-id="' + question.id + '"></i></a>' +
                 '<a href="#" title="Desactivar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-warning"><i class="gi gi-thumbs_down" onclick="AppProtocolGenerator.postDeactivateQuestion(this)" data-entity-id="' + question.id + '"></i></a>' +
                 '<a href="#" class="editable h4" data-url="/protocol-generator/' + question.id + '" data-pk="' + question.id + '"> ' +
                     question.text +
                 '</a>' +
+                '<ul></ul>' +
 			'</li>'
 		);
 	};
@@ -41,13 +45,14 @@ var AppProtocolGenerator = function() {
 		if(! jQuery.isEmptyObject(questionsArray())){
 			$.ajax({
 				url: '/protocol-generator/order',
-				data: {_token: token, questions: questionsArray()},
+				data: {_token: token, questions: questionsArray(), prueba: 'hola mama'},
 				method:'POST',
 				success:function(data){
 					console.log(data);
 				},
 				error:function(){
-					$(ulSortable).sortable('cancel');
+					console.log('error');
+					//$(ulSortable).sortable('cancel');
 				}
 			});
 		}
@@ -143,7 +148,7 @@ var AppProtocolGenerator = function() {
 	};
 
 	var initSortable = function(){
-		$('.sortable').sortable({
+		/*$('.sortable').sortable({
 			axis: 'y',
 		  	cursor: 'pointer',
 		  	cursorAt: { top: 1 },
@@ -153,7 +158,20 @@ var AppProtocolGenerator = function() {
 		  	update: function( event, ui ) {
 		  		postOrderQuestions();	
 		  	}
-		}).disableSelection();
+		}).disableSelection(); */
+
+		var oldContainer;
+
+		$("ul.questions").sortable({
+			group: 'questions',
+			// animation on drop
+			onDrop: function  ($item, container, _super) {
+				$item.removeClass(container.group.options.draggedClass).removeAttr("style")
+  				$("body").removeClass(container.group.options.bodyClass)
+
+				postOrderQuestions();
+			}
+		});
 	};
 
 	var initEventKeyPress = function () {

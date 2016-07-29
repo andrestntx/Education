@@ -39,8 +39,11 @@
 	.editable-container.editable-inline {
 	    display: inline-block;
 	    vertical-align: middle;
-	    width: 100% !important;
+	    width: 80% !important;
 	    zoom: 1;
+	}
+	fieldset fieldset {
+	    padding-left: 35px;
 	}
 </style>
 

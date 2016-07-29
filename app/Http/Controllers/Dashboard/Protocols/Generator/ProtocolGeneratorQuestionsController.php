@@ -150,15 +150,9 @@ class ProtocolGeneratorQuestionsController extends Controller
         return response()->json($data);
     }
 
-    public function order(OrderRequest $request)
+    public function order(Request $request)
     {
-        $questions = $request->get('questions');
-
-        foreach ($questions as $order => $question_id) {
-            $question = $this->company->protocolGeneratorQuestions()->findOrFail($question_id);
-            $question->order = $order + 1;
-            $question->save();
-        }
+        $this->company->reorderQuestions(json_decode($request->get('questions')));
 
         return ['success' => true];
     }

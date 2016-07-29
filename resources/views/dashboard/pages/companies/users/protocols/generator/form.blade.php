@@ -13,21 +13,13 @@
 
         <div class="col-md-12">
           @foreach($questions as $question)
-            <fieldset>
-              <legend><i class="fa fa-angle-right"></i> {{ $question->text }}</legend>
-              <div class="form-group">
-                  <div class="col-xs-12">
-                    {!! Form::textarea('questions['.$question->id.'][answer]', $generatedProtocol->getAnswerQuestion($question->id), 
-                    ['placeholder' => 'Escriba el contenido ', 'class' => 'ckeditor', 'rows' => 4]) !!}
-                  </div>
-              </div>
-            </fieldset>
+            @include('dashboard.pages.companies.users.protocols.generator.fieldset-question', ['question' => $question, 'generatedProtocol' => $generatedProtocol])
           @endforeach
         </div>
       </div>
       <div class="form-group form-actions">
-          <div class="col-md-9 col-md-offset-3">
-              <button type="submit" class="btn btn-effect-ripple btn-primary">Guardar Protocolo</button>
+          <div class="col-md-12 text-center">
+              <button type="submit" class="btn btn-effect-ripple btn-primary btn-lg">Guardar Protocolo</button>
           </div>
       </div>
     </div>

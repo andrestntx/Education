@@ -164,6 +164,14 @@ footer {
   text-align: center;
 }
 
+.answer .answer {
+  padding-left: 5px;
+}
+
+.answer .order {
+  font-size: 16px;
+}
+
   </style>
 
 @endsection
@@ -189,9 +197,8 @@ footer {
       </div>
     </header>
   <main>
-    @foreach($generatedProtocol->questions as $question)
-      <h2>{{ $question->text }}</h2>
-      <p>{!! $question->pivot->answer !!}</p>
+    @foreach($generatedProtocol->questions->where('superior_id', null) as $question)
+      @include('dashboard.pages.companies.users.protocols.generator.answer', ['question' => $question, 'generatedProtocol' => $generatedProtocol, 'order' => $question->order])
     @endforeach
   </main>
   <footer>

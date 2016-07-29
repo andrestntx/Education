@@ -36,5 +36,31 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function superior()
+    {
+        return $this->belongsTo(Question::class, 'superior_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function questions()
+    {
+        return $this->hasMany(Question::class, 'superior_id', 'id');
+    }
+
     /* End Relations */
+
+    public function setOrder($order, $superior_id = null)
+    {
+        $this->superior_id = $superior_id;
+        $this->order = $order;
+        $this->save();
+
+        return $this;
+    }
+
 }
