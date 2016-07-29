@@ -33,7 +33,12 @@
                 </div>
                 
                 <h4><i class="fa fa-question"></i> Nueva Pregunta</h4>
-                <input type="text" id="newQuestion" placeholder="Escriba la pregunta.." class="form-control" data-token="{{ csrf_token() }}" required>
+
+                <div class="form-inline">
+                    <input type="text" id="newQuestion" placeholder="Escriba la pregunta.." style="width: 85%; margin-right: 1%;" class="form-control" data-token="{{ csrf_token() }}" required>  
+                    <button class="btn btn-sm btn-info" id="addNewQuestion"><i class="fa fa-plus"></i></button>
+                </div>
+
                 <hr>
 
                 <ul class="list-unstyled sortable questions" style="margin-top:20px;">
