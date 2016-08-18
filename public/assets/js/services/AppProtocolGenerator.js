@@ -7,6 +7,7 @@
 var AppProtocolGenerator = function() {
 	
 	var ulSortable = 'ul.questions';
+	var generator = '';
 
 	var token = function () {
 		return $('#newQuestion').data('token');
@@ -24,7 +25,7 @@ var AppProtocolGenerator = function() {
 			'<li class="well well-sm" data-id="' + question.id + '" data-name="' + question.text + '" id="' + question.id + '" style="cursor:pointer">' +
 				'<a href="#" title="Borrar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-danger"><i class="gi gi-bin" onclick="AppProtocolGenerator.postDeleteQuestion(this)" data-entity-id="' + question.id + '"></i></a>' +
                 '<a href="#" title="Desactivar Pregunta" data-toggle="tooltip" class="pull-right question-option btn btn-xs btn-warning"><i class="gi gi-thumbs_down" onclick="AppProtocolGenerator.postDeactivateQuestion(this)" data-entity-id="' + question.id + '"></i></a>' +
-                '<a href="#" class="editable h4" data-url="/protocol-generator/' + question.id + '" data-pk="' + question.id + '"> ' +
+                '<a href="#" class="editable h4" data-url="/generators/' + question.id + '" data-pk="' + question.id + '"> ' +
                     question.text +
                 '</a>' +
                 '<ul></ul>' +
@@ -44,7 +45,7 @@ var AppProtocolGenerator = function() {
 	var postOrderQuestions = function() {
 		if(! jQuery.isEmptyObject(questionsArray())){
 			$.ajax({
-				url: '/protocol-generator/order',
+				url: '/generators/'+ generator + '/order',
 				data: {_token: token, questions: questionsArray(), prueba: 'hola mama'},
 				method:'POST',
 				success:function(data){
@@ -60,7 +61,7 @@ var AppProtocolGenerator = function() {
 
 	var postNewQuestion = function(newQuestion) {
 		$.ajax({
-	        url: '/protocol-generator',
+	        url: '/generators/' + generator + '/questions',
 	        data: {_token: token, newQuestion: newQuestion},
 	        method:'POST',
 	        success:function(data){
@@ -175,6 +176,8 @@ var AppProtocolGenerator = function() {
 	};
 
 	var initEventKeyPress = function () {
+		generator = $('#newQuestion').data('generator');
+
 		$('#newQuestion').keyup(function (e) {
 			if (e.keyCode === 13) {
 				var newQuestion = $(this).val();
@@ -243,13 +246,13 @@ var AppProtocolGenerator = function() {
 		},
 		postDeleteQuestion: function (questionElement) {
 			var questionId 	= $(questionElement).data('entity-id');
-			var url 		= '/protocol-generator/' +  questionId;
+			var url 		= '/generators/' + generator + '/questions/' +  questionId;
 
 			postDelete(questionElement, questionId, url);
 		},
 		postDeactivateQuestion: function (questionElement) {
 			var questionId 	= $(questionElement).data('entity-id');
-			var url 		= '/protocol-generator/change/' +  questionId;
+			var url 		= '/generators/' + generator + '/change/' +  questionId;
 
 			postDeactivate(questionElement, questionId, url);
 		}

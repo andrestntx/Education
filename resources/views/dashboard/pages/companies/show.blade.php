@@ -55,7 +55,7 @@
 
         <div class="col-sm-6 col-lg-3">
             @include('dashboard.extends.widget',[
-                'widget_url'    => '/protocol-generator', 
+                'widget_url'    => '/generators', 
                 'widget_title'  => 'Generador de Protocolos', 
                 'widget_count'  => $user->company->generatedProtocols->count(), 
                 'widget_icon'   => 'hi hi-edit',

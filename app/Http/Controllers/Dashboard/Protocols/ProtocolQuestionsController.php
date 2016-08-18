@@ -66,6 +66,7 @@ class ProtocolQuestionsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $protocol_id
      * @return Response
      */
     public function index($protocol_id)

@@ -31,6 +31,7 @@ class ComposerServiceProvider extends ServiceProvider
             'Education\Http\ViewComposers\Formats\Checklists\MyFormatsComposer' => 'dashboard.pages.companies.users.formats.checklists.format.myformats',
             'Education\Http\ViewComposers\Formats\Observations\MyFormatsComposer' => 'dashboard.pages.companies.users.formats.observations.format.myformats',
             'Education\Http\ViewComposers\Protocols\Generator\ListComposer' => 'dashboard.pages.companies.users.protocols.generator.config',
+            'Education\Http\ViewComposers\Protocols\Generator\AllComposer' => 'dashboard.pages.companies.users.protocols.generator.all',
             'Education\Http\ViewComposers\GeneratedProtocols\ListComposer' => 'dashboard.pages.companies.users.protocols.generator.list',
             'Education\Http\ViewComposers\GeneratedProtocols\FormComposer' => 'dashboard.pages.companies.users.protocols.generator.form'
         ]);

@@ -2,6 +2,7 @@
 
 namespace Education\Http\Controllers\Dashboard\Protocols\Generator;
 
+use Education\Entities\Generator;
 use Illuminate\Routing\Route;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
@@ -14,53 +15,20 @@ use Auth, Log;
 
 class ProtocolGeneratorQuestionsController extends Controller
 {
-    private $company;
-    private $question;
-    private $form_data;
 
-    private static $prefixRoute = 'protocol-generator.';
+    private static $prefixRoute = 'generators.';
     private static $prefixView = 'dashboard.pages.companies.users.protocols.generator.';
 
-    public function __construct()
-    {
-        $this->beforeFilter('@findCompnay');
-        $this->beforeFilter('@newQuestion', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findQuestion', ['only' => ['show', 'edit', 'update', 'destroy', 'changeAviable']]);
-    }
 
     /**
-     * Set the Auth User Company
+     * @param Generator $generator
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function findCompnay()
+    public function index(Generator $generator)
     {
-        $this->company = Auth::user()->company;
-    }
-
-    /**
-     * Create a new Question.
-     */
-    public function newQuestion()
-    {
-        $this->question = new Question;
-    }
-
-    /**
-     * Find the Company or App Abort 404.
-     */
-    public function findQuestion(Route $route)
-    {
-        $this->question = $this->company->protocolGeneratorQuestions()
-            ->findOrFail($route->getParameter('protocol_generator'));
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view(self::$prefixView.'config');    
+        return view(self::$prefixView . 'config')->with([
+            'generator' => $generator
+        ]);
     }
 
     /**
@@ -76,18 +44,19 @@ class ProtocolGeneratorQuestionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     * @param Generator $generator
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Generator $generator)
     {
-        $this->question         = new Question;
-        $this->question->text   = $request->get('newQuestion');
-        $this->question->order  = $this->company->orderNewQuestion();
+        $question         = new Question;
+        $question->text   = $request->get('newQuestion');
+        $question->order  = $generator->orderNewQuestion();
 
-        Auth::user()->company->protocolGeneratorQuestions()->save($this->question);
+        $generator->questions()->save($question);
 
-        return ['success' => 'true', 'question' => $this->question];
+        return ['success' => 'true', 'question' => $question];
     }
 
     /**
@@ -112,28 +81,28 @@ class ProtocolGeneratorQuestionsController extends Controller
         //
     }
 
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Question $question
+     * @return array
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Question $question)
     {
-        $this->question->text = $request->get('value');
-        $this->question->save();
+        $question->text = $request->get('value');
+        $question->save();
         
         return ['success' => true];
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Generator $generator
+     * @param Question $question
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Generator $generator, Question $question)
     {
         $data = [
             'success' => true,
@@ -141,7 +110,7 @@ class ProtocolGeneratorQuestionsController extends Controller
         ];   
 
         try {
-            $this->question->delete(); 
+            $question->delete();
         } catch (QueryException $e) {
             $data['success'] = false;
             $data['message'] = 'La Pregunta no se puede eliminar, ya que contiene almenos un Protocolo generado';
@@ -150,19 +119,30 @@ class ProtocolGeneratorQuestionsController extends Controller
         return response()->json($data);
     }
 
-    public function order(Request $request)
+    /**
+     * @param Request $request
+     * @param Generator $generator
+     * @return array
+     */
+    public function order(Request $request, Generator $generator)
     {
-        $this->company->reorderQuestions(json_decode($request->get('questions')));
+        $generator->reorderQuestions(json_decode($request->get('questions')));
 
         return ['success' => true];
     }
 
-    public function changeAviable(Request $request)
+    /**
+     * @param Request $request
+     * @param Generator $generator
+     * @param Question $question
+     * @return array
+     */
+    public function changeAviable(Request $request, Generator $generator, Question $question)
     {
-        $this->question->aviable = ! $this->question->aviable;
-        $this->question->save();
+        $question->aviable = ! $question->aviable;
+        $question->save();
 
-        return ['success' => true, 'state' => $this->question->aviable, 'message' => 'Cambio exitoso'];
+        return ['success' => true, 'state' => $question->aviable, 'message' => 'Cambio exitoso'];
     }
 
 }

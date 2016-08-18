@@ -55,7 +55,7 @@
                     </a>
                     <ul>
                         <li>
-                            <a href="/protocol-generator">
+                            <a href="/generators">
                                 <i class="hi hi-edit sidebar-nav-icon"></i>
                                 <span class="sidebar-nav-mini-hide">Generador</span>
                             </a>

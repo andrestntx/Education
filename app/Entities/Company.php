@@ -12,9 +12,17 @@ class Company extends Model
     public $timestamps = true;
     public $increments = true;
 
+    /**
+     * @param string $type
+     * @param int $paginate
+     * @return mixed
+     */
     public static function allTypePaginate($type = 'customer', $paginate = 10)
     {
-        return self::with(['users', 'protocols'])->whereType('customer')->orderBy('active', 'desc')->paginate($paginate);
+        return self::with(['users', 'protocols'])
+            ->whereType('customer')
+            ->orderBy('active', 'desc')
+            ->paginate($paginate);
     }
 
     public function getAreasCountAttribute()
@@ -67,14 +75,25 @@ class Company extends Model
         return $this->users()->registereds()->get();
     }
 
-    /** 
-     * Relations
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function generators()
+    {
+        return $this->hasMany(Generator::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function roles()
     {
         return $this->hasManyThrough(Role::class, User::class);
@@ -95,11 +114,6 @@ class Company extends Model
         return $this->hasManyThrough(Protocol::class, User::class);
     }
 
-    public function generatedProtocols()
-    {
-        return $this->hasManyThrough(GeneratedProtocol::class, User::class);
-    }
-
     public function formats()
     {
         return $this->hasManyThrough(Format::class, User::class);
@@ -108,11 +122,6 @@ class Company extends Model
     public function observationFormats()
     {
         return $this->hasManyThrough(ObservationFormat::class, User::class);
-    }
-
-    public function protocolGeneratorQuestions ()
-    {
-        return $this->morphMany(Question::class, 'document');
     }
 
     public function exams()
@@ -127,12 +136,6 @@ class Company extends Model
 
     /***** End Relations *****/
 
-    public function firstProtocolGeneratorQuestions()
-    {
-        return $this->protocolGeneratorQuestions()
-            ->with(['questions.questions.questions.questions.questions'])
-            ->whereNull('superior_id')->orderBy('order', 'asc')->get();
-    }
 
     public function surveysNotExam()
     {
@@ -187,11 +190,6 @@ class Company extends Model
         return true;
     }
 
-    public function orderNewQuestion()
-    {
-        return $this->protocolGeneratorQuestions()->count() + 1;
-    }
-
     public function fillAndClear($data)
     {
         $this->fill($data);
@@ -200,59 +198,6 @@ class Company extends Model
             $this->active = 1;
         } else {
             $this->active = 0;
-        }
-    }
-
-    /**
-     * @param $question_id
-     * @return mixed
-     */
-    protected function findQuestion($question_id)
-    {
-        return $this->protocolGeneratorQuestions()->findOrFail($question_id);
-    }
-
-    /**
-     * @param $question_id
-     * @param $order
-     * @param null $superior_id
-     * @return mixed
-     */
-    protected function setOrderQuestion($question_id, $order, $superior_id = null)
-    {
-        $question = $this->findQuestion($question_id);
-        return $question->setOrder($order + 1, $superior_id);
-    }
-
-    /**
-     * @param $superior_id
-     * @param array $questions
-     */
-    protected function reorderChildrenQuestion($superior_id, array $questions)
-    {
-        foreach ($questions as $order => $questionJson) {
-            $this->setOrderQuestionChildren($questionJson, $order, $superior_id);
-        }
-    }
-
-    /**
-     * @param $questionJson
-     * @param $order
-     * @param null $superior_id
-     */
-    protected function setOrderQuestionChildren($questionJson, $order, $superior_id = null)
-    {
-        $question = $this->setOrderQuestion($questionJson->id, $order, $superior_id);
-        $this->reorderChildrenQuestion($question->id, $questionJson->children[0]);
-    }
-
-    /**
-     * @param array $questions
-     */
-    public function reorderQuestions(array $questions)
-    {
-        foreach ($questions as $order => $questionJson) {
-            $this->setOrderQuestionChildren($questionJson, $order);
         }
     }
 }

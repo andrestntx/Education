@@ -2,6 +2,7 @@
 
 namespace Education\Http\Controllers\Dashboard\Protocols\Generator;
 
+use Education\Entities\Generator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
@@ -13,136 +14,114 @@ use Auth, Flash, App;
 
 class GeneratedProtocolsController extends Controller
 {
-    private $generatedProtocol;
-    private $form_data;
-
-    private static $prefixRoute = 'generated-protocols.';
+    private static $prefixRoute = 'generators.generated-protocols.';
     private static $prefixView = 'dashboard.pages.companies.users.protocols.generator.';
-
-    public function __construct()
-    {
-        $this->beforeFilter('@newGeneratedProtocol', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findGeneratedProtocol', ['only' => ['show', 'edit', 'update', 'destroy']]);
-    }
-
-    /**
-     * Create a new GeneratedProtocol.
-     */
-    public function newGeneratedProtocol()
-    {
-        $this->generatedProtocol = new GeneratedProtocol();
-    }
-
-    /**
-     * Find the GeneratedProtocol or App Abort 404.
-     */
-    public function findGeneratedProtocol(Route $route)
-    {
-        $this->generatedProtocol = GeneratedProtocol::findOrFail($route->getParameter('generated_protocols'));
-    }
-
-    /**
-     * Return the default Form View for Companies.
-     */
-    public function getFormView($viewName = 'form')
-    {
-        return view(self::$prefixView.$viewName)
-            ->with(['form_data' => $this->form_data, 'generatedProtocol' => $this->generatedProtocol]);
-    }
 
     /**
      * Display a listing of the resource.
      *
+     * @param Generator $generator
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Generator $generator)
     {
-        return redirect()->to('protocol-generator');
+        return redirect()->to('generators');
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param Generator $generator
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Generator $generator)
     {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST'];
+        $questions = $generator->firstQuestionsAviable();
 
-        return $this->getFormView();
+        return view(self::$prefixView . 'form')->with([
+            'form_data'         => ['route' => [self::$prefixRoute . 'store', $generator], 'method' => 'POST'],
+            'generatedProtocol' => new GeneratedProtocol(),
+            'questions'         => $questions
+        ]);
     }
 
+
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Education\Http\Requests\ProtocolGenerator\FormRequest
-     * @return \Illuminate\Http\Response
+     * @param FormRequest $request
+     * @param Generator $generator
+     * @param GeneratedProtocol $generatedProtocol
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(FormRequest $request)
+    public function store(FormRequest $request, Generator $generator, GeneratedProtocol $generatedProtocol)
     {
-        $this->generatedProtocol->fill($request->all());
-        Auth::user()->generatedProtocols()->save($this->generatedProtocol);
+        $generatedProtocol->fill($request->all() + ['user_id' => Auth::user()->id]);
+        $generator->generatedProtocols()->save($generatedProtocol);
 
         if($request->get('questions')) {
-            $this->generatedProtocol->questions()->sync($request->get('questions'));    
+            $generatedProtocol->questions()->sync($request->get('questions'));
         }
         
         Flash::info('Protocolo generado correctamente');
-        return redirect()->route('protocol-generator.index');
+        return redirect()->route('generators.show', $generator);
     }
 
+
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Generator $generator
+     * @param GeneratedProtocol $generatedProtocol
+     * @return mixed
      */
-    public function show($id)
+    public function show(Generator $generator, GeneratedProtocol $generatedProtocol)
     {
-        $this->generatedProtocol->load(['user', 'questions' => function ($query) {
+        $generatedProtocol->load(['generator', 'questions' => function ($query) {
             $query->orderBy('order', 'asc');    
         }]);
 
         $view = view()->make(self::$prefixView.'download')
-            ->with(['generatedProtocol' => $this->generatedProtocol])
+            ->with(['generatedProtocol' => $generatedProtocol])
             ->render();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($view)->save('storage/generatedProtocols/' . $this->generatedProtocol->id . '.pdf');
+        $pdf->loadHTML($view)->save('storage/generatedProtocols/' . $generatedProtocol->id . '.pdf');
 
         return $pdf->stream('generatedProtocol.pdf');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->generatedProtocol->id], 'method' => 'PUT'];
 
-        return $this->getFormView();
+    /**
+     * @param Generator $generator
+     * @param GeneratedProtocol $generatedProtocol
+     * @return $this
+     */
+    public function edit(Generator $generator, GeneratedProtocol $generatedProtocol)
+    {
+        $questions = $generator->firstQuestionsAviable();
+
+        return view(self::$prefixView . 'form')->with([
+            'form_data'         => ['route' => [self::$prefixRoute . 'update', $generator, $generatedProtocol], 'method' => 'PUT'],
+            'generatedProtocol' => $generatedProtocol,
+            'questions'         => $questions
+        ]);
     }
 
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  Education\Http\Requests\ProtocolGenerator\FormRequest
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param FormRequest $request
+     * @param Generator $generator
+     * @param GeneratedProtocol $generatedProtocol
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(FormRequest $request, $id)
+    public function update(FormRequest $request, Generator $generator, GeneratedProtocol $generatedProtocol)
     {
-        $this->generatedProtocol->fill($request->all());
-        $this->generatedProtocol->save();
+        $generatedProtocol->fill($request->all());
+        $generatedProtocol->save();
+
         if($request->get('questions')) {
-            $this->generatedProtocol->questions()->sync($request->get('questions'));
+            $generatedProtocol->questions()->sync($request->get('questions'));
         }
 
         Flash::info('Protocolo generado correctamente');
-        return redirect()->route('protocol-generator.index');
+        return redirect()->route('generators.show', $generator);
     }
 
     /**

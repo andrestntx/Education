@@ -48,10 +48,12 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
             Route::resource('protocols.annexes', 'ProtocolAnnexesController');
 
             Route::group(['namespace' => 'Generator'], function () {
-                Route::resource('protocol-generator', 'ProtocolGeneratorQuestionsController');
-                Route::post('protocol-generator/order', ['as' => 'protocol-generator.order', 'uses' => 'ProtocolGeneratorQuestionsController@order']);
-                Route::post('protocol-generator/change/{protocol_generator}', ['as' => 'protocol-generator.change', 'uses' => 'ProtocolGeneratorQuestionsController@changeAviable']);
-                Route::resource('generated-protocols', 'GeneratedProtocolsController');
+                Route::resource('generators', 'ProtocolGeneratorController');
+
+                Route::resource('generators.questions', 'ProtocolGeneratorQuestionsController');
+                Route::post('generators/{generators}/order', ['as' => 'generators.order', 'uses' => 'ProtocolGeneratorQuestionsController@order']);
+                Route::post('generators/{generators}/change/{questions}', ['as' => 'generators.questions.change', 'uses' => 'ProtocolGeneratorQuestionsController@changeAviable']);
+                Route::resource('generators.generated-protocols', 'GeneratedProtocolsController');
             });
 
         });

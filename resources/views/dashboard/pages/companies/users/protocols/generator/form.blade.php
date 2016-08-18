@@ -3,7 +3,7 @@
   <i class="fa fa-file-text"></i> 
   @if($generatedProtocol->exists) Editar Protocolo Generado @else Generar nuevo Protocolo @endif
 @stop
-@section('breadcrumbs') {!! Breadcrumbs::render('generated-protocols.protocol', $generatedProtocol) !!} @stop 
+@section('breadcrumbs')  @stop 
 @section('title_form') Datos del Protocolo @stop
 @section('form')
   {!! Form::model($generatedProtocol, $form_data) !!}
