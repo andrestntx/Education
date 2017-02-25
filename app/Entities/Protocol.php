@@ -81,6 +81,11 @@ class Protocol extends MyDocument
         return $this->hasMany(Link::class);
     }
 
+    public function forums()
+    {
+        return $this->hasMany(Forum::class);
+    }
+
     public function exams()
     {
         return $this->hasMany(Exam::class);

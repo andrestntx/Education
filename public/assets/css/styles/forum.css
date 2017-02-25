@@ -1,0 +1,14 @@
+.forum-user-image {
+	width: 60%; 
+	max-width: 60px;
+}
+
+.forum-form {
+	margin-top: 50px;
+}
+
+.protocol-forums {
+	max-height: 450px;
+    overflow: scroll;
+}
+    

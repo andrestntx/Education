@@ -12,6 +12,9 @@
 					<iframe src="https://drive.google.com/viewerng/viewer?url={{URL::to($protocol->doc)}}&embedded=true" style="width:100%; height:550px;" frameborder="0"></iframe>
 				</div>
 			</div>
+            
+            @include('dashboard.pages.companies.users.protocols.forum')
+            
 		</div>
 
 		<div class="col-lg-3">
