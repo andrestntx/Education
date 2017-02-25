@@ -80,10 +80,15 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Dashboard'], function ()
     });
 
     Route::group(['middleware' => 'user_type:registered'], function () {
+        
+        Route::group(['namespace' => 'Protocols'], function () {
+            Route::post('{protocols}/forum', ['as' => 'protocols.forum.store', 'uses' => 'ProtocolForumsController@store']);
+        });
+        
         Route::get('study/{protocols}', ['as' => 'study', 'uses' => 'ExamsController@studyProtocol']);
         Route::get('exams/doit/{protocols}', ['as' => 'exams.create', 'uses' => 'ExamsController@create']);
         Route::post('exams/doit/{protocols}', ['as' => 'exams.store', 'uses' => 'ExamsController@store']);
-
+        
         Route::group(['prefix' => 'myformats'], function () {
            
             Route::group(['namespace' => 'Checklists'], function () {

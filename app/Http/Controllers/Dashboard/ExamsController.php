@@ -2,6 +2,7 @@
 
 namespace Education\Http\Controllers\Dashboard;
 
+use Education\Repositories\ForumRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
@@ -15,12 +16,14 @@ class ExamsController extends Controller
 {
     private $protocol;
     private $exam;
+    private $forumRepository;
 
-    public function __construct()
+    public function __construct(ForumRepository $forumRepository)
     {
         $this->beforeFilter('@findProtocol');
         $this->beforeFilter('@validateExam', ['only' => ['create']]);
         $this->beforeFilter('@newExam', ['only' => ['create', 'store']]);
+        $this->forumRepository = $forumRepository;
     }
 
     /**
@@ -53,8 +56,14 @@ class ExamsController extends Controller
 
     public function studyProtocol($protocol_id)
     {
+        $forums = $this->forumRepository->paginateOfProtocol($this->protocol);
+
         return view()->make('dashboard.pages.companies.users.protocols.study')
-            ->with(['user' => Auth::user(), 'protocol' => $this->protocol]);
+            ->with([
+                'user' => Auth::user(),
+                'protocol' => $this->protocol,
+                'forums' => $forums
+            ]);
     }
 
     public function create($protocol_id)

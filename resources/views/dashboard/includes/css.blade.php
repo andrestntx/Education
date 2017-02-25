@@ -32,6 +32,8 @@
 
 <link rel="stylesheet" href="/assets/css/themes/system.css">
 
+<link rel="stylesheet" href="/assets/css/styles/forum.css">
+
 <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
 <!-- END Stylesheets -->
 
