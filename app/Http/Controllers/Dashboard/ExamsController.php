@@ -1,5 +1,4 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard;
 
 use Education\Repositories\ForumRepository;
