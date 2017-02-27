@@ -1,7 +1,7 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard\Protocols;
 
+use Education\Repositories\ForumRepository;
 use Illuminate\Routing\Route;
 use Education\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
@@ -17,14 +17,16 @@ class ProtocolsController extends Controller
 {
     private $protocol;
     private $form_data;
+    private $forumRepository;
 
     private static $prefixRoute = 'protocols.';
     private static $prefixView = 'dashboard.pages.companies.users.protocols.';
 
-    public function __construct()
+    public function __construct(ForumRepository $forumRepository)
     {
         $this->beforeFilter('@newProtocol', ['only' => ['create', 'store']]);
         $this->beforeFilter('@findProtocol', ['only' => ['show', 'edit', 'update', 'destroy']]);
+        $this->forumRepository = $forumRepository;
     }
 
     /**
@@ -101,9 +103,13 @@ class ProtocolsController extends Controller
      */
     public function show($id)
     {
+        $forums = $this->forumRepository->paginateOfProtocol($this->protocol);
         $this->protocol->load('Links', 'questions');
 
-        return view(self::$prefixView.'show-admin')->with('protocol', $this->protocol);
+        return view(self::$prefixView.'show-admin')->with([
+            'protocol' => $this->protocol,
+            'forums' => $forums
+        ]);
     }
 
     public function stats($id)

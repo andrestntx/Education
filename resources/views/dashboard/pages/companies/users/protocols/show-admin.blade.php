@@ -39,6 +39,8 @@
 						@endif
 					</div>
 				</div>
+
+				@include('dashboard.pages.companies.users.protocols.forum')
 			</div>
 			<div class="col-lg-4">
 				
