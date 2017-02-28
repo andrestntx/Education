@@ -1,188 +1,98 @@
 <?php
 namespace Education\Http\Controllers\Dashboard\Protocols;
 
+use Education\Http\Controllers\ResourceController;
 use Education\Repositories\ForumRepository;
-use Illuminate\Routing\Route;
-use Education\Http\Controllers\Controller;
-use Illuminate\Database\QueryException;
+use Education\Repositories\ProtocolRepository;
 use Education\Http\Requests\Protocols\CreateRequest;
 use Education\Http\Requests\Protocols\EditRequest;
 use Education\Entities\Protocol;
-use Auth;
-use Storage;
-use File;
-use Flash;
+use Education\Repositories\UserRepository;
 
-class ProtocolsController extends Controller
+class ProtocolsController extends ResourceController
 {
-    private $protocol;
-    private $form_data;
     private $forumRepository;
+    private $protocolRepository;
+    private $userRepository;
 
-    private static $prefixRoute = 'protocols.';
-    private static $prefixView = 'dashboard.pages.companies.users.protocols.';
-
-    public function __construct(ForumRepository $forumRepository)
+    public function __construct(ForumRepository $forumRepository, ProtocolRepository $protocolRepository,
+                                UserRepository $userRepository)
     {
-        $this->beforeFilter('@newProtocol', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findProtocol', ['only' => ['show', 'edit', 'update', 'destroy']]);
         $this->forumRepository = $forumRepository;
+        $this->protocolRepository = $protocolRepository;
+        $this->userRepository = $userRepository;
     }
 
-    /**
-     * Create a new Company.
-     */
-    public function newProtocol()
-    {
-        $this->protocol = new Protocol();
-    }
-
-    /**
-     * Find the Company or App Abort 404.
-     */
-    public function findProtocol(Route $route)
-    {
-        $this->protocol = Protocol::findOrFail($route->getParameter('protocols'));
-    }
-
-    /**
-     * Return the default Form View for Companies.
-     */
-    public function getFormView($viewName = 'form')
-    {
-        return view(self::$prefixView.$viewName)
-            ->with(['form_data' => $this->form_data, 'protocol' => $this->protocol]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        return view(self::$prefixView.'list');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create()
     {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST', 'files' => true];
+        $protocol = new Protocol;
+        $formData = $this->getFormData('store', 'POST', true);
 
-        return $this->getFormView();
+        return $this->getFormView($protocol, $formData);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
     public function store(CreateRequest $request)
     {
-        $this->protocol->fillAndClear($request->all());
-        Auth::user()->protocolsCreated()->save($this->protocol);
+        $protocol = $this->protocolRepository->createForUser(auth()->user(),
+            $request->all(), $request->file('file_doc'));
 
-        $this->protocol->syncRelations($request->all());
-        $this->protocol->uploadDoc($request->file('file_doc'));
-        $this->protocol->save();
-        Flash::info('Protocolo '.$this->protocol->name.' Guardado correctamente');
+        $this->resourceFlash($protocol->name);
 
-        return redirect()->route(self::$prefixRoute.'show', $this->protocol);
+        return $this->resourceRedirect('show', $protocol);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
+    public function show(Protocol $protocol)
     {
-        $forums = $this->forumRepository->paginateOfProtocol($this->protocol);
-        $this->protocol->load('Links', 'questions');
+        $forums = $this->forumRepository->paginateOfProtocol($protocol);
+        $protocol->load('Links', 'questions');
 
-        return view(self::$prefixView.'show-admin')->with([
-            'protocol' => $this->protocol,
+        return $this->resourceView('show-admin')->with([
+            'protocol' => $protocol,
             'forums' => $forums
         ]);
     }
-
-    public function stats($id)
+    
+    public function edit(Protocol $protocol)
     {
-        $protocol = Protocol::findOrFail($id);
-        $users = User::with(array('examScores' => function ($query) use ($protocol) {
-            $query->whereSurveyId($protocol->survey_id);
+        $formData = $this->getFormData('update', 'PUT', true, $protocol);
 
-        }, ))->canStudyProtocol($protocol->id)->get();
+        return $this->getFormView($protocol, $formData);
+    }
+    
+    public function update(EditRequest $request, Protocol $protocol)
+    {
+        $protocol = $this->protocolRepository->update($protocol, $request->all(), $request->file('file_doc'));
+        $this->resourceFlash($protocol->name, 'update');
+
+        return $this->resourceRedirect('show', $protocol);
+    }
+    
+    public function destroy(Protocol $protocol)
+    {
+        $success = $this->protocolRepository->delete($protocol);
+
+        return $this->resourceDeleteJson($protocol->name, $success);
+    }
+
+    public function stats(Protocol $protocol)
+    {
+        $users = $this->userRepository->usersWithProtocolExams($protocol);
 
         return view()->make('dashboard.pages.protocol.exams', compact('protocol', 'users'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
+    protected function getPrefixRoute()
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->protocol->id], 'method' => 'PUT', 'files' => true];
-
-        return $this->getFormView();
+        return 'protocols';
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update(EditRequest $request, $id)
+    protected function getPrefixView()
     {
-        $this->protocol->uploadDoc($request->file('file_doc'));
-        $this->protocol->fillAndClear($request->all());
-        $this->protocol->save();
-        $this->protocol->syncRelations($request->all());
-        Flash::info('Protocolo '.$this->protocol->name.' Actualizado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'show', $this->protocol);
+        return 'dashboard.pages.companies.users.protocols';
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
+    protected function getModelName()
     {
-        $data = [
-            'success' => true,
-            'message' => 'Protocolo eliminado correctamente'
-        ];   
-
-        if($this->protocol->exams()->count() == 0){
-            try {
-                $this->protocol->detachAndDelete();
-            } catch (QueryException $e) {
-                $data['success'] = false;
-                $data['message'] = 'El Protocolo no se puede eliminar';
-            }    
-        }
-        else{
-            $data['success'] = false;
-            $data['message'] = 'El Protocolo no se puede eliminar, ya que tiene examenes asociados';
-        }
-
-        return response()->json($data);
+        return 'protocol';
     }
-
 }
