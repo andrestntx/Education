@@ -11,6 +11,7 @@ use Education\Repositories\UserRepository;
 
 class ProtocolsController extends ResourceController
 {
+    protected $formWithFiles = true;
     private $forumRepository;
     private $protocolRepository;
     private $userRepository;
@@ -21,14 +22,6 @@ class ProtocolsController extends ResourceController
         $this->forumRepository = $forumRepository;
         $this->protocolRepository = $protocolRepository;
         $this->userRepository = $userRepository;
-    }
-
-    public function create()
-    {
-        $protocol = new Protocol;
-        $formData = $this->getFormData('store', 'POST', true);
-
-        return $this->getFormView($protocol, $formData);
     }
 
     public function store(CreateRequest $request)
@@ -81,18 +74,8 @@ class ProtocolsController extends ResourceController
         return view()->make('dashboard.pages.protocol.exams', compact('protocol', 'users'));
     }
 
-    protected function getPrefixRoute()
+    protected function getResourceEntity()
     {
-        return 'protocols';
-    }
-
-    protected function getPrefixView()
-    {
-        return 'dashboard.pages.companies.users.protocols';
-    }
-
-    protected function getModelName()
-    {
-        return 'protocol';
+        return Protocol::class;
     }
 }

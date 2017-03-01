@@ -2,7 +2,8 @@
 
 return [
     'names' => [
-        'protocol' => 'protocolo'
+        \Education\Entities\Protocol::class => 'protocolo',
+        \Education\Entities\Company::class => 'institución'
     ],
 
     'resources' => [

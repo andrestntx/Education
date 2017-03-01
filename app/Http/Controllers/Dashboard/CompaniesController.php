@@ -1,130 +1,52 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard;
 
-use Illuminate\Routing\Route;
-use Education\Http\Controllers\Controller;
+use Education\Http\Controllers\ResourceController;
 use Education\Http\Requests\Companies\CreateRequest;
 use Education\Http\Requests\Companies\EditRequest;
 use Education\Entities\Company;
-use Flash;
+use Education\Repositories\CompanyRepository;
 
-class CompaniesController extends Controller
+class CompaniesController extends ResourceController
 {
-    private $company;
-    private $form_data;
+    protected $formWithFiles = true;
+    private $companyRepository;
 
-    private static $prefixRoute = 'companies.';
-    private static $prefixView = 'dashboard.pages.companies.';
-
-    public function __construct()
+    public function __construct(CompanyRepository $companyRepository)
     {
-        $this->beforeFilter('@newCompany', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findCompany', ['only' => ['show', 'edit', 'update']]);
+        $this->companyRepository = $companyRepository;
     }
 
-    /**
-     * Create a new Company.
-     */
-    public function newCompany()
+    public function store(CreateRequest $request, Company $company)
     {
-        $this->company = new Company();
+        $this->companyRepository->create($request->all(), $request->file('url_logo'));
+        $this->resourceFlash($company->name, 'store');
+
+        return $this->resourceRedirect('index', $company);
     }
 
-    /**
-     * Find the Company or App Abort 404.
-     */
-    public function findCompany(Route $route)
+    public function show(Company $company)
     {
-        $this->company = Company::findOrFail($route->getParameter('companies'));
+        return $this->resourceRedirect('edit', $company);
     }
 
-    /**
-     * Return the default Form View for Companies.
-     */
-    public function getFormView($viewName = 'form')
+    public function edit(Company $company)
     {
-        return view(self::$prefixView.$viewName)
-            ->with(['form_data' => $this->form_data, 'company' => $this->company]);
+        $formData = $this->getFormData('update', 'PUT', true, $company);
+
+        return $this->getFormView($company, $formData);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
+    public function update(EditRequest $request, Company $company)
     {
-        return view(self::$prefixView.'list');
+        $this->companyRepository->update($company, $request->all(), $request->file('url_logo'));
+        $this->resourceFlash($company->name, 'update');
+
+        return $this->resourceRedirect('index', $company);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
+    protected function getResourceEntity()
     {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST', 'files' => true];
-
-        return $this->getFormView();
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(CreateRequest $request)
-    {
-        $this->company->fillAndClear($request->all());
-        $this->company->save();
-        $this->company->uploadLogo($request->file('url_logo'));
-        Flash::info('Institución '.$this->company->name.' Guardada correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        return redirect()->route(self::$prefixRoute.'edit', $id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit()
-    {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->company->id], 'method' => 'PUT', 'files' => true];
-
-        return $this->getFormView();
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update(EditRequest $request, $id)
-    {
-        $this->company->fillAndClear($request->all());
-        $this->company->save();
-        $this->company->uploadLogo($request->file('url_logo'));
-        Flash::info('Institución '.$this->company->name.' Actualizado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return Company::class;
     }
 }

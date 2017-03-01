@@ -1,13 +1,26 @@
 <?php
 namespace Education\Http\Controllers;
 
+use Education\Resolvers\EntityResolver;
 use Laracasts\Flash\Flash;
 
 abstract class ResourceController extends Controller
 {
+    protected $formWithFiles = false;
+
+    abstract protected function getResourceEntity();
+
     public function index()
     {
         return $this->resourceView('list');
+    }
+
+    public function create()
+    {
+        $entity = new $this->getResourceEntity();
+        $formData = $this->getFormData('store', 'POST', true);
+
+        return $this->getFormView($entity, $formData);
     }
 
     protected function getFormData($route = 'store', $method = 'POST', $files = false, $entity = null)
@@ -21,17 +34,22 @@ abstract class ResourceController extends Controller
         ];
     }
 
-    protected function getFormView($model, array $formData, $viewName = 'form')
+    protected function getFormView($entity, array $formData, $viewName = 'form')
     {
         return $this->resourceView($viewName)->with([
             'form_data' => $formData,
-            $this->getModelName() => $model
+            $this->getEntityName() => $entity
         ]);
+    }
+
+    protected function getEntityName()
+    {
+        return strtolower(class_basename($this->getResourceEntity()));
     }
 
     protected function getModelNameTrans()
     {
-        return trans("entities.names.{$this->getModelName()}");
+        return trans("entities.names.{$this->getResourceEntity()}");
     }
 
     protected function getResourceTrans($entityName, $method = 'store')
@@ -44,12 +62,16 @@ abstract class ResourceController extends Controller
 
     protected function resourceView($viewName)
     {
-        return view("{$this->getPrefixView()}.$viewName");
+        $viewBase = EntityResolver::getConfigKey($this->getResourceEntity(), 'view');
+
+        return view("{$viewBase}.$viewName");
     }
 
     protected function resourceRoute($routeName)
     {
-        return "{$this->getPrefixRoute()}.$routeName";
+        $routeBase = EntityResolver::getConfigKey($this->getResourceEntity(), 'route');
+
+        return "{$routeBase}.$routeName";
     }
 
     protected function resourceRedirect($routeName, $model)
@@ -71,8 +93,4 @@ abstract class ResourceController extends Controller
             'message' => $this->getResourceTrans($entityName, $method)
         ]);
     }
-
-    abstract protected function getPrefixRoute();
-    abstract protected function getPrefixView();
-    abstract protected function getModelName();
 }
