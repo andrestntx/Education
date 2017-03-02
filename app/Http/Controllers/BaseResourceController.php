@@ -4,28 +4,22 @@ namespace Education\Http\Controllers;
 use Education\Resolvers\EntityResolver;
 use Laracasts\Flash\Flash;
 
-abstract class ResourceController extends Controller
+abstract class BaseResourceController extends Controller
 {
     protected $formWithFiles = false;
 
     abstract protected function getResourceEntity();
 
-    public function index($entity = null)
-    {
-        return $this->resourceView('list');
-    }
-
-    public function create()
-    {
-        $entity = new $this->getResourceEntity();
-        $formData = $this->getFormData('store', 'POST', true);
-
-        return $this->getFormView($entity, $formData);
-    }
-
     protected function getFormData($route = 'store', $method = 'POST', $files = false, $entity = null)
     {
-        $formRoute = is_null($entity) ? $this->resourceRoute($route) : [$this->resourceRoute($route), $entity];
+        $formRoute = [$this->resourceRoute($route), $entity];
+
+        if(is_null($entity)) {
+            $formRoute = $this->resourceRoute($route);
+        }
+        else if(is_array($entity)) {
+            $formRoute = array_merge([$this->resourceRoute($route)], $entity);
+        }
 
         return [
             'route' => $formRoute,
@@ -34,12 +28,14 @@ abstract class ResourceController extends Controller
         ];
     }
 
-    protected function getFormView($entity, array $formData, $viewName = 'form')
+    protected function getFormView($entity, array $formData, $viewName = 'form', array $additionalData = [])
     {
-        return $this->resourceView($viewName)->with([
+        $data = array_merge([
             'form_data' => $formData,
             $this->getEntityName() => $entity
-        ]);
+        ], $additionalData);
+
+        return $this->resourceView($viewName)->with($data);
     }
 
     protected function getEntityName()
@@ -74,9 +70,9 @@ abstract class ResourceController extends Controller
         return "{$routeBase}.$routeName";
     }
 
-    protected function resourceRedirect($routeName, $model)
+    protected function resourceRedirect($routeName, ...$entities)
     {
-        return redirect()->route($this->resourceRoute($routeName), $model);
+        return redirect()->route($this->resourceRoute($routeName), $entities);
     }
 
     protected function resourceFlash($entityName, $method = 'store')

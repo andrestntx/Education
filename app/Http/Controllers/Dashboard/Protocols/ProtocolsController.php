@@ -1,7 +1,8 @@
 <?php
 namespace Education\Http\Controllers\Dashboard\Protocols;
 
-use Education\Http\Controllers\ResourceController;
+use Education\Http\Controllers\BaseResourceController;
+use Education\Http\Controllers\Dashboard\SimpleResourceController;
 use Education\Repositories\ForumRepository;
 use Education\Repositories\ProtocolRepository;
 use Education\Http\Requests\Protocols\CreateRequest;
@@ -9,7 +10,7 @@ use Education\Http\Requests\Protocols\EditRequest;
 use Education\Entities\Protocol;
 use Education\Repositories\UserRepository;
 
-class ProtocolsController extends ResourceController
+class ProtocolsController extends SimpleResourceController
 {
     protected $formWithFiles = true;
     private $forumRepository;

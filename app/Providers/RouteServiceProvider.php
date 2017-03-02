@@ -23,7 +23,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
+        $router->model('companies', 'Education\Entities\Company');
         $router->model('protocols', 'Education\Entities\Protocol');
+        $router->model('users', 'Education\Entities\User');
         $router->model('generators', 'Education\Entities\Generator');
         $router->model('questions', 'Education\Entities\Question');
         $router->model('generated-protocols', 'Education\Entities\GeneratedProtocol');

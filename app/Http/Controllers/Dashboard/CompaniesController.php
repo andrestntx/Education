@@ -1,13 +1,13 @@
 <?php
 namespace Education\Http\Controllers\Dashboard;
 
-use Education\Http\Controllers\ResourceController;
+use Education\Http\Controllers\SimpleResourceController;
 use Education\Http\Requests\Companies\CreateRequest;
 use Education\Http\Requests\Companies\EditRequest;
 use Education\Entities\Company;
 use Education\Repositories\CompanyRepository;
 
-class CompaniesController extends ResourceController
+class CompaniesController extends SimpleResourceController
 {
     protected $formWithFiles = true;
     private $companyRepository;
@@ -42,7 +42,7 @@ class CompaniesController extends ResourceController
         $this->companyRepository->update($company, $request->all(), $request->file('url_logo'));
         $this->resourceFlash($company->name, 'update');
 
-        return $this->resourceRedirect('index', $company);
+        return $this->resourceRedirect('index');
     }
 
     protected function getResourceEntity()

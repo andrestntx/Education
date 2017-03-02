@@ -36,8 +36,9 @@ class EditRequest extends Request
      */
     public function rules()
     {
+        $user = $this->route->getParameter('users');
         $rules = $this->createRequest->rules();
-        $rules['username'] .= ',username,'.$this->route->getParameter('users').',id';
+        $rules['username'] .= ',username,'.$user->id.',id';
         $rules['password'] = 'confirmed';
 
         return $rules;

@@ -1,20 +1,20 @@
 <?php
 namespace Education\Http\Controllers\Dashboard;
 
-use Education\Http\Controllers\ResourceController;
+use Education\Http\Controllers\BaseResourceController;
 use Education\Http\Requests\Companies\Users\CreateRequest;
 use Education\Http\Requests\Companies\Users\EditRequest;
 use Education\Entities\Company;
 use Education\Entities\User;
 
-class CompanyUsersController extends ResourceController
+class CompanyUsersController extends BaseResourceController
 {
     public function index(Company $company)
     {
         $users = $company->userAdmins();
 
         return $this->resourceView('list')->with([
-            'company' => $this->company,
+            'company' => $company,
             'users' => $users
         ]);
     }
@@ -23,7 +23,9 @@ class CompanyUsersController extends ResourceController
     {
         $formData = $this->getFormData('store', 'POST', true, $company);
 
-        return $this->getFormView($company, $formData);
+        return $this->getFormView(new User, $formData, 'form', [
+            'company' => $company
+        ]);
     }
 
     public function store(CreateRequest $request, Company $company)
@@ -32,7 +34,7 @@ class CompanyUsersController extends ResourceController
         $company->users()->save($this->user);
         $user->uploadImage($request->file('url_photo'));
 
-        $this->resourceFlash($company);
+        $this->resourceFlash($user->name);
 
         //Flash::info('Administrador '.$this->user->name.' Guardado correctamente');
 
@@ -48,21 +50,20 @@ class CompanyUsersController extends ResourceController
 
     public function edit(Company $company, User $user)
     {
-        $formData = [
-            'route' => [self::$prefixRoute.'update', $this->company->id, $this->user->id],
-            'method' => 'PUT', 'files' => true,
-        ];
+        $formData = $this->getFormData('update', 'PUT', true, [$company, $user]);
 
-        return $this->getFormView($company, $formData);
+        return $this->getFormView($user, $formData, 'form', [
+            'company' => $company
+        ]);
     }
 
     public function update(EditRequest $request, Company $company, User $user)
     {
-        $this->user->fill($request->all());
-        $this->user->save();
-        $this->user->uploadImage($request->file('url_photo'));
+        $user->fill($request->all());
+        $user->save();
+        $user->uploadImage($request->file('url_photo'));
 
-        $this->resourceFlash($company, 'update');
+        $this->resourceFlash($user->name, 'update');
 
         //Flash::info('Administrador '.$this->user->name.' Actualizado correctamente');
 

@@ -36,8 +36,9 @@ class EditRequest extends Request
      */
     public function rules()
     {
+        $company = $this->route->getParameter('companies');
         $rules = $this->createRequest->rules();
-        $rules['name'] .= ',name,'.$this->route->getParameter('companies').',id';
+        $rules['name'] .= ',name,'.$company->id.',id';
 
         return $rules;
     }
