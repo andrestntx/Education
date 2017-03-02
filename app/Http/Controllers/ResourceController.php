@@ -10,7 +10,7 @@ abstract class ResourceController extends Controller
 
     abstract protected function getResourceEntity();
 
-    public function index()
+    public function index($entity = null)
     {
         return $this->resourceView('list');
     }

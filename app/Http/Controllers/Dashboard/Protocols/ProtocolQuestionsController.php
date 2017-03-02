@@ -21,40 +21,6 @@ class ProtocolQuestionsController extends Controller
     private static $prefixRoute = 'protocols.questions.';
     private static $prefixView = 'dashboard.pages.companies.users.protocols.questions.';
 
-    public function __construct()
-    {
-        $this->beforeFilter('@newQuestion', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findProtocol');
-        $this->beforeFilter('@findQuestion', ['only' => ['show', 'edit', 'update']]);
-    }
-
-    /**
-     * Create a new Protocol.
-     */
-    public function newQuestion()
-    {
-        $this->question = new Question();
-    }
-
-    /**
-     * Find the Protocol or App Abort 404.
-     */
-    public function findProtocol(Route $route)
-    {
-        $this->protocol = Protocol::findOrFail($route->getParameter('protocols'));
-    }
-
-    /**
-     * Find the Question of Protocol or App Abort 404.
-     */
-    public function findQuestion(Route $route)
-    {
-        $this->question = $this->protocol->questions()->findOrFail($route->getParameter('questions'));
-    }
-
-    /**
-     * Return the default Form View for Companies.
-     */
     public function getFormView($number_answers = 2, $viewName = 'form')
     {
         return view(self::$prefixView.$viewName)
@@ -63,22 +29,11 @@ class ProtocolQuestionsController extends Controller
             ]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param $protocol_id
-     * @return Response
-     */
     public function index($protocol_id)
     {
         return redirect()->route('protocols.show', $protocol_id);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request, $protocol_id)
     {
         $this->form_data = ['route' => [self::$prefixRoute.'store', $this->protocol->id], 'method' => 'POST'];
@@ -86,11 +41,6 @@ class ProtocolQuestionsController extends Controller
         return $this->getFormView($request->get('answers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
     public function store(CreateRequest $request, $protocol_id)
     {
         $this->question->fill($request->all());
@@ -110,13 +60,6 @@ class ProtocolQuestionsController extends Controller
         return redirect()->route('protocols.show', $this->protocol->id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
     public function edit($protocol_id, $question_id)
     {
         $this->form_data = ['route' => [self::$prefixRoute.'update', $this->protocol->id, $this->question->id], 'method' => 'PUT'];
@@ -124,13 +67,6 @@ class ProtocolQuestionsController extends Controller
         return $this->getFormView();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
     public function update(EditRequest $request, $protocol_id, $question_id)
     {
         $this->question->fillAndClear($request->all());

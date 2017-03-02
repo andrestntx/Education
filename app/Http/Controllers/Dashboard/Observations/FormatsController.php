@@ -13,33 +13,8 @@ use Flash;
 
 class FormatsController extends Controller
 {
-    private $format;
-    private $form_data;
-
     private static $prefixRoute = 'formats.observations.';
     private static $prefixView = 'dashboard.pages.companies.users.formats.observations.format.';
-
-    public function __construct()
-    {
-        $this->beforeFilter('@newFormat', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findFormat', ['only' => ['show', 'edit', 'update', 'showChecklistsUser', 'destroy']]);
-    }
-
-    /**
-     * Create a new Company.
-     */
-    public function newFormat()
-    {
-        $this->format = new ObservationFormat();
-    }
-
-    /**
-     * Find the Company or App Abort 404.
-     */
-    public function findFormat(Route $route)
-    {
-        $this->format = ObservationFormat::findOrFail($route->getParameter('observations'));
-    }
 
     /**
      * Return the default Form View for Companies.
@@ -50,21 +25,12 @@ class FormatsController extends Controller
             ->with(['form_data' => $this->form_data, 'format' => $this->format]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index()
     {
         return view(self::$prefixView.'list');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
+
     public function create()
     {
         $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST'];
@@ -72,11 +38,7 @@ class FormatsController extends Controller
         return $this->getFormView();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
+
     public function store(CreateRequest $request)
     {
         $this->format->fillAndClear($request->all());
@@ -90,13 +52,6 @@ class FormatsController extends Controller
         return redirect()->route(self::$prefixRoute.'show', $this->format);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
     public function show($id)
     {
         $this->format->load(['questions' => function ($query) {
@@ -106,13 +61,7 @@ class FormatsController extends Controller
         return view(self::$prefixView.'show')->with('format', $this->format);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
+
     public function edit($id)
     {
         $this->form_data = ['route' => [self::$prefixRoute.'update', $this->format->id], 'method' => 'PUT'];
@@ -120,13 +69,7 @@ class FormatsController extends Controller
         return $this->getFormView();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
+
     public function update(EditRequest $request, $id)
     {
         $this->format->fillAndClear($request->all());
@@ -138,13 +81,7 @@ class FormatsController extends Controller
         return redirect()->route(self::$prefixRoute.'show', $this->format);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
+
     public function destroy($id)
     {
         $data = [

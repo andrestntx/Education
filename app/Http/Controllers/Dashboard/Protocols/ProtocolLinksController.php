@@ -12,51 +12,8 @@ use Flash;
 
 class ProtocolLinksController extends Controller
 {
-    private $link;
-    private $protocol;
-    private $form_data;
     private static $prefixRoute = 'protocols.links.';
     private static $prefixView = 'dashboard.pages.companies.users.protocols.links.';
-
-    public function __construct()
-    {
-        $this->beforeFilter('@newLink', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findLink', ['only' => ['show', 'edit', 'update', 'destroy']]);
-        $this->beforeFilter('@findProtocol');
-    }
-
-    /**
-     * Find a specified resource.
-     */
-    public function findLink(Route $route)
-    {
-        $this->link = Link::findOrFail($route->getParameter('links'));
-    }
-
-    /**
-     * Find a specified resource.
-     */
-    public function findProtocol(Route $route)
-    {
-        $this->protocol = Protocol::findOrFail($route->getParameter('protocols'));
-    }
-
-    /**
-     * Create a new Annex instance.
-     */
-    public function newLink()
-    {
-        $this->link = new Link();
-    }
-
-    /**
-     * Get de thefault view Form.
-     */
-    public function getViewForm($viewName = 'form')
-    {
-        return view(self::$prefixView.$viewName)
-            ->with(['protocol' => $this->protocol, 'link' => $this->link, 'form_data' => $this->form_data]);
-    }
 
     /**
      * Show the form for creating a new resource.

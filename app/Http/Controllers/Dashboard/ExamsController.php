@@ -13,29 +13,13 @@ use Flash;
 
 class ExamsController extends Controller
 {
-    private $protocol;
-    private $exam;
     private $forumRepository;
 
     public function __construct(ForumRepository $forumRepository)
     {
-        $this->beforeFilter('@findProtocol');
-        $this->beforeFilter('@validateExam', ['only' => ['create']]);
-        $this->beforeFilter('@newExam', ['only' => ['create', 'store']]);
         $this->forumRepository = $forumRepository;
     }
 
-    /**
-     * Find the Protocol or App Abort 404.
-     */
-    public function findProtocol(Route $route)
-    {
-        $this->protocol = Protocol::findOrFail($route->getParameter('protocols'));
-    }
-
-    /**
-     * Validate the conditions for a new Exam.
-     */
     public function validateExam()
     {
         if (!$this->protocol->aviable || $this->protocol->questions->count() == 0) {
@@ -45,42 +29,35 @@ class ExamsController extends Controller
         }
     }
 
-    /**
-     * Create a new Exam.
-     */
-    public function newExam()
+    public function studyProtocol(Protocol $protocol)
     {
-        $this->exam = new Exam();
-    }
-
-    public function studyProtocol($protocol_id)
-    {
-        $forums = $this->forumRepository->paginateOfProtocol($this->protocol);
+        $forums = $this->forumRepository->paginateOfProtocol($protocol);
 
         return view()->make('dashboard.pages.companies.users.protocols.study')
             ->with([
                 'user' => Auth::user(),
-                'protocol' => $this->protocol,
+                'protocol' => $protocol,
                 'forums' => $forums
             ]);
     }
 
-    public function create($protocol_id)
+    public function create(Protocol $protocol)
     {
-        $this->protocol->load('questions');
-        $form_data = ['route' => ['exams.store', $this->protocol->id], 'method' => 'POST'];
+        $exam = new Exam;
+        $protocol->load('questions');
+        $formData = ['route' => ['exams.store', $protocol->id], 'method' => 'POST'];
 
-        return view('dashboard.pages.companies.users.protocols.exams.form', compact('form_data'))
-            ->with(['exam' => $this->exam, 'protocol' => $this->protocol]);
+        return view('dashboard.pages.companies.users.protocols.exams.form', compact('formData'))
+            ->with(['exam' => $exam, 'protocol' => $protocol]);
     }
 
-    public function store(Request $request, $protocol_id)
+    public function store(Request $request, Protocol $protocol)
     {
-        $this->exam = Exam::create(['protocol_id' => $this->protocol->id, 'user_id' => Auth::user()->id]);
-        $this->exam->answers()->attach($request->get('answers'));
+        $exam = Exam::create(['protocol_id' => $protocol->id, 'user_id' => Auth::user()->id]);
+        $exam->answers()->attach($request->get('answers'));
 
         Flash::info('Examen evaluado correctamente');
 
-        return redirect()->route('study', $this->protocol->id);
+        return redirect()->route('study', $protocol->id);
     }
 }

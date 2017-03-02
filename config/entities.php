@@ -8,5 +8,9 @@ return [
     \Education\Entities\Company::class => [
         'route' => 'companies',
         'view' => 'dashboard.pages.companies'
+    ],
+    \Education\Entities\User::class => [
+        'route' => 'companies.users',
+        'view' => 'dashboard.pages.companies.users.superadmin'
     ]
 ];

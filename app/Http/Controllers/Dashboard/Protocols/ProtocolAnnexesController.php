@@ -11,27 +11,8 @@ use Storage, File, Flash;
 class ProtocolAnnexesController extends Controller
 {
     private $protocol;
-    private $form_data;
 
-    public function __construct()
-    {
-        $this->beforeFilter('@findProtocol');
-    }
-
-    /**
-     * Find a specified resource.
-     */
-    public function findProtocol(Route $route)
-    {
-        $this->protocol = Protocol::findOrFail($route->getParameter('protocols'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request, $protocol_id)
+    public function store(Request $request, Protocol $protocol)
     {
         $file = $request->file('file');
         $name = $file->getClientOriginalName();
@@ -44,14 +25,7 @@ class ProtocolAnnexesController extends Controller
         return 'file saved';
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($protocol_id, $fileName)
+    public function destroy(Protocol $protocol, $fileName)
     {
         if (Storage::has($this->protocol->getPathAnnexes().$fileName)) {
             Storage::delete($this->protocol->getPathAnnexes().$fileName);
