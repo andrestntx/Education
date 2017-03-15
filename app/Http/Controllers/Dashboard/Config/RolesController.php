@@ -1,154 +1,61 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard\Config;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-use Illuminate\Database\QueryException;
-use Education\Http\Controllers\Controller;
+use Education\Http\Controllers\SimpleResourceController;
+use Education\Repositories\RoleRepository;
 use Education\Http\Requests\Roles\CreateRequest;
 use Education\Http\Requests\Roles\EditRequest;
 use Education\Entities\Role;
-use Flash;
+use Illuminate\Support\Facades\Auth;
 
-
-class RolesController extends Controller
+class RolesController extends SimpleResourceController
 {
-    private $role;
-    private $form_data;
-    private static $prefixRoute = 'roles.';
-    private static $prefixView = 'dashboard.pages.companies.users.roles.';
+    protected $roleRepository;
 
-    public function __construct()
+    public function __construct(RoleRepository $roleRepository)
     {
-        $this->beforeFilter('@newRole', ['only' => ['store', 'create']]);
-        $this->beforeFilter('@findRole', ['only' => ['show', 'edit', 'update', 'destroy']]);
+        $this->roleRepository = $roleRepository;
     }
 
-    /**
-     * Find a specified resource.
-     */
-    public function findRole(Route $route)
-    {
-        $this->role = Role::findOrFail($route->getParameter('roles'));
-    }
-
-    /**
-     * Create a new User instance.
-     */
-    public function newRole()
-    {
-        $this->role = new Role();
-    }
-
-    public function getViewForm($viewName = 'show')
-    {
-        return view(self::$prefixView.$viewName)
-            ->with(['role' => $this->role, 'form_data' => $this->form_data]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        return view(self::$prefixView.'list');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST'];
-
-        return $this->getViewForm('form');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
     public function store(CreateRequest $request)
     {
-        $this->role->fill($request->all());
-        \Auth::user()->rolesCreated()->save($this->role);
+        $role = $this->roleRepository->createForUser(auth()->user(), $request->all());
+        $this->resourceFlash($role->name);
 
-        Flash::info('Perfil '.$this->role->name.' Guardado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return $this->resourceRedirect('index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
+    public function show(Role $role)
     {
-        return $this->getViewForm();
+        return $this->resourceView('show')->with([
+            'role' => $role
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->role->id], 'method' => 'PUT','files' => true];
+        $formData = $this->getFormData('update', 'PUT', true);
 
-        return $this->getViewForm('form');
+        return $this->getFormView($role, $formData);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update(EditRequest $request, $id)
+    public function update(EditRequest $request, Role $role)
     {
-        $this->role->fill($request->all());
-        $this->role->save();
+        $role = $this->roleRepository->simpleUpdate($role, $request->all());
+        $this->resourceFlash($role->name, 'update');
 
-        Flash::info('Perfil '.$this->role->name.' Actualizado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return $this->resourceRedirect('index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        $data = [
-            'success' => true,
-            'message' => 'Perfil eliminado correctamente'
-        ];   
+        $success = $this->roleRepository->deleteEntity($role);
 
-        try {
-            $this->role->delete(); 
-        } catch (QueryException $e) {
-            $data['success'] = false;
-            $data['message'] = 'El Perfil no se puede eliminar, ya que está asociado a almenos a un Usuario o Protocolo';
-        }
+        return $this->resourceDeleteJson($role->name, $success);
+    }
 
-        return response()->json($data);
-        
+    protected function getResourceEntity()
+    {
+        return Role::class;
     }
 }

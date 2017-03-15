@@ -29,6 +29,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->model('generators', 'Education\Entities\Generator');
         $router->model('questions', 'Education\Entities\Question');
         $router->model('generated-protocols', 'Education\Entities\GeneratedProtocol');
+        $router->model('areas', 'Education\Entities\Area');
 
 
         parent::boot($router);

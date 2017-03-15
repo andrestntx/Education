@@ -1,152 +1,69 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard\Config;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-use Illuminate\Database\QueryException;
-use Education\Http\Controllers\Controller;
+use Education\Http\Controllers\SimpleResourceController;
+use Education\Repositories\AreaRepository;
 use Education\Http\Requests\Areas\CreateRequest;
 use Education\Http\Requests\Areas\EditRequest;
-use Flash;
 use Education\Entities\Area;
+use Illuminate\Support\Facades\Auth;
 
-class AreasController extends Controller
+class AreasController extends SimpleResourceController
 {
-    private $area;
-    private $form_data;
-    private static $prefixRoute = 'areas.';
-    private static $prefixView = 'dashboard.pages.companies.users.areas.';
+    protected $areaRepository;
 
-    public function __construct()
+    public function __construct(AreaRepository $areaRepository)
     {
-        $this->beforeFilter('@newArea', ['only' => ['store', 'create']]);
-        $this->beforeFilter('@findArea', ['only' => ['show', 'edit', 'update', 'destroy']]);
+        $this->areaRepository = $areaRepository;
     }
 
-    /**
-     * Find a specified resource.
-     */
-    public function findArea(Route $route)
-    {
-        $this->area = Area::findOrFail($route->getParameter('areas'));
-    }
-
-    /**
-     * Create a new User instance.
-     */
-    public function newArea()
-    {
-        $this->area = new Area();
-    }
-
-    public function getViewForm($viewName = 'show')
-    {
-        return view(self::$prefixView.$viewName)
-            ->with(['area' => $this->area, 'form_data' => $this->form_data]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        return view(self::$prefixView.'list');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create()
     {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST'];
+        $formData = $this->getFormData('store', 'POST');
 
-        return $this->getViewForm('form');
+        return $this->getFormView(new Area, $formData);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
     public function store(CreateRequest $request)
     {
-        $this->area->fill($request->all());
-        \Auth::user()->areasCreated()->save($this->area);
+        $area = $this->areaRepository->createForUser(Auth::user(), $request->all());
+        $this->resourceFlash($area->name);
 
-        Flash::info('Area '.$this->area->name.' Guardada correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return $this->resourceRedirect('index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
+    public function show(Area $area)
     {
-        return $this->getViewForm();
+        return $this->resourceView('show')->with([
+            'area' => $area
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
+    public function edit(Area $area)
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->area->id], 'method' => 'PUT', 'files' => true];
+        $formData = $this->getFormData('update', 'PUT', true, $area);
 
-        return $this->getViewForm('form');
+        return $this->getFormView($area, $formData);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update(EditRequest $request, $id)
+
+    public function update(EditRequest $request, Area $area)
     {
-        $this->area->fill($request->all());
-        $this->area->save();
+        $this->areaRepository->simpleUpdate($area, $request->all());
+        $this->resourceFlash($area->name);
 
-        Flash::info('Area '.$this->area->name.' Actualizada correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return $this->resourceRedirect('index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
+    public function destroy(Area $area)
     {
-        $data = [
-            'success' => true,
-            'message' => 'Área eliminada correctamente'
-        ];   
+        $success = $this->areaRepository->deleteEntity($area);
 
-        try {
-            $this->area->delete(); 
-        } catch (QueryException $e) {
-            $data['success'] = false;
-            $data['message'] = 'El Área no se puede eliminar, ya que está asociado a almenos a un Usuario o Protocolo';
-        }
+        return $this->resourceDeleteJson($area->name, $success);
+    }
 
-        return response()->json($data);
+    protected function getResourceEntity()
+    {
+        return Area::class;
     }
 }

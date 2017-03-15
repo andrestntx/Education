@@ -1,107 +1,65 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard\Observations;
 
-use Illuminate\Routing\Route;
-use Education\Http\Controllers\Controller;
+use Education\Entities\Format;
+use Education\Http\Controllers\SimpleResourceController;
 use Education\Http\Requests\Formats\CreateRequest;
 use Education\Http\Requests\Formats\EditRequest;
-use Education\Entities\ObservationFormat;
-use Auth;
-use Storage;
-use Flash;
+use Education\Repositories\FormatRepository;
 
-class FormatsController extends Controller
+class FormatsController extends SimpleResourceController
 {
-    private static $prefixRoute = 'formats.observations.';
-    private static $prefixView = 'dashboard.pages.companies.users.formats.observations.format.';
+    protected $formatRepository;
 
-    /**
-     * Return the default Form View for Companies.
-     */
-    public function getFormView($viewName = 'form')
+    public function __construct(FormatRepository $formatRepository)
     {
-        return view(self::$prefixView.$viewName)
-            ->with(['form_data' => $this->form_data, 'format' => $this->format]);
-    }
-
-    public function index()
-    {
-        return view(self::$prefixView.'list');
-    }
-
-
-    public function create()
-    {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST'];
-
-        return $this->getFormView();
+        $this->formatRepository = $formatRepository;
     }
 
 
     public function store(CreateRequest $request)
     {
-        $this->format->fillAndClear($request->all());
-        Auth::user()->formatsCreated()->save($this->format);
+        $format = $this->formatRepository->createForUser(auth()->user(), $request->all());
+        $this->resourceFlash($format->name);
 
-        $this->format->syncRelations($request->all());
-        $this->format->save();
-
-        Flash::info('Formato '.$this->format->name.' Guardado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'show', $this->format);
+        return $this->resourceRedirect('show', $format);
     }
 
-    public function show($id)
+    public function show(Format $format)
     {
-        $this->format->load(['questions' => function ($query) {
+        $format->load(['questions' => function ($query) {
             $query->orderBy('order', 'asc');
         }]);
 
-        return view(self::$prefixView.'show')->with('format', $this->format);
+        return $this->resourceView('show')->with('format', $format);
     }
 
 
-    public function edit($id)
+    public function edit(Format $format)
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->format->id], 'method' => 'PUT'];
+        $formData = $this->getFormData('update', 'PUT', false, $format);
 
-        return $this->getFormView();
+        return $this->getFormView($format, $formData);
     }
 
 
-    public function update(EditRequest $request, $id)
+    public function update(EditRequest $request, Format $format)
     {
-        $this->format->fillAndClear($request->all());
-        $this->format->save();
-        $this->format->syncRelations($request->all());
+        $format = $this->formatRepository->update($format, $request->all());
+        $this->resourceFlash($format->name);
 
-        Flash::info('Formato '.$this->format->name.' Actualizado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'show', $this->format);
+        return $this->resourceRedirect('show', $format);
     }
 
-
-    public function destroy($id)
+    public function destroy(Format $format)
     {
-        $data = [
-            'success' => true,
-            'message' => 'Formato eliminado correctamente'
-        ];   
+        $success = $this->formatRepository->deleteEntity($format);
 
-        if($this->format->observations()->count() == 0){
-            try {
-                $this->format->detachAndDelete();
-            } catch (QueryException $e) {
-                $data['success'] = false;
-                $data['message'] = 'El Formato no se puede eliminar';
-            }    
-        }
-        else{
-            $data['success'] = false;
-            $data['message'] = 'El Formato no se puede eliminar, ya que algún usuario lo ha diligenciado';
-        }
+        return $this->resourceDeleteJson($format->name, $success);
+    }
 
-        return response()->json($data);
+    protected function getResourceEntity()
+    {
+        return Format::class;
     }
 }

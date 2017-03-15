@@ -75,7 +75,7 @@ abstract class BaseResourceController extends Controller
         return redirect()->route($this->resourceRoute($routeName), $entities);
     }
 
-    protected function resourceFlash($entityName, $method = 'store')
+    protected function resourceFlash($entityName = '', $method = 'store')
     {
         Flash::info($this->getResourceTrans($entityName, $method));
     }

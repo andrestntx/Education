@@ -1,8 +1,7 @@
 <?php
 namespace Education\Http\Controllers\Dashboard\Protocols;
 
-use Education\Http\Controllers\BaseResourceController;
-use Education\Http\Controllers\Dashboard\SimpleResourceController;
+use Education\Http\Controllers\SimpleResourceController;
 use Education\Repositories\ForumRepository;
 use Education\Repositories\ProtocolRepository;
 use Education\Http\Requests\Protocols\CreateRequest;
@@ -63,7 +62,7 @@ class ProtocolsController extends SimpleResourceController
     
     public function destroy(Protocol $protocol)
     {
-        $success = $this->protocolRepository->delete($protocol);
+        $success = $this->protocolRepository->deleteEntity($protocol);
 
         return $this->resourceDeleteJson($protocol->name, $success);
     }

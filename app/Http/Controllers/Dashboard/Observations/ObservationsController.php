@@ -2,130 +2,94 @@
 
 namespace Education\Http\Controllers\Dashboard\Observations;
 
-use Illuminate\Routing\Route;
-use Education\Http\Controllers\Controller;
+use Education\Http\Controllers\BaseResourceController;
+use Education\Repositories\ObservationRepository;
 use Education\Entities\ObservationFormat;
 use Education\Entities\ObservationFormatUser;
 use Education\Http\Requests\Checklists\CreateRequest;
-use Auth;
 use Flash;
 use App;
 
-class ObservationsController extends Controller
+class ObservationsController extends BaseResourceController
 {
-    private $format;
-    private $observation;
+    protected $observationRepository;
 
-    private static $prefixRoute = 'myformats.observations.doit.';
-    private static $prefixView = 'dashboard.pages.companies.users.formats.observations.';
-
-    public function __construct()
+    public function __construct(ObservationRepository $observationRepository)
     {
-        $this->beforeFilter('@findFormat', ['except' => ['allMyFormats']]);
-        $this->beforeFilter('@validateObservationFormatUser', ['only' => ['create']]);
-        $this->beforeFilter('@newObservationFormatUser', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findObservationFormatUser', ['only' => ['show', 'download']]);
-        $this->beforeFilter('@loadQuestions', ['only' => ['create']]);
-    }
-
-    /**
-     * Find the Format or App Abort 404.
-     */
-    public function findFormat(Route $route)
-    {
-        $this->format = ObservationFormat::findOrFail($route->getParameter('observations'));
-    }
-
-    public function loadQuestions()
-    {
-        $this->format->load(['questions' => function ($query) {
-            $query->orderBy('order', 'asc');
-        }]);
-    }
-
-    /**
-     * Validate the conditions for a new Observation.
-     */
-    public function validateObservationFormatUser()
-    {
-        if (!$this->format->isAviable()) {
-            Flash::warning('El formato no está habilitado');
-
-            return redirect()->route(self::$prefixRoute . 'index', $this->format);
-        }
-    }
-
-    /**
-     * Create a new ObservationFormatUser.
-     */
-    public function newObservationFormatUser()
-    {
-        $this->observation = new ObservationFormatUser();
-    }
-
-    /**
-     * Find the ObservationFormatUser or App Abort 404.
-     */
-    public function findObservationFormatUser(Route $route)
-    {
-        $this->observation = ObservationFormatUser::findOrFail($route->getParameter('doit'));
-        $this->observation->load('answers.question');
-
-        $this->observation->answers = $this->observation->answers->sortBy(function ($answer, $key) {
-            return $answer->question->order;
-        });
+        $this->observationRepository = $observationRepository;
     }
 
     public function allMyFormats()
     {
-        return view(self::$prefixView . 'format.myformats');
+        return $this->resourceView('format.myformats');
     }
 
-    public function index($format_id)
+    public function index(ObservationFormat $format)
     {
-        $observations = $this->format->getUserObservations(Auth::user());
+        $observations = $format->getUserObservations(auth()->user());
 
-        return view(self::$prefixView . 'list')
-            ->with(['observations' => $observations, 'format' => $this->format]);
+        return $this->resourceView('list')->with([
+            'observations' => $observations,
+            'format' => $format
+        ]);
     }
 
-    public function create($format_id)
+    public function create(ObservationFormat $format)
     {
+        $formData = $this->getFormData('store', 'POST', false, $format);
+        $format = $this->observationRepository->loadFormatQuestions($format);
+        $observation = new ObservationFormatUser();
 
-        $form_data = ['route' => [self::$prefixRoute . 'store', $this->format], 'method' => 'POST'];
-
-        return view(self::$prefixView.'form', compact('form_data'))
-            ->with(['observation' => $this->observation, 'format' => $this->format]);
+        return $this->resourceView('form')->with([
+            'observation' => $observation,
+            'format' => $format,
+            'form_data' => $formData
+        ]);
     }
 
-    public function store(CreateRequest $request, $format_id)
+    public function store(CreateRequest $request, ObservationFormat $format)
     {
-        $this->observation = ObservationFormatUser::create(['observation_format_id' => $this->format->id, 'user_id' => Auth::user()->id]);
-        $this->observation->fill($request->all());
-        $this->observation->save();
+        if (!$format->isAviable()) {
+            Flash::warning('El formato no está habilitado');
 
-        $this->observation->answers()->attach($request->get('answers'));
+            return $this->resourceRedirect('index', $format);
+        }
 
-        Flash::info('Lista de chequeo guardada correctamente');
+        $observation = $this->observationRepository->create($format, $request->all(), $request->get('answers'));
+        $this->resourceFlash();
 
-        return redirect()->route(self::$prefixRoute.'show', [$this->format, $this->observation]);
+        return $this->resourceRedirect('show', $format, $observation);
     }
 
-    public function show($format_id, $observation_id)
+    public function show(ObservationFormat $format, ObservationFormatUser $observation)
     {
-        return view(self::$prefixView.'show')
-            ->with(['observation' => $this->observation, 'format' => $this->format]);
+        $observation = $this->observationRepository->loadAnswers($observation);
+
+        return $this->resourceView('show')->with([
+            'observation' => $observation,
+            'format' => $format
+        ]);
     }
 
-    public function download($format_id, $observation_id)
+    public function download(ObservationFormat $format, ObservationFormatUser $observation)
     {
-        $view = view()->make(self::$prefixView.'download')
-            ->with(['format' => $this->format, 'observation' => $this->observation])
+        $observation = $this->observationRepository->loadAnswers($observation);
+
+        $view = $this->resourceView('download')
+            ->with([
+                'format' => $format,
+                'observation' => $observation
+            ])
             ->render();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($view)->save('storage/checklists/' . $this->observation->id . '.pdf');
+        $pdf->loadHTML($view)->save("storage/checklists/{$observation->id}.pdf");
 
         return $pdf->stream('observation.pdf');
+    }
+
+    protected function getResourceEntity()
+    {
+        return ObservationFormat::class;
     }
 }

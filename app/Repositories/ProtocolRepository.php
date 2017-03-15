@@ -31,15 +31,6 @@ class ProtocolRepository extends BaseRepository
 
     public function delete(Protocol $protocol)
     {
-        $success = true;
-
-        try {
-            $protocol->detachAndDelete();
-        } catch (QueryException $e) {
-            $success = false;
-            $this->logQueryException($e);
-        }
-
-        return $success;
+        $protocol->detachAndDelete();
     }
 }

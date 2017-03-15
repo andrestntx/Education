@@ -2,94 +2,87 @@
 
 namespace Education\Http\Controllers\Dashboard\Observations;
 
+use Education\Entities\Format;
+use Education\Http\Controllers\BaseResourceController;
+use Education\Repositories\FormatRepository;
+use Education\Repositories\QuestionRepository;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-use Education\Http\Controllers\Controller;
 use Education\Http\Requests\Questions\CreateRequest;
 use Education\Http\Requests\Questions\EditRequest;
-use Education\Entities\ObservationFormat;
 use Education\Entities\Question;
-use Education\Entities\Answer;
 use Flash;
 
-class FormatQuestionsController extends Controller
+class FormatQuestionsController extends BaseResourceController
 {
-    private static $prefixRoute = 'formats.observations.questions.';
-    private static $prefixView = 'dashboard.pages.companies.users.formats.observations.questions.';
+    protected $formatRepository;
+    protected $questionRepository;
 
-    public function getFormView($number_answers = 2, $viewName = 'form')
+    public function __construct(FormatRepository $formatRepository, QuestionRepository $questionRepository)
     {
-        return view(self::$prefixView.$viewName)
-            ->with(['form_data' => $this->form_data, 'format' => $this->format, 'question' => $this->question,
-                'number_answers' => $number_answers,
-            ]);
+        $this->formatRepository = $formatRepository;
+        $this->questionRepository = $questionRepository;
     }
 
-    public function index($format_id)
+    public function index(Format $format)
     {
-        return redirect()->route('formats.observations.show', $format_id);
+        return redirect()->route('formats.observations.show', $format);
     }
 
-    public function create(Request $request, $format_id)
+    public function create(Request $request, Format $format)
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'store', $this->format->id], 'method' => 'POST'];
+        $formData = $this->getFormData('store', 'POST', false, $format);
 
-        return $this->getFormView($request->get('answers'));
+        return $this->resourceView('form')->with([
+            'form_data' => $formData,
+            'format' => $format,
+            'number_answers' => $request->get('answers', 2),
+            'question' => new Question
+        ]);
     }
 
-    public function store(CreateRequest $request, $format_id)
+    public function store(CreateRequest $request, Format $format)
     {
-        $this->question->fill($request->all());
-        $this->question->order = $this->format->orderNewQuestion();
-        $this->format->questions()->save($this->question);
+        $this->formatRepository->createQuestion($format, $request->all(), $request->get('answers'));
+        $this->resourceFlash();
 
-        $answers = $request->get('answers');
-        $newAnswers = [];
-
-        foreach ($answers as $answer) {
-            array_push($newAnswers, new Answer($answer));
-        }
-
-        $this->question->answers()->saveMany($newAnswers);
-
-        Flash::info('Pregunta  Guardada correctamente');
-
-        return redirect()->route('formats.observations.show', $this->format->id);
+        return redirect()->route('formats.observations.show', $format);
     }
 
-    public function edit($format_id, $question_id)
+    public function edit(Request $request, Format $format, Question $question)
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->format->id, $this->question->id], 'method' => 'PUT'];
+        $formData = $this->getFormData('update', 'PUT', false, [$format, $question]);
 
-        return $this->getFormView();
+        return $this->resourceView('form')->with([
+            'form_data' => $formData,
+            'format' => $format,
+            'question' => $question,
+            'number_answers' => $request->get('answers', 2)
+        ]);
     }
 
-    public function update(EditRequest $request, $format_id, $question_id)
+    public function update(EditRequest $request, Format $format, Question $question)
     {
-        $this->question->fill($request->all());
-        $this->question->save();
+        $this->questionRepository->update($question, $request->all(), $request->get('answers'));
+        $this->resourceFlash('', 'update');
 
-        $answers = $request->get('answers');
-
-        foreach ($answers as $id => $answer) {
-            Answer::findOrFail($id)->fill($answer)->save();
-        }
-
-        Flash::info('Pregunta  Actualizada correctamente');
-
-        return redirect()->route('formats.observations.show', $this->format->id);
+        return redirect()->route('formats.observations.show', $format);
     }
 
-    public function order(Request $request)
+    public function order(Request $request, Format $format)
     {
         $questions = $request->get('questions');
 
         foreach ($questions as $order => $question_id) {
-            $question = $this->format->questions()->findOrFail($question_id);
+            $question = $format->questions()->findOrFail($question_id);
             $question->order = $order + 1;
             $question->save();
         }
 
         return ['success' => true];
+    }
+
+    protected function getResourceEntity()
+    {
+        return Question::class;
     }
 }

@@ -90,14 +90,7 @@ class FormatsController extends Controller
         return redirect()->route(self::$prefixRoute.'show', $this->format);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
+    public function show(Format $format)
     {
         $this->format->load(['questions' => function ($query) {
             $query->orderBy('order', 'asc');
@@ -106,28 +99,14 @@ class FormatsController extends Controller
         return view(self::$prefixView.'show')->with('format', $this->format);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
+    public function edit(Format $format)
     {
         $this->form_data = ['route' => [self::$prefixRoute.'update', $this->format->id], 'method' => 'PUT'];
 
         return $this->getFormView();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update(EditRequest $request, $id)
+    public function update(EditRequest $request, Format $format)
     {
         $this->format->fillAndClear($request->all());
         $this->format->save();
@@ -138,14 +117,7 @@ class FormatsController extends Controller
         return redirect()->route(self::$prefixRoute.'show', $this->format);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
+    public function destroy(Format $format)
     {
         $data = [
             'success' => true,

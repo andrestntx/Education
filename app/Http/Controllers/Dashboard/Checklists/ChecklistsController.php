@@ -2,8 +2,8 @@
 
 namespace Education\Http\Controllers\Dashboard\Checklists;
 
+use Education\Http\Controllers\BaseResourceController;
 use Illuminate\Routing\Route;
-use Education\Http\Controllers\Controller;
 use Education\Entities\Format;
 use Education\Entities\Checklist;
 use Education\Http\Requests\Checklists\CreateRequest;
@@ -11,56 +11,26 @@ use Auth;
 use Flash;
 use App;
 
-class ChecklistsController extends Controller
+class ChecklistsController extends BaseResourceController
 {
-    private $format;
-    private $checklist;
-
     private static $prefixRoute = 'myformats.checklists.doit.';
     private static $prefixView = 'dashboard.pages.companies.users.formats.checklists.';
 
     public function __construct()
     {
-        $this->beforeFilter('@findFormat', ['except' => ['allMyFormats']]);
         $this->beforeFilter('@validateChecklist', ['only' => ['create']]);
-        $this->beforeFilter('@newChecklist', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findChecklist', ['only' => ['show', 'download']]);
-        $this->beforeFilter('@loadQuestions', ['only' => ['create']]);
-    }
-
-    /**
-     * Find the Format or App Abort 404.
-     */
-    public function findFormat(Route $route)
-    {
-        $this->format = Format::findOrFail($route->getParameter('checklists'));
-    }
-
-    public function loadQuestions()
-    {
-        $this->format->load(['questions' => function ($query) {
-            $query->orderBy('order', 'asc');
-        }]);
     }
 
     /**
      * Validate the conditions for a new Checklist.
      */
-    public function validateChecklist()
+    public function validateChecklist() // Debe ir en el Request
     {
         if (!$this->format->isAviable()) {
             Flash::warning('El formato no está habilitado');
 
             return redirect()->route('checklists.doit.index', $this->format);
         }
-    }
-
-    /**
-     * Create a new Checklist.
-     */
-    public function newChecklist()
-    {
-        $this->checklist = new Checklist();
     }
 
     /**
@@ -81,52 +51,70 @@ class ChecklistsController extends Controller
         return view(self::$prefixView . 'format.myformats');
     }
 
-    public function index($format_id)
+    public function index(Format $format)
     {
-        $checklists = $this->format->getUserChecklists(Auth::user());
+        $checklists = $format->getUserChecklists(Auth::user());
 
-        return view(self::$prefixView.'list')
-            ->with(['checklists' => $checklists, 'format' => $this->format]);
+        return $this->resourceView('list')->with([
+            'checklists' => $checklists,
+            'format' => $format
+        ]);
     }
 
-    public function create($format_id)
+    public function create(Format $format)
     {
+        $format->load(['questions' => function ($query) {
+            $query->orderBy('order', 'asc');
+        }]);
 
-        $form_data = ['route' => ['myformats.checklists.doit.store', $this->format], 'method' => 'POST'];
+        $formData = $this->getFormData('store', 'POST', false, $format);
 
-        return view(self::$prefixView.'form', compact('form_data'))
-            ->with(['checklist' => $this->checklist, 'format' => $this->format]);
+        return $this->getFormView($format, $formData, 'form', [
+            'checklist' => new Checklist
+        ]);
     }
 
-    public function store(CreateRequest $request, $format_id)
+    public function store(CreateRequest $request, Format $format)
     {        
-        $this->checklist = Checklist::create(['format_id' => $this->format->id, 'user_id' => Auth::user()->id]);
+        $checklist = Checklist::create([
+            'format_id' => $format->id,
+            'user_id' => Auth::user()->id
+        ]);
 
-        $this->checklist->fill($request->all());
-        $this->checklist->save();
+        $checklist->fill($request->all());
+        $checklist->save();
+        $checklist->answers()->attach($request->get('answers'));
 
-        $this->checklist->answers()->attach($request->get('answers'));
+        $this->resourceFlash();
+        // Flash::info('Lista de chequeo guardada correctamente');
 
-        Flash::info('Lista de chequeo guardada correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index', $this->format);
+        return $this->resourceRedirect('index', $format);
     }
 
-    public function show($format_id, $checklist_id)
+    public function show(Format $format, Checklist $checklist)
     {
-        return view(self::$prefixView.'show')
-            ->with(['checklist' => $this->checklist, 'format' => $this->format]);
+        return $this->resourceView('show')->with([
+            'checklist' => $checklist,
+            'format' => $format
+        ]);
     }
 
-    public function download($format_id, $checklist_id)
+    public function download(Format $format, Checklist $checklist)
     {
-        $view = view()->make(self::$prefixView.'download')
-            ->with(['format' => $this->format, 'checklist' => $this->checklist])
+        $view = $this->resourceView('download')->with([
+                'format' => $format,
+                'checklist' => $checklist
+            ])
             ->render();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($view)->save('storage/checklists/' . $this->checklist->id . '.pdf');
+        $pdf->loadHTML($view)->save('storage/checklists/' . $checklist->id . '.pdf');
 
         return $pdf->stream('checklist.pdf');
+    }
+
+    protected function getResourceEntity()
+    {
+        return Format::class;
     }
 }

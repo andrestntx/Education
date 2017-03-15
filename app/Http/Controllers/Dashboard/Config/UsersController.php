@@ -1,141 +1,54 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard\Config;
 
-use Illuminate\Routing\Route;
-use Illuminate\Database\QueryException;
-use Education\Http\Controllers\Controller;
+use Education\Http\Controllers\SimpleResourceController;
 use Education\Http\Requests\Users\CreateRequest;
 use Education\Http\Requests\Users\EditRequest;
 use Education\Http\Requests\Users\ProfileRequest;
 use Education\Entities\User;
+use Education\Repositories\UserRepository;
 use Flash;
 use Auth;
 
-class UsersController extends Controller
+class UsersController extends SimpleResourceController
 {
-    private $user;
-    private $form_data;
-    private static $prefixRoute = 'users.';
-    private static $prefixView = 'dashboard.pages.companies.users.admin.';
+    protected $userRepository;
 
-    public function __construct()
+    public function __construct(UserRepository $userRepository)
     {
-        $this->beforeFilter('@newUser', ['only' => ['store', 'create']]);
-        $this->beforeFilter('@findUser', ['only' => ['show', 'edit', 'update', 'destroy', 'activate', 'scores']]);
+        $this->userRepository = $userRepository;
     }
 
-    /**
-     * Find a specified resource.
-     */
-    public function findUser(Route $route)
-    {
-        $this->user = User::findOrFail($route->getParameter('users'));
-    }
-    /**
-     * Create a new User instance.
-     */
-    public function newUser()
-    {
-        $this->user = new User();
-    }
-
-    public function getViewForm($viewName = 'form')
-    {
-        return view(self::$prefixView.$viewName)
-            ->with(['user' => $this->user, 'form_data' => $this->form_data]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        return view(self::$prefixView.'list');
-    }
-
-    /**
-     * Display a listing of the inactive resource.
-     *
-     * @return Response
-     */
     public function inactive()
     {
-        return view(self::$prefixView.'inactive');
+        return $this->resourceView('inactive');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST', 'files' => true];
-
-        return $this->getViewForm();
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
     public function store(CreateRequest $request)
     {
-        $this->user->fill($request->all());
-        \Auth::user()->company->users()->save($this->user);
-        $this->user->syncRelations($request->all());
-        $this->user->uploadImage($request->file('url_photo'));
+        $user = $this->userRepository->createForCompany(auth()->user()->company, $request->all(), $request->file('url_photo'));
+        $this->resourceFlash($user->name);
 
-        Flash::info('Usuario '.$this->user->name.' Guardado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return $this->resourceRedirect('index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
+
+    public function edit(User $user)
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->user->id], 'method' => 'PUT', 'files' => true];
+        $formData = $this->getFormData('update', 'PUT', true, $user);
 
-        return $this->getViewForm('form');
+        return $this->getFormView($user, $formData);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update(EditRequest $request)
+    public function update(EditRequest $request, User $user)
     {
-        $this->user->fill($request->all());
-        $this->user->save();
-        $this->user->syncRelations($request->all());
-        $this->user->uploadImage($request->file('url_photo'));
+        $user = $this->userRepository->update($user, $request->all(), $request->file('url_photo'));
+        $this->resourceFlash($user->name);
 
-        Flash::info('Usuario '.$this->user->name.' Actualizado correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return $this->resourceRedirect('index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
+    public function destroy(User $user)
     {
         $data = [
             'success' => true,
@@ -143,19 +56,12 @@ class UsersController extends Controller
             'status'  => 'info'
         ];   
 
-        $this->user->inactivate();
+        $user->inactivate();
 
         return response()->json($data);
     }
 
-    /**
-     * Activate the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function activate($id)
+    public function activate(User $user)
     {
         $data = [
             'success' => true,
@@ -163,25 +69,27 @@ class UsersController extends Controller
             'status'  => 'info'
         ];   
 
-        $this->user->activate();
+        $user->activate();
 
         return response()->json($data);
     }
 
-    public function scores($id)
+    public function scores(User $user)
     {
-        return view()->make('dashboard.pages.companies.users.scores')->with('user', $this->user);
+        return view()->make('dashboard.pages.companies.users.scores')->with('user', $user);
     }
 
     public function profile(ProfileRequest $request)
     {
-        $this->user = Auth::user();
-        $this->user->fill($request->all());
-        $this->user->save();
-        $this->user->uploadImage($request->file('url_photo'));
+        $user = Auth::user();
+        $this->userRepository->update($user, $request->all(), $request->file('url_photo'));
+        $this->resourceFlash('Perfil', 'update');
 
-        Flash::info('Pefil actualizado correctamente');
+        return $this->resourceRedirect('index');
+    }
 
-        return redirect()->route(self::$prefixRoute.'index');
+    protected function getResourceEntity()
+    {
+        return User::class;
     }
 }

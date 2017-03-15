@@ -1,156 +1,68 @@
 <?php
-
 namespace Education\Http\Controllers\Dashboard\Config;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-use Illuminate\Database\QueryException;
-use Education\Http\Controllers\Controller;
+use Education\Http\Controllers\SimpleResourceController;
+use Education\Repositories\CategoryRepository;
 use Education\Http\Requests\Categories\CreateRequest;
 use Education\Http\Requests\Categories\EditRequest;
 use Education\Entities\Category;
-use Flash;
+use Illuminate\Support\Facades\Auth;
 
-class CategoriesController extends Controller
+class CategoriesController extends SimpleResourceController
 {
-    private $category;
-    private $form_data;
+    protected $categoryRepository;
 
-    private static $prefixRoute = 'categories.';
-    private static $prefixView = 'dashboard.pages.companies.users.categories.';
-
-    public function __construct()
+    public function __construct(CategoryRepository $categoryRepository)
     {
-        $this->beforeFilter('@newCategory', ['only' => ['create', 'store']]);
-        $this->beforeFilter('@findCategory', ['only' => ['show', 'edit', 'update', 'destroy']]);
+        $this->categoryRepository = $categoryRepository;
     }
 
-    /**
-     * Create a new Category.
-     */
-    public function newCategory()
-    {
-        $this->category = new Category();
-    }
-
-    /**
-     * Find the Category or App Abort 404.
-     */
-    public function findCategory(Route $route)
-    {
-        $this->category = Category::findOrFail($route->getParameter('categories'));
-    }
-
-    /**
-     * Return the default Form View for Companies.
-     */
-    public function getFormView($viewName = 'form')
-    {
-        return view(self::$prefixView.$viewName)
-            ->with(['form_data' => $this->form_data, 'category' => $this->category]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        return view()->make(self::$prefixView.'list');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create()
     {
-        $this->form_data = ['route' => self::$prefixRoute.'store', 'method' => 'POST'];
+        $formData = $this->getFormData('store', 'POST');
 
-        return $this->getFormView();
+        return $this->getFormView(new Category(), $formData);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
     public function store(CreateRequest $request)
     {
-        $this->category->fill($request->all());
-        \Auth::user()->categoriesCreated()->save($this->category);
+        $category = $this->categoryRepository->createForUser(Auth::user(), $request->all());
+        $this->resourceFlash($category->name, 'store');
 
-        Flash::info('Categoria '.$this->category->name.' Guardada correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        $this->resourceRedirect('index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
+    public function show(Category $category)
     {
-        return view()->make(self::$prefixView.'show');
+        $this->resourceView('show')->with([
+            'category' => $category
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        $this->form_data = ['route' => [self::$prefixRoute.'update', $this->category->id], 'method' => 'PUT', 'files' => true];
+        $formData = $this->getFormData('store', 'POST', true);
 
-        return $this->getFormView();
+        return $this->getFormView($category, $formData);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update(EditRequest $request, $id)
+    public function update(EditRequest $request, Category $category)
     {
-        $this->category->fill($request->all());
-        $this->category->save();
+        $this->categoryRepository->simpleUpdate($category, $request->all());
+        $this->resourceFlash($category->name, 'store');
 
-        Flash::info('Categoria '.$this->category->name.' Actualizada correctamente');
-
-        return redirect()->route(self::$prefixRoute.'index');
+        return $this->resourceRedirect('index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $data = [
-            'success' => true,
-            'message' => 'Categoria eliminada correctamente'
-        ];   
+        $success = $this->categoryRepository->deleteEntity($category);
 
-        try {
-            $this->category->delete(); 
-        } catch (QueryException $e) {
-            $data['success'] = false;
-            $data['message'] = 'La Categoria no se puede eliminar, ya que contiene almenos un Protocolo';
-        }
+        return $this->resourceDeleteJson($category->name, $success);
+    }
 
-        return response()->json($data);
+    protected function getResourceEntity()
+    {
+        return Category::class;
     }
 }
